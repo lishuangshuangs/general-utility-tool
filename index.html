@@ -1,128 +1,40 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>实用工具箱</title>
-
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="免费、轻量、无需登录的在线实用工具箱">
+  <title>在线实用工具箱</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      padding: 40px 20px;
-      font-family: Arial, "Microsoft YaHei", sans-serif;
-      color: #1f2937;
-      background: #f3f4f6;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    header {
-      margin-bottom: 30px;
-      text-align: center;
-    }
-
-    header h1 {
-      margin-bottom: 10px;
-      color: #2563eb;
-    }
-
-    .tool {
-      padding: 24px;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 16px rgb(0 0 0 / 8%);
-    }
-
-    textarea {
-      width: 100%;
-      min-height: 160px;
-      margin: 12px 0;
-      padding: 12px;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      font-size: 16px;
-      resize: vertical;
-    }
-
-    button {
-      margin-right: 8px;
-      padding: 10px 18px;
-      color: white;
-      background: #2563eb;
-      border: 0;
-      border-radius: 8px;
-      font-size: 15px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #1d4ed8;
-    }
-
-    .result {
-      margin-top: 18px;
-      padding: 14px;
-      line-height: 1.8;
-      background: #eff6ff;
-      border-radius: 8px;
-    }
+    :root{--blue:#2563eb;--dark:#172033;--muted:#64748b;--line:#dbe3ef;--bg:#f5f7fb}*{box-sizing:border-box}body{margin:0;font-family:Arial,"Microsoft YaHei",sans-serif;color:var(--dark);background:var(--bg)}header{padding:48px 20px;color:#fff;text-align:center;background:linear-gradient(135deg,#1d4ed8,#7c3aed)}header h1{margin:0 0 10px;font-size:clamp(28px,5vw,44px)}header p{margin:0;color:#dbeafe}main{width:min(1050px,calc(100% - 32px));margin:28px auto 50px}.tabs{display:flex;gap:9px;margin-bottom:18px;overflow:auto}.tab,button{padding:10px 15px;border:0;border-radius:9px;font:inherit;font-weight:600;cursor:pointer}.tab{flex:none;color:#334155;background:#fff;border:1px solid var(--line)}.tab.active,.primary{color:#fff;background:var(--blue)}.panel{display:none;padding:25px;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 30px #0f172a12}.panel.active{display:block}h2{margin:0 0 7px}.desc{margin:0 0 17px;color:var(--muted)}textarea,input{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:9px;font:inherit}textarea{min-height:175px;resize:vertical}textarea:focus,input:focus{outline:3px solid #2563eb22;border-color:var(--blue)}.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:13px}.secondary{color:#334155;background:#e8eef7}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:11px;margin-top:17px}.stat{padding:14px;text-align:center;background:#eff6ff;border-radius:10px}.stat strong{display:block;color:var(--blue);font-size:24px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}label{display:block;margin-bottom:6px;color:#475569;font-weight:600;font-size:14px}.result{margin-top:15px;padding:14px;background:#f1f5f9;border-radius:9px;overflow-wrap:anywhere}.message{min-height:23px;margin-top:9px;color:#047857}.error{color:#b91c1c}footer{padding:22px;text-align:center;color:var(--muted)}@media(max-width:620px){.grid{grid-template-columns:1fr}.panel{padding:19px}}
   </style>
 </head>
-
 <body>
-  <div class="container">
-    <header>
-      <h1>实用工具箱</h1>
-      <p>一些简单、方便的在线工具</p>
-    </header>
-
-    <main class="tool">
-      <h2>文本统计工具</h2>
-      <p>输入文字后，可以统计字符数、字数和行数。</p>
-
-      <textarea
-        id="textInput"
-        placeholder="请在这里输入文字……"
-        oninput="countText()"
-      ></textarea>
-
-      <button onclick="countText()">开始统计</button>
-      <button onclick="clearText()">清空内容</button>
-
-      <div class="result">
-        字符数：<strong id="characterCount">0</strong><br>
-        非空字符数：<strong id="nonSpaceCount">0</strong><br>
-        行数：<strong id="lineCount">0</strong>
-      </div>
-    </main>
-  </div>
-
+  <header><h1>在线实用工具箱</h1><p>免费、轻量、无需登录，数据仅在你的浏览器中处理</p></header>
+  <main>
+    <nav class="tabs">
+      <button class="tab active" data-id="text">文本统计</button><button class="tab" data-id="json">JSON 格式化</button><button class="tab" data-id="time">时间戳转换</button><button class="tab" data-id="password">密码生成</button><button class="tab" data-id="case">大小写转换</button>
+    </nav>
+    <section id="text" class="panel active"><h2>文本统计</h2><p class="desc">实时统计字符、字数和行数。</p><textarea id="textIn" placeholder="请粘贴或输入文本……"></textarea><div class="actions"><button class="secondary" onclick="clearText()">清空</button><button class="secondary" onclick="copy('textIn','textMsg')">复制文本</button></div><div class="stats"><div class="stat"><strong id="chars">0</strong>字符</div><div class="stat"><strong id="nonspaces">0</strong>非空字符</div><div class="stat"><strong id="words">0</strong>字数/单词</div><div class="stat"><strong id="lines">0</strong>行</div></div><div id="textMsg" class="message"></div></section>
+    <section id="json" class="panel"><h2>JSON 格式化</h2><p class="desc">格式化、压缩并检查 JSON 数据。</p><textarea id="jsonIn" spellcheck="false" placeholder='例如：{"name":"工具箱","version":1}'></textarea><div class="actions"><button class="primary" onclick="formatJson(2)">格式化</button><button class="secondary" onclick="formatJson(0)">压缩</button><button class="secondary" onclick="copy('jsonIn','jsonMsg')">复制结果</button><button class="secondary" onclick="$('jsonIn').value=''">清空</button></div><div id="jsonMsg" class="message"></div></section>
+    <section id="time" class="panel"><h2>时间戳转换</h2><p class="desc">在 Unix 时间戳和本地日期时间之间转换。</p><div class="grid"><div><label>Unix 时间戳（秒或毫秒）</label><input id="stamp" placeholder="例如：1700000000"></div><div><label>本地日期时间</label><input id="date" type="datetime-local" step="1"></div></div><div class="actions"><button class="primary" onclick="stampToDate()">时间戳 → 日期</button><button class="primary" onclick="dateToStamp()">日期 → 时间戳</button><button class="secondary" onclick="fillNow()">当前时间</button></div><div id="timeResult" class="result">等待转换</div></section>
+    <section id="password" class="panel"><h2>密码生成器</h2><p class="desc">使用浏览器安全随机数生成密码。</p><div class="grid"><div><label>密码长度：<span id="lenLabel">16</span></label><input id="len" type="range" min="6" max="64" value="16"></div><div><label>生成结果</label><input id="passwordOut" readonly></div></div><div class="actions"><button class="primary" onclick="makePassword()">生成密码</button><button class="secondary" onclick="copy('passwordOut','passwordMsg')">复制密码</button></div><div id="passwordMsg" class="message"></div></section>
+    <section id="case" class="panel"><h2>英文大小写转换</h2><p class="desc">快速转换英文大小写或单词首字母。</p><textarea id="caseIn" placeholder="请输入英文文本……"></textarea><div class="actions"><button class="primary" onclick="changeCase('upper')">全部大写</button><button class="primary" onclick="changeCase('lower')">全部小写</button><button class="secondary" onclick="changeCase('title')">首字母大写</button><button class="secondary" onclick="copy('caseIn','caseMsg')">复制结果</button></div><div id="caseMsg" class="message"></div></section>
+  </main>
+  <footer>© <span id="year"></span> 在线实用工具箱</footer>
   <script>
-    function countText() {
-      const text = document.getElementById("textInput").value;
-
-      document.getElementById("characterCount").textContent =
-        text.length;
-
-      document.getElementById("nonSpaceCount").textContent =
-        text.replace(/\s/g, "").length;
-
-      document.getElementById("lineCount").textContent =
-        text.length === 0 ? 0 : text.split(/\r?\n/).length;
-    }
-
-    function clearText() {
-      document.getElementById("textInput").value = "";
-      countText();
-    }
+    const $=id=>document.getElementById(id);document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab,.panel').forEach(x=>x.classList.remove('active'));t.classList.add('active');$(t.dataset.id).classList.add('active')});
+    function countText(){const s=$('textIn').value;$('chars').textContent=s.length;$('nonspaces').textContent=s.replace(/\s/g,'').length;$('words').textContent=(s.match(/[\u3400-\u9fff]|[A-Za-z0-9]+(?:['’-][A-Za-z0-9]+)*/g)||[]).length;$('lines').textContent=s?s.split(/\r?\n/).length:0} $('textIn').oninput=countText;
+    function clearText(){$('textIn').value='';countText();$('textMsg').textContent=''}
+    async function copy(id,msg){if(!$(id).value){$(msg).textContent='没有可复制的内容';return}try{await navigator.clipboard.writeText($(id).value);$(msg).textContent='已复制到剪贴板'}catch{$(msg).textContent='复制失败，请手动复制'}}
+    function formatJson(n){const m=$('jsonMsg');try{$('jsonIn').value=JSON.stringify(JSON.parse($('jsonIn').value),null,n);m.className='message';m.textContent='JSON 格式正确'}catch(e){m.className='message error';m.textContent='JSON 格式错误：'+e.message}}
+    function localValue(d){return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,19)}
+    function stampToDate(){let n=Number($('stamp').value.trim());if(!Number.isFinite(n)){$('timeResult').textContent='请输入有效时间戳';return}if(Math.abs(n)<1e12)n*=1000;const d=new Date(n);if(isNaN(d)){$('timeResult').textContent='时间戳无效';return}$('date').value=localValue(d);$('timeResult').textContent=`本地时间：${d.toLocaleString()} ｜ UTC：${d.toISOString()}`}
+    function dateToStamp(){const d=new Date($('date').value);if(isNaN(d)){$('timeResult').textContent='请选择有效日期';return}$('stamp').value=Math.floor(d.getTime()/1000);$('timeResult').textContent=`秒：${Math.floor(d.getTime()/1000)} ｜ 毫秒：${d.getTime()}`}
+    function fillNow(){const d=new Date();$('date').value=localValue(d);$('stamp').value=Math.floor(d.getTime()/1000);$('timeResult').textContent='已填入当前时间'}
+    $('len').oninput=e=>$('lenLabel').textContent=e.target.value;function makePassword(){const c='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%^&*_-+=';const a=new Uint32Array(+$('len').value);crypto.getRandomValues(a);$('passwordOut').value=Array.from(a,n=>c[n%c.length]).join('');$('passwordMsg').textContent=''}
+    function changeCase(t){const e=$('caseIn');if(t==='upper')e.value=e.value.toUpperCase();if(t==='lower')e.value=e.value.toLowerCase();if(t==='title')e.value=e.value.toLowerCase().replace(/\b[a-z]/g,c=>c.toUpperCase())}
+    $('year').textContent=new Date().getFullYear();fillNow();makePassword();countText();
   </script>
 </body>
 </html>
