@@ -7,29 +7,29 @@
   <title>留言管理 - Utilora</title>
   <link rel="stylesheet" href="../assets/css/site.css">
   <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="filters.css">
 </head>
 <body>
   <header class="tool-head"><nav><a class="brand" href="../">Utilora 管理端</a><a href="../">返回网站</a></nav></header>
   <main class="admin-main">
     <section id="login-panel" class="panel login-panel">
-      <h1>管理员登录</h1>
-      <p class="hint">使用 Supabase 中创建的管理员邮箱和密码登录。</p>
-      <form id="login-form">
-        <div class="field"><label for="email">邮箱</label><input id="email" type="email" required autocomplete="username"></div>
-        <div class="field"><label for="password">密码</label><input id="password" type="password" required autocomplete="current-password"></div>
-        <button id="login-button" type="submit">登录</button>
-      </form>
+      <h1>管理员登录</h1><p class="hint">使用 Supabase 中创建的管理员邮箱和密码登录。</p>
+      <form id="login-form"><div class="field"><label for="email">邮箱</label><input id="email" type="email" required autocomplete="username"></div><div class="field"><label for="password">密码</label><input id="password" type="password" required autocomplete="current-password"></div><button id="login-button" type="submit">登录</button></form>
       <div id="login-message" class="message" role="status"></div>
     </section>
-
     <section id="manager-panel" class="panel" hidden>
       <div class="manager-head"><div><h1>留言管理</h1><p id="summary" class="hint"></p></div><div class="actions"><button id="refresh" class="secondary">刷新</button><button id="logout" class="secondary">退出登录</button></div></div>
+      <form id="filter-form" class="filters">
+        <div><label for="status-filter">状态</label><select id="status-filter"><option value="">全部状态</option><option value="new">新留言</option><option value="processing">处理中</option><option value="completed">已完成</option><option value="closed">已关闭</option></select></div>
+        <div><label for="start-date">开始日期</label><input id="start-date" type="date"></div>
+        <div><label for="end-date">结束日期</label><input id="end-date" type="date"></div>
+        <div class="filter-actions"><button type="submit">查询</button><button id="reset-filter" type="button" class="secondary">重置</button></div>
+      </form>
       <div id="manager-message" class="message" role="status"></div>
       <div class="table-wrap"><table><thead><tr><th>时间</th><th>称呼</th><th>功能</th><th>详细说明</th><th>联系方式</th><th>状态</th><th>操作</th></tr></thead><tbody id="feedback-list"></tbody></table></div>
-      <div id="empty" class="result" hidden>暂时没有留言。</div>
+      <div id="empty" class="result" hidden>没有符合当前筛选条件的留言。</div>
     </section>
   </main>
-  <script src="../feedback/config.js"></script>
-  <script src="admin.js"></script>
+  <script src="../feedback/config.js"></script><script src="admin.js"></script>
 </body>
 </html>

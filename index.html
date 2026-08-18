@@ -1,1 +1,31 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Utilora 免费在线实用工具箱"><title>Utilora 在线工具箱</title><link rel="stylesheet" href="assets/css/site.css"></head><body><header class="hero"><nav><a class="brand" href="/">Utilora</a><a href="feedback/">功能建议</a></nav><div><h1>简单、快速的在线工具</h1><p>无需安装，无需登录，数据只在浏览器中处理。</p></div></header><main class="container"><h2>全部工具</h2><div class="cards"><a class="card" href="tools/text-counter/"><span>📝</span><h3>文本统计</h3><p>统计字符、字数和行数</p></a><a class="card" href="tools/json-formatter/"><span>{ }</span><h3>JSON 格式化</h3><p>格式化、压缩和校验 JSON</p></a><a class="card" href="tools/timestamp/"><span>🕒</span><h3>时间戳转换</h3><p>Unix 时间戳与日期互转</p></a><a class="card" href="tools/password-generator/"><span>🔐</span><h3>密码生成器</h3><p>生成安全的随机密码</p></a><a class="card" href="tools/case-converter/"><span>Aa</span><h3>大小写转换</h3><p>转换英文文本大小写</p></a><a class="card suggestion" href="feedback/"><span>＋</span><h3>想要其他工具？</h3><p>给 Utilora 留下功能建议</p></a></div></main><footer>© <span id="year"></span> Utilora</footer><script src="assets/js/home.js"></script></body></html>
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Utilora 免费、轻量、保护隐私的在线实用工具箱"><meta name="theme-color" content="#111827"><title>Utilora｜在线实用工具箱</title><link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+  <header class="site-header"><nav class="nav"><a class="brand" href="./"><span class="brand-mark">U</span><span>Utilora</span></a><div class="nav-links"><a href="#tools">全部工具</a><a href="feedback/">功能建议</a></div></nav></header>
+  <main>
+    <section class="hero"><div class="hero-inner"><div class="eyebrow">LOCAL-FIRST · PRIVACY-FRIENDLY</div><h1>顺手的工具，<br><span>不该复杂。</span></h1><p>无需安装、无需登录。常用文本与开发工具，尽可能只在你的浏览器中处理。</p><div class="search-wrap"><span>⌕</span><input id="tool-search" type="search" placeholder="搜索工具，例如 JSON、时间戳、Base64…" autocomplete="off"><kbd>/</kbd></div><div class="hero-meta"><span><b id="tool-count">12</b> 个工具</span><span>✓ 免费使用</span><span>✓ 本地处理</span></div></div><div class="hero-art" aria-hidden="true"><div class="orb orb-one"></div><div class="orb orb-two"></div><div class="code-card"><i></i><i></i><i></i><pre>{
+  "simple": true,
+  "private": true
+}</pre></div></div></section>
+    <section id="tools" class="tools-section"><div class="section-head"><div><span class="section-kicker">TOOLBOX</span><h2>选择一个工具开始</h2></div><div id="categories" class="categories"><button class="active" data-category="all">全部</button><button data-category="text">文本</button><button data-category="developer">开发</button><button data-category="generator">生成</button></div></div>
+      <div id="tool-grid" class="tool-grid">
+        <a class="tool-card" data-category="text" data-search="文本统计 字数 字符 行数" href="tools/text-counter/"><span class="icon indigo">字</span><div><h3>文本统计</h3><p>统计字符、字数与行数</p></div><b>→</b></a>
+        <a class="tool-card" data-category="developer" data-search="JSON 格式化 压缩 校验" href="tools/json-formatter/"><span class="icon amber">{ }</span><div><h3>JSON 格式化</h3><p>格式化、压缩与校验</p></div><b>→</b></a>
+        <a class="tool-card" data-category="developer" data-search="时间戳 Unix 日期 转换" href="tools/timestamp/"><span class="icon cyan">时</span><div><h3>时间戳转换</h3><p>Unix 时间戳与日期互转</p></div><b>→</b></a>
+        <a class="tool-card" data-category="generator" data-search="密码 生成 随机 安全" href="tools/password-generator/"><span class="icon rose">密</span><div><h3>密码生成器</h3><p>生成安全随机密码</p></div><b>→</b></a>
+        <a class="tool-card" data-category="text" data-search="大小写 英文 转换" href="tools/case-converter/"><span class="icon violet">Aa</span><div><h3>大小写转换</h3><p>转换英文文本大小写</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="developer" data-search="Base64 编码 解码 UTF8" href="tools/base64/"><span class="icon blue">64</span><div><h3>Base64 编解码</h3><p>UTF-8 文本安全转换</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="developer" data-search="正则 Regex 测试 匹配" href="tools/regex-tester/"><span class="icon green">.*</span><div><h3>正则测试</h3><p>实时查看匹配结果</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="developer" data-search="JWT Token 解码 Header Payload" href="tools/jwt-decoder/"><span class="icon orange">JWT</span><div><h3>JWT 解码</h3><p>查看 Header 与 Payload</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="generator" data-search="UUID GUID 随机 生成" href="tools/uuid-generator/"><span class="icon cyan">ID</span><div><h3>UUID 生成器</h3><p>批量生成 UUID v4</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="generator" data-search="二维码 QR 生成" href="tools/qr-code/"><span class="icon dark">▦</span><div><h3>二维码生成器</h3><p>文本与链接生成二维码</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="text" data-search="文本 对比 Diff 差异" href="tools/text-diff/"><span class="icon rose">≠</span><div><h3>文本对比</h3><p>按行查看新增与删除</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="developer" data-search="Hash SHA 摘要 哈希" href="tools/hash-generator/"><span class="icon green">#</span><div><h3>Hash 生成器</h3><p>生成 SHA-256/384/512</p></div><b>→</b></a>
+      </div><div id="no-results" class="no-results" hidden>没有找到匹配的工具，<a href="feedback/">告诉我们你想要什么</a>。</div>
+    </section>
+    <section class="privacy"><div><span>隐私优先</span><h2>你的内容，留在你的浏览器里。</h2><p>除留言功能外，工具处理过程不会主动把输入内容发送到 Utilora 服务器。</p></div><div class="privacy-badge">◉<small>LOCAL<br>PROCESSING</small></div></section>
+  </main><footer><a class="brand" href="./"><span class="brand-mark">U</span><span>Utilora</span></a><p>把复杂留给工具，把时间还给你。</p><span>© <span id="year"></span></span></footer><script src="assets/js/home.js"></script>
+</body></html>
