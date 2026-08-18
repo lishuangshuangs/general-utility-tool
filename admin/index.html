@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
-  <title>留言管理 - Utilora</title>
+  <title>网站管理 - Utilora</title>
   <link rel="stylesheet" href="../assets/css/site.css">
   <link rel="stylesheet" href="admin.css">
   <link rel="stylesheet" href="filters.css">
@@ -18,8 +18,14 @@
       <div id="login-message" class="message" role="status"></div>
     </section>
     <section id="manager-panel" class="panel" hidden>
-      <div class="manager-head"><div><h1>留言管理</h1><p id="summary" class="hint"></p></div><div class="actions"><button id="refresh" class="secondary">刷新</button><button id="logout" class="secondary">退出登录</button></div></div>
-      <form id="filter-form" class="filters">
+      <div class="manager-head"><div><h1>网站管理</h1><p id="summary" class="hint"></p></div><div class="actions"><button id="refresh" class="secondary">刷新</button><button id="logout" class="secondary">退出登录</button></div></div>
+      <section class="analytics-panel" aria-labelledby="analytics-title">
+        <div class="analytics-head"><div><h2 id="analytics-title">访问与工具统计</h2><p class="hint">最近 30 天访问趋势与累计工具使用次数</p></div><div class="view-switch"><button id="show-chart" type="button">图表</button><button id="show-table" type="button" class="secondary">表格</button></div></div>
+        <div id="stats-overview" class="stats analytics-overview"><div class="stat"><strong id="total-views">—</strong>总访问量</div><div class="stat"><strong id="today-views">—</strong>今日访问</div><div class="stat"><strong id="total-uses">—</strong>工具使用次数</div><div class="stat"><strong id="popular-tool">—</strong>最常用工具</div></div>
+        <div id="chart-view"><h3>最近 30 天访问量</h3><div id="daily-chart" class="bar-chart"></div><h3>工具使用排行</h3><div id="tool-chart" class="horizontal-chart"></div></div>
+        <div id="table-view" hidden><div class="table-wrap analytics-table"><table><thead><tr><th>工具</th><th>使用次数</th><th>占比</th></tr></thead><tbody id="tool-stats-list"></tbody></table></div></div>
+        <div id="analytics-message" class="message"></div>
+      </section>      <form id="filter-form" class="filters">
         <div><label for="status-filter">状态</label><select id="status-filter"><option value="">全部状态</option><option value="new">新留言</option><option value="processing">处理中</option><option value="completed">已完成</option><option value="closed">已关闭</option></select></div>
         <div><label for="start-date">开始日期</label><input id="start-date" type="date"></div>
         <div><label for="end-date">结束日期</label><input id="end-date" type="date"></div>
