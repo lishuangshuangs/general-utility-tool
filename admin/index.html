@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>留言管理 - Utilora</title>
+  <link rel="stylesheet" href="../assets/css/site.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <header class="tool-head"><nav><a class="brand" href="../">Utilora 管理端</a><a href="../">返回网站</a></nav></header>
+  <main class="admin-main">
+    <section id="login-panel" class="panel login-panel">
+      <h1>管理员登录</h1>
+      <p class="hint">使用 Supabase 中创建的管理员邮箱和密码登录。</p>
+      <form id="login-form">
+        <div class="field"><label for="email">邮箱</label><input id="email" type="email" required autocomplete="username"></div>
+        <div class="field"><label for="password">密码</label><input id="password" type="password" required autocomplete="current-password"></div>
+        <button id="login-button" type="submit">登录</button>
+      </form>
+      <div id="login-message" class="message" role="status"></div>
+    </section>
+
+    <section id="manager-panel" class="panel" hidden>
+      <div class="manager-head"><div><h1>留言管理</h1><p id="summary" class="hint"></p></div><div class="actions"><button id="refresh" class="secondary">刷新</button><button id="logout" class="secondary">退出登录</button></div></div>
+      <div id="manager-message" class="message" role="status"></div>
+      <div class="table-wrap"><table><thead><tr><th>时间</th><th>称呼</th><th>功能</th><th>详细说明</th><th>联系方式</th><th>状态</th><th>操作</th></tr></thead><tbody id="feedback-list"></tbody></table></div>
+      <div id="empty" class="result" hidden>暂时没有留言。</div>
+    </section>
+  </main>
+  <script src="../feedback/config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
