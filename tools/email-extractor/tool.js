@@ -1,71 +1,45 @@
-(() => {
-  const input = document.getElementById("input");
-  const output = document.getElementById("output");
-  const unique = document.getElementById("unique");
-  const message = document.getElementById("message");
-  const countEl = document.getElementById("count");
-  const uniqueCountEl = document.getElementById("unique-count");
+const input = document.getElementById("input");
+const output = document.getElementById("output");
+const message = document.getElementById("message");
 
-  // Practical email regex (not perfect RFC, but good for extraction)
-  const emailRe =
-    /[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*/g;
+const EMAIL_RE = /[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g;
 
-  function extract() {
-    const text = input.value;
-    const matches = text.match(emailRe) || [];
-    const all = matches.map((m) => m.toLowerCase());
-    const deduped = [...new Set(all)];
-    const result = unique.checked ? deduped : matches;
-
-    countEl.textContent = matches.length;
-    uniqueCountEl.textContent = deduped.length;
-    output.value = result.join("\n");
-    message.textContent =
-      matches.length === 0
-        ? "未找到邮箱地址"
-        : `找到 ${matches.length} 个，去重后 ${deduped.length} 个`;
-    message.className = "message";
+function extract() {
+  const text = input.value;
+  const matches = text.match(EMAIL_RE) || [];
+  const seen = new Set();
+  const ordered = [];
+  for (const m of matches) {
+    const key = m.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    ordered.push(m);
   }
+  output.value = ordered.join("\n");
+  document.getElementById("count").textContent = ordered.length;
+  message.textContent = ordered.length ? `已提取 ${ordered.length} 个邮箱` : "未找到邮箱";
+}
 
-  document.getElementById("extract").addEventListener("click", extract);
-  unique.addEventListener("change", () => {
-    if (input.value.trim()) extract();
-  });
-  input.addEventListener("input", () => {
-    if (input.value.trim()) extract();
-  });
+document.getElementById("run").onclick = extract;
+input.addEventListener("input", () => {
+  if (input.value.trim()) extract();
+});
 
-  document.getElementById("sample").addEventListener("click", () => {
-    input.value = `联系人列表：
-张三：zhangsan@example.com
-李四：lisi@company.cn，备用：lisi.backup@mail.com
-无效：not-an-email、@missing.local
-重复：zhangsan@example.com
-客服：support@utilora.dev / hello@utilora.dev`;
-    extract();
-  });
+document.getElementById("copy").onclick = async () => {
+  if (!output.value) return;
+  await navigator.clipboard.writeText(output.value);
+  message.textContent = "已复制";
+};
 
-  document.getElementById("clear").addEventListener("click", () => {
-    input.value = "";
-    output.value = "";
-    countEl.textContent = "0";
-    uniqueCountEl.textContent = "0";
-    message.textContent = "";
-  });
+document.getElementById("sample").onclick = () => {
+  input.value = "联系我们：support@utilora.example 或 sales@example.com\n抄送 alice@test.org，重复 support@utilora.example\n无效：not-an-email、@missing.com";
+  extract();
+  message.textContent = "已填入示例";
+};
 
-  document.getElementById("copy").addEventListener("click", async () => {
-    if (!output.value) {
-      message.textContent = "暂无结果可复制";
-      message.className = "message error";
-      return;
-    }
-    try {
-      await navigator.clipboard.writeText(output.value);
-      message.textContent = "已复制结果";
-      message.className = "message";
-    } catch {
-      message.textContent = "复制失败，请手动选择";
-      message.className = "message error";
-    }
-  });
-})();
+document.getElementById("clear").onclick = () => {
+  input.value = "";
+  output.value = "";
+  document.getElementById("count").textContent = "0";
+  message.textContent = "";
+};
