@@ -60,14 +60,11 @@ function writeJSON(space, sorter) {
 document.querySelectorAll("[data-space]").forEach((button) => {
   button.onclick = () => writeJSON(Number(button.dataset.space));
 });
-
 document.getElementById("sort").onclick = () => writeJSON(2, sortKeys);
-
 document.getElementById("sample").onclick = () => {
   input.value = SAMPLE;
   show(true, "已填入示例");
 };
-
 document.getElementById("download").onclick = () => {
   const blob = new Blob([input.value || "{}"], { type: "application/json;charset=utf-8" });
   const link = document.createElement("a");
@@ -77,20 +74,21 @@ document.getElementById("download").onclick = () => {
   URL.revokeObjectURL(link.href);
   show(true, "已下载 data.json");
 };
-
 document.getElementById("clear").onclick = () => {
   input.value = "";
   show(true, "");
 };
-
 document.getElementById("copy").onclick = async () => {
   await navigator.clipboard.writeText(input.value);
   show(true, "已复制");
 };
-
+document.getElementById("share").onclick = () => UtiloraShare.copyShareLink(input.value, message);
 document.addEventListener("keydown", (event) => {
   if ((event.metaKey || event.ctrlKey) && event.key === "Enter") {
     event.preventDefault();
     writeJSON(2);
   }
 });
+
+const shared = UtiloraShare.readShareQuery();
+if (shared) input.value = shared;
