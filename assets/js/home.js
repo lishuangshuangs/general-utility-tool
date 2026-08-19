@@ -17,6 +17,7 @@ const toolPriority = [
   "zh-convert",
   "markdown-preview",
   "unix-permission",
+  "sql-formatter",
   "json-formatter",
   "data-convert",
   "unit-converter",
