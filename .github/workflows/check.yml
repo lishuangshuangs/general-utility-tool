@@ -1,0 +1,111 @@
+name: 页面检查
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: 检查页面与工具入口
+    runs-on: ubuntu-latest
+    steps:
+      - name: 拉取代码
+        uses: actions/checkout@v4
+
+      - name: 必要文件存在
+        run: |
+          set -euo pipefail
+          for f in \
+            index.html \
+            README.md \
+            assets/css/site.css \
+            assets/js/home.js \
+            feedback/index.html
+          do
+            test -f "$f" || { echo "缺少文件: $f"; exit 1; }
+          done
+          echo "核心文件齐全"
+
+      - name: 工具目录完整
+        run: |
+          set -euo pipefail
+          missing=0
+          count=0
+          for dir in tools/*/; do
+            [ -d "$dir" ] || continue
+            count=$((count + 1))
+            name=$(basename "$dir")
+            if [ ! -f "${dir}index.html" ]; then
+              echo "缺少 ${name}/index.html"
+              missing=1
+            fi
+            if [ ! -f "${dir}tool.js" ]; then
+              echo "缺少 ${name}/tool.js"
+              missing=1
+            fi
+          done
+          if [ "$count" -eq 0 ]; then
+            echo "tools/ 下没有工具目录"
+            exit 1
+          fi
+          if [ "$missing" -ne 0 ]; then
+            exit 1
+          fi
+          echo "工具页文件齐全: ${count} 个"
+
+      - name: 首页卡片链接有效
+        run: |
+          set -euo pipefail
+          python3 << 'PY'
+          import re
+          import pathlib
+          import sys
+
+          html = pathlib.Path("index.html").read_text(encoding="utf-8")
+          hrefs = re.findall(r'href="(tools/[^\"]+/)"', html)
+          if not hrefs:
+              print("首页没有找到 tools/ 链接")
+              sys.exit(1)
+
+          failed = False
+          seen = set()
+          for href in hrefs:
+              path = pathlib.Path(href) / "index.html"
+              if href in seen:
+                  print(f"重复卡片: {href}")
+                  failed = True
+              seen.add(href)
+              if not path.is_file():
+                  print(f"死链: {href} -> 缺少 {path}")
+                  failed = True
+              else:
+                  print(f"OK  {href}")
+
+          cards = len(re.findall(r'class="tool-card', html))
+          count_m = re.search(r'id="tool-count">(\d+)', html)
+          if count_m and int(count_m.group(1)) != cards:
+              print(f"工具数量不一致: 展示 {count_m.group(1)}，卡片 {cards}")
+              failed = True
+          if cards != len(hrefs):
+              print(f"卡片数 {cards} 与工具链接数 {len(hrefs)} 不一致")
+              failed = True
+
+          folders = {p.name for p in pathlib.Path("tools").iterdir() if p.is_dir()}
+          linked = {href.rstrip("/").split("/", 1)[1] for href in hrefs}
+          orphans = sorted(folders - linked)
+          if orphans:
+              print("未在首页挂出的工具目录: " + ", ".join(orphans))
+              failed = True
+
+          print(f"共检查 {len(hrefs)} 个首页入口")
+          sys.exit(1 if failed else 0)
+          PY
