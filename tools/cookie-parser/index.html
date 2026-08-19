@@ -4,14 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Cookie 解析 - Utilora</title>
-  <meta name="description" content="在浏览器中解析 Cookie 字符串为键值对，本地处理不上传。">
+  <meta name="description" content="在浏览器中解析 Cookie 字符串，拆分名称、值与属性，本地处理不上传。">
   <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
   <link rel="stylesheet" href="../../assets/css/site.css">
   <style>
-    .cookie-table{width:100%;border-collapse:collapse;margin-top:14px;font-size:14px}
-    .cookie-table th,.cookie-table td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);word-break:break-all}
-    .cookie-table th{color:#475569;font-size:12px;font-weight:750;background:#f8fafc}
-    .cookie-table code{font-size:13px}
+    .cookie-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px}
+    .cookie-table th,.cookie-table td{padding:10px 8px;text-align:left;border-bottom:1px solid var(--line);word-break:break-all}
+    .cookie-table th{color:#475569;font-weight:700;background:#f8fafc}
   </style>
 </head>
 <body>
@@ -24,22 +23,29 @@
   <main class="tool-main">
     <div class="panel">
       <h1>Cookie 解析</h1>
-      <p class="hint">粘贴 document.cookie 或 Set-Cookie 风格的字符串，拆分为键值对。内容只在你的浏览器里处理。</p>
-      <textarea id="input" spellcheck="false" placeholder="session_id=abc123; theme=dark; lang=zh-CN"></textarea>
+      <p class="hint">粘贴完整 Cookie 字符串（如 document.cookie 或 Set-Cookie 头），自动拆分名称、值与属性。仅在浏览器内处理。</p>
+      <div class="field">
+        <label for="input">Cookie 字符串</label>
+        <textarea id="input" rows="5" placeholder="session_id=abc123; Path=/; HttpOnly; Secure; SameSite=Lax&#10;或&#10;name1=value1; name2=value2"></textarea>
+      </div>
       <div class="actions">
         <button id="parse" type="button">解析</button>
-        <button id="sample" class="secondary" type="button">示例</button>
-        <button id="copy" class="secondary" type="button">复制 JSON</button>
         <button id="clear" class="secondary" type="button">清空</button>
       </div>
-      <div id="result" class="output" hidden></div>
+      <div id="result-wrap" hidden>
+        <p class="hint" style="margin-top:18px;margin-bottom:6px">解析结果</p>
+        <table class="cookie-table">
+          <thead><tr><th>名称</th><th>值</th><th>属性</th></tr></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
       <div id="message" class="message"></div>
     </div>
     <div class="related">
       <span>相关工具</span>
       <a href="../url-parser/">URL 解析器</a>
       <a href="../jwt-decoder/">JWT 解码</a>
-      <a href="../json-formatter/">JSON 格式化</a>
+      <a href="../base64/">Base64 编解码</a>
     </div>
   </main>
   <script src="../../assets/js/app.js"></script>
