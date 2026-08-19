@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Utilora 免费、轻量、保护隐私的在线实用工具箱">
+  <meta name="theme-color" content="#111827">
+  <meta property="og:title" content="Utilora｜在线实用工具箱">
+  <meta property="og:description" content="无需安装、无需登录。常用文本与开发工具，尽可能只在你的浏览器中处理。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://utilora.github.io/">
+  <meta name="twitter:card" content="summary">
+  <title>Utilora｜在线实用工具箱</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" href="favicon.svg">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+  <header class="site-header"><nav class="nav"><a class="brand" href="./"><span class="brand-mark">U</span><span>Utilora</span></a><div class="nav-links"><a href="#tools">全部工具</a><a href="feedback/">功能建议</a></div></nav></header>
+  <main>
+    <section class="hero"><div class="hero-inner"><div class="eyebrow">LOCAL-FIRST · PRIVACY-FRIENDLY</div><h1>顺手的工具，<br><span>不该复杂。</span></h1><p>无需安装、无需登录。常用文本与开发工具，尽可能只在你的浏览器中处理。</p><div class="search-wrap"><span>⌕</span><input id="tool-search" type="search" placeholder="搜索工具，例如 JSON、图片压缩、大写金额…" autocomplete="off"><kbd>/</kbd></div><div class="hero-meta"><span><b id="tool-count">34</b> 个工具</span><span>✓ 免费使用</span><span>✓ 本地处理</span><span>✓ 可离线安装</span></div></div><div class="hero-art" aria-hidden="true"><div class="orb orb-one"></div><div class="orb orb-two"></div><div class="code-card"><i></i><i></i><i></i><pre>{
+  "simple": true,
+  "private": true
+}</pre></div></div></section>
+    <section id="library" class="library" hidden>
+      <div id="fav-shelf" class="shelf" hidden>
+        <h3>我的收藏</h3>
+        <div id="fav-row" class="shelf-row"></div>
+      </div>
+      <div id="recent-shelf" class="shelf" hidden>
+        <h3>最近使用</h3>
+        <div id="recent-row" class="shelf-row"></div>
+      </div>
+    </section>
+    <section id="tools" class="tools-section"><div class="section-head"><div><span class="section-kicker">TOOLBOX</span><h2>选择一个工具开始</h2></div><div id="categories" class="categories"><button class="active" data-category="all">全部</button><button data-category="text">文本</button><button data-category="developer">开发</button><button data-category="generator">生成</button><button data-category="image">图像</button></div></div>
+      <div id="tool-grid" class="tool-grid">
+        <a class="tool-card new" data-category="image" data-search="图片 压缩 体积 WebP Base64 EXIF 照片 粘贴 批量 zip tupian yasuo tpy" href="tools/image-compress/"><span class="icon amber">图</span><div><h3>图片压缩</h3><p>单张或批量压缩，可打包下载</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="text" data-search="数字 中文 大写 人民币 金额 发票 合同 批量 shuzi zhongwen daxie" href="tools/number-chinese/"><span class="icon rose">万</span><div><h3>数字转中文大写</h3><p>金额转人民币大写，支持批量发票</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="text" data-search="身份证 校验 号码 生日 性别 户籍 18位 15位 shenfenzheng jiaoyan sfz" href="tools/id-card/"><span class="icon indigo">证</span><div><h3>身份证校验</h3><p>校验号码，读出生日、性别与省份</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="text" data-search="简体 繁体 拼音 slug 中文 转换 台湾 香港 头发 词级 jianfan pinyin" href="tools/zh-convert/"><span class="icon violet">汉</span><div><h3>简繁拼音</h3><p>词级简繁互转、拼音与 slug</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="text" data-search="Markdown 预览 HTML 公众号 笔记 md 渲染 微信 markdown yulan gongzhonghao" href="tools/markdown-preview/"><span class="icon green">MD</span><div><h3>Markdown 预览</h3><p>本地预览，并复制公众号 HTML</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="developer" data-search="Unix 权限 chmod 文件 权限 八进制 符号 rwx 计算 quanxian" href="tools/unix-permission/"><span class="icon amber">rwx</span><div><h3>Unix 权限计算</h3><p>勾选权限，得到 chmod 八进制与命令</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="developer" data-search="SQL 格式化 美化 压缩 关键字 缩进 sql geshihua" href="tools/sql-formatter/"><span class="icon blue">SQL</span><div><h3>SQL 格式化</h3><p>关键字大写、换行缩进与压缩</p></div><b>→</b></a>
+        <a class="tool-card" data-category="text" data-search="文本统计 字数 字符 行数 中文 阅读" href="tools/text-counter/"><span class="icon indigo">字</span><div><h3>文本统计</h3><p>统计字符、中文与阅读时间</p></div><b>→</b></a>
+        <a class="tool-card" data-category="developer" data-search="JSON 格式化 压缩 校验 排序 json geshihua" href="tools/json-formatter/"><span class="icon amber">{ }</span><div><h3>JSON 格式化</h3><p>格式化、压缩、排序与下载</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="developer" data-search="JSON YAML CSV 转换 表格 配置 zhuanhuan" href="tools/data-convert/"><span class="icon blue">YML</span><div><h3>JSON / YAML / CSV</h3><p>三种格式在浏览器里互转</p></div><b>→</b></a>
+        <a class="tool-card" data-category="developer" data-search="时间戳 Unix 日期 转换" href="tools/timestamp/"><span class="icon cyan">时</span><div><h3>时间戳转换</h3><p>Unix 时间戳与日期互转</p></div><b>→</b></a>
+        <a class="tool-card" data-category="generator" data-search="密码 生成 随机 安全" href="tools/password-generator/"><span class="icon rose">密</span><div><h3>密码生成器</h3><p>生成安全随机密码</p></div><b>→</b></a>
+        <a class="tool-card" data-category="text" data-search="大小写 英文 转换" href="tools/case-converter/"><span class="icon violet">Aa</span><div><h3>大小写转换</h3><p>转换英文文本大小写</p></div><b>→</b></a>
+        <a class="tool-card" data-category="developer" data-search="Base64 编码 解码 UTF8" href="tools/base64/"><span class="icon blue">64</span><div><h3>Base64 编解码</h3><p>UTF-8 文本安全转换</p></div><b>→</b></a>
+        <a class="tool-card" data-category="developer" data-search="正则 Regex 测试 匹配" href="tools/regex-tester/"><span class="icon green">.*</span><div><h3>正则测试</h3><p>实时查看匹配结果</p></div><b>→</b></a>
+        <a class="tool-card" data-category="developer" data-search="JWT Token 解码 Header Payload" href="tools/jwt-decoder/"><span class="icon orange">JWT</span><div><h3>JWT 解码</h3><p>查看 Header 与 Payload</p></div><b>→</b></a>
+        <a class="tool-card" data-category="generator" data-search="UUID GUID 随机 生成" href="tools/uuid-generator/"><span class="icon cyan">ID</span><div><h3>UUID 生成器</h3><p>批量生成 UUID v4</p></div><b>→</b></a>
+        <a class="tool-card" data-category="generator" data-search="二维码 QR 生成 识别 扫码 解码 erweima saoma" href="tools/qr-code/"><span class="icon dark">▦</span><div><h3>二维码</h3><p>生成二维码，也可识别图片</p></div><b>→</b></a>
+        <a class="tool-card" data-category="text" data-search="文本 对比 Diff 差异" href="tools/text-diff/"><span class="icon rose">≠</span><div><h3>文本对比</h3><p>按行查看新增与删除</p></div><b>→</b></a>
+        <a class="tool-card" data-category="developer" data-search="Hash MD5 SHA 摘要 哈希 加密" href="tools/hash-generator/"><span class="icon green">#</span><div><h3>Hash 生成器</h3><p>生成 MD5 与 SHA 摘要</p></div><b>→</b></a>
+        <a class="tool-card" data-category="developer" data-search="URL URI 百分号 编码 解码" href="tools/url-codec/"><span class="icon blue">%</span><div><h3>URL 编解码</h3><p>网址与参数安全转换</p></div><b>→</b></a>
+        <a class="tool-card" data-category="developer" data-search="颜色 HEX RGB HSL 转换" href="tools/color-converter/"><span class="icon violet">◐</span><div><h3>颜色转换</h3><p>HEX、RGB 与 HSL 互转</p></div><b>→</b></a>
+        <a class="tool-card" data-category="developer" data-search="Cron Crontab 定时 表达式 解释" href="tools/cron-explainer/"><span class="icon amber">⌚</span><div><h3>Cron 表达式解释</h3><p>读懂常见 5 段定时规则</p></div><b>→</b></a>
+        <a class="tool-card" data-category="developer" data-search="URL 网址 解析 域名 参数 端口" href="tools/url-parser/"><span class="icon blue">URL</span><div><h3>URL 解析器</h3><p>拆分网址的各个组成部分</p></div><b>→</b></a>
+        <a class="tool-card" data-category="developer" data-search="进制 二进制 八进制 十六进制 转换" href="tools/number-base/"><span class="icon amber">01</span><div><h3>进制转换</h3><p>二、八、十、十六进制互转</p></div><b>→</b></a>
+        <a class="tool-card" data-category="generator" data-search="单位 换算 长度 重量 温度" href="tools/unit-converter/"><span class="icon cyan">↔</span><div><h3>单位换算</h3><p>长度、重量与温度转换</p></div><b>→</b></a>
+        <a class="tool-card" data-category="text" data-search="HTML 实体 编码 解码 转义" href="tools/html-entities/"><span class="icon violet">&amp;</span><div><h3>HTML 实体编解码</h3><p>转换 HTML 特殊字符</p></div><b>→</b></a>
+        <a class="tool-card" data-category="generator" data-search="随机数 生成 安全 批量" href="tools/random-number/"><span class="icon rose">#?</span><div><h3>随机数生成器</h3><p>安全批量生成随机整数</p></div><b>→</b></a>
+        <a class="tool-card" data-category="developer" data-search="抖音 视频 下载 无水印 分享链接" href="tools/douyin-downloader/"><span class="icon rose">▶</span><div><h3>抖音视频下载</h3><p>解析已授权的公开分享视频</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="text" data-search="占位 文本 Lorem Ipsum 假文 段落 生成 zhanwei lorem" href="tools/lorem-text/"><span class="icon violet">Lor</span><div><h3>占位文本生成</h3><p>Lorem 与中文占位段落</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="developer" data-search="Cookie 解析 拆分 属性 HttpOnly SameSite cookie jiexi" href="tools/cookie-parser/"><span class="icon amber">Ck</span><div><h3>Cookie 解析</h3><p>拆分名称、值与属性</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="developer" data-search="User-Agent UA 浏览器 系统 设备 解析 useragent" href="tools/user-agent/"><span class="icon blue">UA</span><div><h3>User-Agent 解析</h3><p>识别浏览器、系统与设备</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="generator" data-search="NanoID 生成 随机 ID 唯一 短 nanoid" href="tools/nanoid/"><span class="icon cyan">NID</span><div><h3>NanoID 生成</h3><p>生成安全短唯一 ID</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="text" data-search="文本 去重 重复 行 排序 quchong dedup" href="tools/text-dedup/"><span class="icon green">≠</span><div><h3>文本去重</h3><p>按行去除重复并可选排序</p></div><b>→</b></a>
+      </div><div id="no-results" class="no-results" hidden>没有找到匹配的工具，<a href="feedback/">告诉我们你想要什么</a>。</div>
+    </section>
+    <section class="privacy"><div><span>隐私优先</span><h2>你的内容，留在你的浏览器里。</h2><p>除留言功能外，工具处理过程不会主动把输入内容发送到 Utilora 服务器。收藏和最近使用只保存在你的设备上。</p></div><div class="privacy-badge">◉<small>LOCAL<br>PROCESSING</small></div></section>
+  </main>
+  <footer>
+    <a class="brand" href="./"><span class="brand-mark">U</span><span>Utilora</span></a>
+    <p>把复杂留给工具，把时间还给你。</p>
+    <button id="install-app" class="install-btn" type="button" hidden>安装到桌面</button>
+    <span>© <span id="year"></span></span>
+  </footer>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/home.js"></script>
+  <script src="assets/js/analytics.js"></script>
+</body>
+</html>
