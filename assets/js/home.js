@@ -11,6 +11,10 @@ const recentShelf = document.getElementById("recent-shelf");
 const installBtn = document.getElementById("install-app");
 
 const toolPriority = [
+  "color-contrast",
+  "markdown-table",
+  "random-palette",
+  "cron-next",
   "image-compress",
   "number-chinese",
   "id-card",
@@ -28,8 +32,6 @@ const toolPriority = [
   "css-units",
   "slugify",
   "text-binary",
-  "random-palette",
-  "cron-next",
   "lorem-ipsum",
   "cookie-parser",
   "nanoid",
