@@ -11,6 +11,10 @@ const recentShelf = document.getElementById("recent-shelf");
 const installBtn = document.getElementById("install-app");
 
 const toolPriority = [
+  "roman-numeral",
+  "percentage",
+  "list-converter",
+  "http-status",
   "color-contrast",
   "markdown-table",
   "random-palette",
