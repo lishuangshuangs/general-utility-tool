@@ -1,66 +1,89 @@
 (() => {
   const input = document.getElementById("input");
   const output = document.getElementById("output");
-  const modeEl = document.getElementById("mode");
-  const trimEl = document.getElementById("trim");
+  const mode = document.getElementById("mode");
   const message = document.getElementById("message");
+  const beforeEl = document.getElementById("before");
+  const afterEl = document.getElementById("after");
+  const removedEl = document.getElementById("removed");
 
-  function run() {
-    const raw = input.value;
-    let lines = raw.split(/\r?\n/);
-    const before = lines.length;
-    const trimMode = trimEl.value;
+  function dedup() {
+    const text = input.value;
+    const m = mode.value;
+    let items = [];
+    let joiner = "\n";
 
-    if (trimMode === "trim" || trimMode === "empty") {
-      lines = lines.map((l) => l.trim());
-    }
-    if (trimMode === "empty") {
-      lines = lines.filter((l) => l.length > 0);
+    if (m === "word") {
+      items = text.split(/\s+/).filter(Boolean);
+      joiner = " ";
+    } else {
+      items = text.split(/\r?\n/);
     }
 
     const seen = new Set();
-    const unique = [];
-    for (const line of lines) {
-      if (!seen.has(line)) {
-        seen.add(line);
-        unique.push(line);
+    const result = [];
+    for (const item of items) {
+      let key = item;
+      if (m === "line-trim") key = item.trim();
+      if (m === "line-case") key = item.trim().toLowerCase();
+      if (m === "line-trim" && key === "") {
+        if (!seen.has("")) {
+          seen.add("");
+          result.push(item);
+        }
+        continue;
       }
+      if (seen.has(key)) continue;
+      seen.add(key);
+      result.push(m === "line-trim" || m === "line-case" ? (m === "line-trim" ? item.trim() : item) : item);
     }
 
-    let result = unique;
-    if (modeEl.value === "sort") {
-      result = [...unique].sort((a, b) => a.localeCompare(b, "zh-CN"));
-    } else if (modeEl.value === "reverse") {
-      result = [...unique].reverse();
-    }
-
-    output.value = result.join("\n");
-    document.getElementById("before").textContent = String(before);
-    document.getElementById("after").textContent = String(result.length);
-    document.getElementById("removed").textContent = String(before - result.length);
-    message.textContent = `完成：移除 ${before - result.length} 行`;
+    const before = items.length;
+    const after = result.length;
+    beforeEl.textContent = before;
+    afterEl.textContent = after;
+    removedEl.textContent = Math.max(0, before - after);
+    output.value = result.join(joiner);
+    message.textContent = after === before ? "无重复项" : `已去除 ${before - after} 项`;
     message.className = "message";
   }
 
-  document.getElementById("run").addEventListener("click", run);
+  document.getElementById("run").addEventListener("click", dedup);
+  mode.addEventListener("change", () => {
+    if (input.value.trim()) dedup();
+  });
+  input.addEventListener("input", () => {
+    if (input.value.trim()) dedup();
+  });
+
+  document.getElementById("sample").addEventListener("click", () => {
+    input.value = "苹果\n香蕉\n苹果\n橙子\n香蕉\n葡萄\n苹果\n猕猴桃";
+    mode.value = "line";
+    dedup();
+  });
+
+  document.getElementById("clear").addEventListener("click", () => {
+    input.value = "";
+    output.value = "";
+    beforeEl.textContent = "0";
+    afterEl.textContent = "0";
+    removedEl.textContent = "0";
+    message.textContent = "";
+  });
+
   document.getElementById("copy").addEventListener("click", async () => {
-    if (!output.value && output.value !== "") {
-      message.textContent = "请先执行去重";
+    if (!output.value) {
+      message.textContent = "暂无结果可复制";
       message.className = "message error";
       return;
     }
     try {
       await navigator.clipboard.writeText(output.value);
-      message.textContent = "已复制到剪贴板";
+      message.textContent = "已复制结果";
       message.className = "message";
     } catch {
       message.textContent = "复制失败，请手动选择";
       message.className = "message error";
     }
-  });
-  document.getElementById("swap").addEventListener("click", () => {
-    input.value = output.value;
-    message.textContent = "已写回输入框";
-    message.className = "message";
   });
 })();

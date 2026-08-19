@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>邮箱提取 - Utilora</title>
+  <meta name="description" content="从文本中提取邮箱地址，支持去重与复制，本地处理不上传。">
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="stylesheet" href="../../assets/css/site.css">
+</head>
+<body>
+  <header class="tool-head">
+    <nav>
+      <a class="brand" href="../../">Utilora</a>
+      <a href="../../feedback/">功能建议</a>
+    </nav>
+  </header>
+  <main class="tool-main">
+    <div class="panel">
+      <h1>邮箱提取</h1>
+      <p class="hint">从任意文本中识别并提取邮箱地址，可选择是否去重。适合整理通讯录或日志中的邮箱。</p>
+      <div class="field">
+        <label for="input">输入文本</label>
+        <textarea id="input" placeholder="粘贴包含邮箱的文本、日志或页面内容……"></textarea>
+      </div>
+      <div class="field">
+        <label><input type="checkbox" id="unique" checked> 自动去重</label>
+      </div>
+      <div class="actions">
+        <button id="extract" type="button">提取</button>
+        <button id="sample" class="secondary" type="button">示例</button>
+        <button id="clear" class="secondary" type="button">清空</button>
+        <button id="copy" class="secondary" type="button">复制结果</button>
+      </div>
+      <div class="stats" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:16px">
+        <div class="stat"><strong id="count">0</strong>找到邮箱</div>
+        <div class="stat"><strong id="unique-count">0</strong>去重后</div>
+      </div>
+      <div class="field" style="margin-top:16px">
+        <label for="output">提取结果（每行一个）</label>
+        <textarea id="output" readonly></textarea>
+      </div>
+      <div id="message" class="message"></div>
+    </div>
+    <div class="related">
+      <span>相关工具</span>
+      <a href="../text-dedup/">文本去重</a>
+      <a href="../text-counter/">文本统计</a>
+      <a href="../regex-tester/">正则测试</a>
+    </div>
+  </main>
+  <script src="../../assets/js/app.js"></script>
+  <script src="tool.js"></script>
+  <script src="../../assets/js/analytics.js" data-tool="email-extractor"></script>
+</body>
+</html>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>文本去重 - Utilora</title>
-  <meta name="description" content="在浏览器中对文本按行去重，支持保留顺序或排序，本地处理不上传。">
+  <meta name="description" content="去除重复行或重复词，支持按行、按空格分词，本地处理不上传。">
   <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
   <link rel="stylesheet" href="../../assets/css/site.css">
 </head>
@@ -18,42 +18,34 @@
   <main class="tool-main">
     <div class="panel">
       <h1>文本去重</h1>
-      <p class="hint">按行去除重复内容，可选择保留首次出现顺序或排序输出。所有处理在浏览器内完成。</p>
+      <p class="hint">去除重复行或重复词，保留首次出现顺序。适合清理名单、日志、关键词列表。</p>
       <div class="field">
-        <label for="input">输入文本（每行一条）</label>
-        <textarea id="input" rows="10" placeholder="一行一条&#10;重复行会被移除"></textarea>
+        <label for="input">输入文本</label>
+        <textarea id="input" placeholder="每行一项，或用空格分隔的词……"></textarea>
       </div>
-      <div class="grid">
-        <div class="field">
-          <label for="mode">处理方式</label>
-          <select id="mode">
-            <option value="keep">保留首次出现顺序</option>
-            <option value="sort">去重后排序</option>
-            <option value="reverse">去重后倒序</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="trim">空白处理</label>
-          <select id="trim">
-            <option value="trim">去除首尾空格</option>
-            <option value="keep">保留原样</option>
-            <option value="empty">同时忽略空行</option>
-          </select>
-        </div>
+      <div class="field">
+        <label for="mode">去重方式</label>
+        <select id="mode">
+          <option value="line">按行去重</option>
+          <option value="word">按空格分词去重</option>
+          <option value="line-trim">按行去重（忽略首尾空白）</option>
+          <option value="line-case">按行去重（忽略大小写）</option>
+        </select>
       </div>
       <div class="actions">
         <button id="run" type="button">去重</button>
+        <button id="sample" class="secondary" type="button">示例</button>
+        <button id="clear" class="secondary" type="button">清空</button>
         <button id="copy" class="secondary" type="button">复制结果</button>
-        <button id="swap" class="secondary" type="button">结果写回输入</button>
       </div>
-      <div class="stats" style="margin-top:14px">
-        <div class="stat"><span>原行数</span><strong id="before">0</strong></div>
-        <div class="stat"><span>去重后</span><strong id="after">0</strong></div>
-        <div class="stat"><span>移除</span><strong id="removed">0</strong></div>
+      <div class="stats" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:16px">
+        <div class="stat"><strong id="before">0</strong>处理前</div>
+        <div class="stat"><strong id="after">0</strong>处理后</div>
+        <div class="stat"><strong id="removed">0</strong>去除</div>
       </div>
       <div class="field" style="margin-top:16px">
         <label for="output">结果</label>
-        <textarea id="output" readonly rows="10" placeholder="点击去重…"></textarea>
+        <textarea id="output" readonly></textarea>
       </div>
       <div id="message" class="message"></div>
     </div>
