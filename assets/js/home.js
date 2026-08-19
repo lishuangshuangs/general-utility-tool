@@ -16,6 +16,7 @@ const toolPriority = [
   "id-card",
   "zh-convert",
   "markdown-preview",
+  "unix-permission",
   "json-formatter",
   "data-convert",
   "unit-converter",
