@@ -2,17 +2,13 @@ const input = document.getElementById("input");
 const output = document.getElementById("output");
 const message = document.getElementById("message");
 const maps = window.ZhMaps || { s2t: {}, t2s: {} };
-const SAMPLE = "Utilora 把常用工具留在浏览器里。头发干了以后，再把文件名转成 slug。";
+const s2tPhrases = window.ZhPhrases || {};
+const t2sPhrases = window.ZhPhrasesT2S || {};
+const SAMPLE = "Utilora 把常用工具留在浏览器里。头发干了以后，再把文件名转成 slug。皇后只是路过后面那家理发店。";
 
 function show(ok, text) {
   message.className = ok ? "message" : "message error";
   message.textContent = text;
-}
-
-function mapText(text, table) {
-  let out = "";
-  for (const ch of text) out += table[ch] || ch;
-  return out;
 }
 
 function toPinyin(text, asSlug) {
@@ -46,11 +42,11 @@ function convert(mode) {
   const text = input.value;
   try {
     if (mode === "s2t") {
-      output.value = mapText(text, maps.s2t);
-      show(true, "已转为繁体");
+      output.value = convertWithPhrases(text, s2tPhrases, maps.s2t);
+      show(true, "已按词级转为繁体");
     } else if (mode === "t2s") {
-      output.value = mapText(text, maps.t2s);
-      show(true, "已转为简体");
+      output.value = convertWithPhrases(text, t2sPhrases, maps.t2s);
+      show(true, "已按词级转为简体");
     } else if (mode === "pinyin") {
       output.value = toPinyin(text, false);
       show(true, "已转为拼音");
@@ -77,6 +73,8 @@ document.getElementById("copy").onclick = async () => {
   show(true, "已复制");
 };
 
+document.getElementById("share").onclick = () => UtiloraShare.copyShareLink(input.value, message);
+
 document.getElementById("swap").onclick = () => {
   input.value = output.value;
   show(true, "已把结果填回原文");
@@ -87,3 +85,6 @@ document.getElementById("clear").onclick = () => {
   output.value = "";
   show(true, "");
 };
+
+const shared = UtiloraShare.readShareQuery();
+if (shared) input.value = shared;

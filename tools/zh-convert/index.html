@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>简繁拼音 - Utilora</title>
-  <meta name="description" content="简体繁体互转、汉字转拼音和 URL slug，全部在浏览器本地完成。">
+  <meta name="description" content="词级简体繁体互转、汉字转拼音和 URL slug，全部在浏览器本地完成。">
   <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
   <link rel="stylesheet" href="../../assets/css/site.css">
 </head>
@@ -18,7 +18,7 @@
   <main class="tool-main">
     <div class="panel">
       <h1>简繁拼音</h1>
-      <p class="hint">简体 / 繁体互转，并生成拼音或 URL slug。适合起名、文件名和链接。字库来自 OpenCC 单字表，常用字覆盖完整。</p>
+      <p class="hint">会先匹配「头发 / 干了 / 皇后」这类词，再逐字转换。拼音与 slug 也在本地完成。</p>
       <div class="field">
         <label for="input">原文</label>
         <textarea id="input" placeholder="请输入中文……"></textarea>
@@ -30,6 +30,7 @@
         <button data-mode="slug" class="secondary">转 slug</button>
         <button id="sample" class="secondary">示例</button>
         <button id="copy" class="secondary">复制结果</button>
+        <button id="share" class="secondary">复制链接</button>
         <button id="swap" class="secondary">结果填回</button>
         <button id="clear" class="secondary">清空</button>
       </div>
@@ -37,7 +38,7 @@
         <label for="output">结果</label>
         <textarea id="output" readonly></textarea>
       </div>
-      <div id="message" class="message"></div>
+      <div id="message" class="message">会先匹配「头发 / 干了 / 皇后」这类词，再逐字转换。</div>
     </div>
     <div class="related">
       <span>相关工具</span>
@@ -46,8 +47,9 @@
       <a href="../html-entities/">HTML 实体</a>
     </div>
   </main>
-  <script src="s2t.js"></script>
-  <script src="t2s.js"></script>
+  <script src="../../assets/js/share.js"></script>
+  <script src="maps.js"></script>
+  <script src="phrases.js"></script>
   <script src="pinyin.js"></script>
   <script src="tool.js"></script>
   <script src="../../assets/js/analytics.js" data-tool="zh-convert"></script>
