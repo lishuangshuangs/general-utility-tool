@@ -5,37 +5,232 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
   <title>网站管理 - Utilora</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <link rel="stylesheet" href="../assets/css/site.css">
   <link rel="stylesheet" href="admin.css">
   <link rel="stylesheet" href="filters.css">
 </head>
 <body>
-  <header class="tool-head"><nav><a class="brand" href="../">Utilora 管理端</a><a href="../">返回网站</a></nav></header>
+  <header class="tool-head">
+    <nav>
+      <a class="brand" href="../">Utilora 管理端</a>
+      <a href="../">返回网站</a>
+    </nav>
+  </header>
+
   <main class="admin-main">
     <section id="login-panel" class="panel login-panel">
-      <h1>管理员登录</h1><p class="hint">使用 Supabase 中创建的管理员邮箱和密码登录。</p>
-      <form id="login-form"><div class="field"><label for="email">邮箱</label><input id="email" type="email" required autocomplete="username"></div><div class="field"><label for="password">密码</label><input id="password" type="password" required autocomplete="current-password"></div><button id="login-button" type="submit">登录</button></form>
+      <h1>管理员登录</h1>
+      <p class="hint">使用 Supabase 中创建的管理员邮箱和密码登录。</p>
+      <form id="login-form">
+        <div class="field">
+          <label for="email">邮箱</label>
+          <input id="email" type="email" required autocomplete="username">
+        </div>
+        <div class="field">
+          <label for="password">密码</label>
+          <input id="password" type="password" required autocomplete="current-password">
+        </div>
+        <button id="login-button" type="submit">登录</button>
+      </form>
       <div id="login-message" class="message" role="status"></div>
     </section>
+
     <section id="manager-panel" class="panel" hidden>
-      <div class="manager-head"><div><h1>网站管理</h1><p id="summary" class="hint"></p></div><div class="actions"><button id="refresh" class="secondary">刷新</button><button id="logout" class="secondary">退出登录</button></div></div>
-      <section class="analytics-panel" aria-labelledby="analytics-title">
-        <div class="analytics-head"><div><h2 id="analytics-title">访问与工具统计</h2><p class="hint">最近 30 天访问趋势与累计工具使用次数</p></div><div class="view-switch"><select id="analytics-range" aria-label="统计范围"><option value="7">最近 7 天</option><option value="30" selected>最近 30 天</option><option value="90">最近 90 天</option><option value="365">最近一年</option></select><button id="show-chart" type="button">图表</button><button id="show-table" type="button" class="secondary">表格</button></div></div>
-        <div id="stats-overview" class="stats analytics-overview"><div class="stat"><strong id="total-views">—</strong>总访问量</div><div class="stat"><strong id="unique-visitors">—</strong>独立访客</div><div class="stat"><strong id="today-views">—</strong>今日访问</div><div class="stat"><strong id="average-views">—</strong>日均访问</div><div class="stat"><strong id="total-uses">—</strong>工具使用次数</div><div class="stat"><strong id="popular-tool">—</strong>最常用工具</div></div>
-        <div id="chart-view"><h3>最近 30 天访问量</h3><div id="daily-chart" class="bar-chart"></div><h3>工具使用排行</h3><div id="tool-chart" class="horizontal-chart"></div><div class="analytics-grid"><div><h3>设备类型</h3><div id="device-chart" class="horizontal-chart"></div></div><div><h3>浏览器</h3><div id="browser-chart" class="horizontal-chart"></div></div><div><h3>访问来源</h3><div id="referrer-chart" class="horizontal-chart"></div></div><div><h3>热门页面</h3><div id="page-chart" class="horizontal-chart"></div></div></div></div>
-        <div id="table-view" hidden><div class="table-wrap analytics-table"><table><thead><tr><th>工具</th><th>使用次数</th><th>占比</th></tr></thead><tbody id="tool-stats-list"></tbody></table></div></div>
+      <div class="manager-head">
+        <div>
+          <h1>网站管理</h1>
+          <p id="summary" class="hint"></p>
+        </div>
+        <div class="actions">
+          <button id="refresh" class="secondary" type="button">刷新</button>
+          <button id="logout" class="secondary" type="button">退出登录</button>
+        </div>
+      </div>
+
+      <div class="admin-tabs" role="tablist">
+        <button id="tab-analytics" class="tab active" type="button" role="tab" aria-selected="true">访问统计</button>
+        <button id="tab-feedback" class="tab" type="button" role="tab" aria-selected="false">用户留言 <b id="feedback-count" hidden></b></button>
+      </div>
+
+      <section id="analytics-section" class="analytics-panel" aria-labelledby="analytics-title">
+        <div class="analytics-head">
+          <div>
+            <h2 id="analytics-title">访问与工具统计</h2>
+            <p id="analytics-subtitle" class="hint">按所选时间范围汇总访问趋势、访客构成与工具使用</p>
+          </div>
+          <div class="view-switch">
+            <select id="analytics-range" aria-label="统计范围">
+              <option value="7">最近 7 天</option>
+              <option value="30" selected>最近 30 天</option>
+              <option value="90">最近 90 天</option>
+              <option value="365">最近一年</option>
+              <option value="custom">自定义范围</option>
+            </select>
+            <div id="custom-range" class="custom-range" hidden>
+              <input id="analytics-start" type="date" aria-label="开始日期">
+              <span>至</span>
+              <input id="analytics-end" type="date" aria-label="结束日期">
+              <button id="apply-range" type="button">应用</button>
+            </div>
+            <button id="show-chart" type="button">图表</button>
+            <button id="show-table" type="button" class="secondary">表格</button>
+            <button id="export-csv" type="button" class="secondary">导出 CSV</button>
+          </div>
+        </div>
+
+        <div id="stats-overview" class="stats analytics-overview">
+          <div class="stat kpi">
+            <span>总访问量</span>
+            <strong id="total-views">—</strong>
+            <em id="total-views-delta" class="delta"></em>
+            <div id="views-spark" class="spark-wrap"></div>
+          </div>
+          <div class="stat kpi">
+            <span>独立访客</span>
+            <strong id="unique-visitors">—</strong>
+            <em id="unique-visitors-delta" class="delta"></em>
+          </div>
+          <div class="stat kpi">
+            <span>今日访问</span>
+            <strong id="today-views">—</strong>
+            <em id="today-views-delta" class="delta"></em>
+          </div>
+          <div class="stat kpi">
+            <span>日均访问</span>
+            <strong id="average-views">—</strong>
+            <em class="delta muted">所选区间</em>
+          </div>
+          <div class="stat kpi">
+            <span>工具使用次数</span>
+            <strong id="total-uses">—</strong>
+            <em id="total-uses-delta" class="delta"></em>
+          </div>
+          <div class="stat kpi">
+            <span>最常用工具</span>
+            <strong id="popular-tool">—</strong>
+            <em id="popular-tool-share" class="delta muted"></em>
+          </div>
+          <div class="stat kpi">
+            <span>新访客</span>
+            <strong id="new-visitors">—</strong>
+            <em id="new-visitors-share" class="delta muted"></em>
+          </div>
+          <div class="stat kpi">
+            <span>回访访客</span>
+            <strong id="returning-visitors">—</strong>
+            <em id="returning-visitors-share" class="delta muted"></em>
+          </div>
+        </div>
+
+        <div id="chart-view">
+          <div class="chart-card">
+            <div class="chart-card-head">
+              <h3 id="daily-chart-title">访问趋势</h3>
+              <p class="chart-legend"><i class="leg-view"></i>访问量 <i class="leg-use"></i>工具使用</p>
+            </div>
+            <div id="daily-chart" class="bar-chart"></div>
+          </div>
+          <h3>工具使用排行</h3>
+          <div id="tool-chart" class="horizontal-chart"></div>
+          <div class="analytics-grid">
+            <div>
+              <h3>设备类型</h3>
+              <div id="device-chart" class="horizontal-chart"></div>
+            </div>
+            <div>
+              <h3>浏览器</h3>
+              <div id="browser-chart" class="horizontal-chart"></div>
+            </div>
+            <div>
+              <h3>访问来源</h3>
+              <div id="referrer-chart" class="horizontal-chart"></div>
+            </div>
+            <div>
+              <h3>热门页面</h3>
+              <div id="page-chart" class="horizontal-chart"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="table-view" hidden>
+          <div class="table-wrap analytics-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>日期</th>
+                  <th>访问量</th>
+                  <th>独立访客</th>
+                  <th>工具使用</th>
+                </tr>
+              </thead>
+              <tbody id="daily-stats-list"></tbody>
+            </table>
+          </div>
+          <div class="table-wrap analytics-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>工具</th>
+                  <th>使用次数</th>
+                  <th>占比</th>
+                </tr>
+              </thead>
+              <tbody id="tool-stats-list"></tbody>
+            </table>
+          </div>
+        </div>
+        <div id="chart-tip" class="chart-tip" hidden></div>
         <div id="analytics-message" class="message"></div>
-      </section>      <form id="filter-form" class="filters">
-        <div><label for="status-filter">状态</label><select id="status-filter"><option value="">全部状态</option><option value="new">新留言</option><option value="processing">处理中</option><option value="completed">已完成</option><option value="closed">已关闭</option></select></div>
-        <div><label for="start-date">开始日期</label><input id="start-date" type="date"></div>
-        <div><label for="end-date">结束日期</label><input id="end-date" type="date"></div>
-        <div class="filter-actions"><button type="submit">查询</button><button id="reset-filter" type="button" class="secondary">重置</button></div>
-      </form>
-      <div id="manager-message" class="message" role="status"></div>
-      <div class="table-wrap"><table><thead><tr><th>时间</th><th>称呼</th><th>功能</th><th>详细说明</th><th>联系方式</th><th>状态</th><th>操作</th></tr></thead><tbody id="feedback-list"></tbody></table></div>
-      <div id="empty" class="result" hidden>没有符合当前筛选条件的留言。</div>
+      </section>
+
+      <section id="feedback-section" hidden>
+        <form id="filter-form" class="filters">
+          <div>
+            <label for="status-filter">状态</label>
+            <select id="status-filter">
+              <option value="">全部状态</option>
+              <option value="new">新留言</option>
+              <option value="processing">处理中</option>
+              <option value="completed">已完成</option>
+              <option value="closed">已关闭</option>
+            </select>
+          </div>
+          <div>
+            <label for="start-date">开始日期</label>
+            <input id="start-date" type="date">
+          </div>
+          <div>
+            <label for="end-date">结束日期</label>
+            <input id="end-date" type="date">
+          </div>
+          <div class="filter-actions">
+            <button type="submit">查询</button>
+            <button id="reset-filter" type="button" class="secondary">重置</button>
+          </div>
+        </form>
+        <div id="manager-message" class="message" role="status"></div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>时间</th>
+                <th>称呼</th>
+                <th>功能</th>
+                <th>详细说明</th>
+                <th>联系方式</th>
+                <th>状态</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="feedback-list"></tbody>
+          </table>
+        </div>
+        <div id="empty" class="result" hidden>没有符合当前筛选条件的留言。</div>
+      </section>
     </section>
   </main>
-  <script src="../feedback/config.js"></script><script src="admin.js"></script>
+  <script src="../feedback/config.js"></script>
+  <script src="admin.js"></script>
 </body>
 </html>
