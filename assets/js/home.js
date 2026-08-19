@@ -13,8 +13,11 @@ const installBtn = document.getElementById("install-app");
 const toolPriority = [
   "image-compress",
   "number-chinese",
+  "id-card",
   "zh-convert",
+  "markdown-preview",
   "json-formatter",
+  "data-convert",
   "unit-converter",
   "timestamp",
   "qr-code",

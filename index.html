@@ -19,7 +19,7 @@
 <body>
   <header class="site-header"><nav class="nav"><a class="brand" href="./"><span class="brand-mark">U</span><span>Utilora</span></a><div class="nav-links"><a href="#tools">全部工具</a><a href="feedback/">功能建议</a></div></nav></header>
   <main>
-    <section class="hero"><div class="hero-inner"><div class="eyebrow">LOCAL-FIRST · PRIVACY-FRIENDLY</div><h1>顺手的工具，<br><span>不该复杂。</span></h1><p>无需安装、无需登录。常用文本与开发工具，尽可能只在你的浏览器中处理。</p><div class="search-wrap"><span>⌕</span><input id="tool-search" type="search" placeholder="搜索工具，例如 JSON、图片压缩、大写金额…" autocomplete="off"><kbd>/</kbd></div><div class="hero-meta"><span><b id="tool-count">24</b> 个工具</span><span>✓ 免费使用</span><span>✓ 本地处理</span><span>✓ 可离线安装</span></div></div><div class="hero-art" aria-hidden="true"><div class="orb orb-one"></div><div class="orb orb-two"></div><div class="code-card"><i></i><i></i><i></i><pre>{
+    <section class="hero"><div class="hero-inner"><div class="eyebrow">LOCAL-FIRST · PRIVACY-FRIENDLY</div><h1>顺手的工具，<br><span>不该复杂。</span></h1><p>无需安装、无需登录。常用文本与开发工具，尽可能只在你的浏览器中处理。</p><div class="search-wrap"><span>⌕</span><input id="tool-search" type="search" placeholder="搜索工具，例如 JSON、图片压缩、大写金额…" autocomplete="off"><kbd>/</kbd></div><div class="hero-meta"><span><b id="tool-count">27</b> 个工具</span><span>✓ 免费使用</span><span>✓ 本地处理</span><span>✓ 可离线安装</span></div></div><div class="hero-art" aria-hidden="true"><div class="orb orb-one"></div><div class="orb orb-two"></div><div class="code-card"><i></i><i></i><i></i><pre>{
   "simple": true,
   "private": true
 }</pre></div></div></section>
@@ -35,11 +35,14 @@
     </section>
     <section id="tools" class="tools-section"><div class="section-head"><div><span class="section-kicker">TOOLBOX</span><h2>选择一个工具开始</h2></div><div id="categories" class="categories"><button class="active" data-category="all">全部</button><button data-category="text">文本</button><button data-category="developer">开发</button><button data-category="generator">生成</button><button data-category="image">图像</button></div></div>
       <div id="tool-grid" class="tool-grid">
-        <a class="tool-card new" data-category="image" data-search="图片 压缩 体积 WebP Base64 EXIF 照片" href="tools/image-compress/"><span class="icon amber">图</span><div><h3>图片压缩</h3><p>压缩、转 WebP 并去掉 EXIF</p></div><b>→</b></a>
-        <a class="tool-card new" data-category="text" data-search="数字 中文 大写 人民币 金额 发票 合同" href="tools/number-chinese/"><span class="icon rose">万</span><div><h3>数字转中文大写</h3><p>金额转人民币大写与读法</p></div><b>→</b></a>
-        <a class="tool-card new" data-category="text" data-search="简体 繁体 拼音 slug 中文 转换 台湾 香港" href="tools/zh-convert/"><span class="icon violet">汉</span><div><h3>简繁拼音</h3><p>简繁互转、拼音与 URL slug</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="image" data-search="图片 压缩 体积 WebP Base64 EXIF 照片 粘贴 批量 zip tupian yasuo tpy" href="tools/image-compress/"><span class="icon amber">图</span><div><h3>图片压缩</h3><p>单张或批量压缩，可打包下载</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="text" data-search="数字 中文 大写 人民币 金额 发票 合同 批量 shuzi zhongwen daxie" href="tools/number-chinese/"><span class="icon rose">万</span><div><h3>数字转中文大写</h3><p>金额转人民币大写，支持批量发票</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="text" data-search="身份证 校验 号码 生日 性别 户籍 18位 15位 shenfenzheng jiaoyan sfz" href="tools/id-card/"><span class="icon indigo">证</span><div><h3>身份证校验</h3><p>校验号码，读出生日、性别与省份</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="text" data-search="简体 繁体 拼音 slug 中文 转换 台湾 香港 头发 词级 jianfan pinyin" href="tools/zh-convert/"><span class="icon violet">汉</span><div><h3>简繁拼音</h3><p>词级简繁互转、拼音与 slug</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="text" data-search="Markdown 预览 HTML 公众号 笔记 md 渲染 微信 markdown yulan gongzhonghao" href="tools/markdown-preview/"><span class="icon green">MD</span><div><h3>Markdown 预览</h3><p>本地预览，并复制公众号 HTML</p></div><b>→</b></a>
         <a class="tool-card" data-category="text" data-search="文本统计 字数 字符 行数 中文 阅读" href="tools/text-counter/"><span class="icon indigo">字</span><div><h3>文本统计</h3><p>统计字符、中文与阅读时间</p></div><b>→</b></a>
-        <a class="tool-card" data-category="developer" data-search="JSON 格式化 压缩 校验 排序" href="tools/json-formatter/"><span class="icon amber">{ }</span><div><h3>JSON 格式化</h3><p>格式化、压缩、排序与下载</p></div><b>→</b></a>
+        <a class="tool-card" data-category="developer" data-search="JSON 格式化 压缩 校验 排序 json geshihua" href="tools/json-formatter/"><span class="icon amber">{ }</span><div><h3>JSON 格式化</h3><p>格式化、压缩、排序与下载</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="developer" data-search="JSON YAML CSV 转换 表格 配置 zhuanhuan" href="tools/data-convert/"><span class="icon blue">YML</span><div><h3>JSON / YAML / CSV</h3><p>三种格式在浏览器里互转</p></div><b>→</b></a>
         <a class="tool-card" data-category="developer" data-search="时间戳 Unix 日期 转换" href="tools/timestamp/"><span class="icon cyan">时</span><div><h3>时间戳转换</h3><p>Unix 时间戳与日期互转</p></div><b>→</b></a>
         <a class="tool-card" data-category="generator" data-search="密码 生成 随机 安全" href="tools/password-generator/"><span class="icon rose">密</span><div><h3>密码生成器</h3><p>生成安全随机密码</p></div><b>→</b></a>
         <a class="tool-card" data-category="text" data-search="大小写 英文 转换" href="tools/case-converter/"><span class="icon violet">Aa</span><div><h3>大小写转换</h3><p>转换英文文本大小写</p></div><b>→</b></a>
@@ -47,7 +50,7 @@
         <a class="tool-card" data-category="developer" data-search="正则 Regex 测试 匹配" href="tools/regex-tester/"><span class="icon green">.*</span><div><h3>正则测试</h3><p>实时查看匹配结果</p></div><b>→</b></a>
         <a class="tool-card" data-category="developer" data-search="JWT Token 解码 Header Payload" href="tools/jwt-decoder/"><span class="icon orange">JWT</span><div><h3>JWT 解码</h3><p>查看 Header 与 Payload</p></div><b>→</b></a>
         <a class="tool-card" data-category="generator" data-search="UUID GUID 随机 生成" href="tools/uuid-generator/"><span class="icon cyan">ID</span><div><h3>UUID 生成器</h3><p>批量生成 UUID v4</p></div><b>→</b></a>
-        <a class="tool-card" data-category="generator" data-search="二维码 QR 生成" href="tools/qr-code/"><span class="icon dark">▦</span><div><h3>二维码生成器</h3><p>文本与链接生成二维码</p></div><b>→</b></a>
+        <a class="tool-card" data-category="generator" data-search="二维码 QR 生成 识别 扫码 解码 erweima saoma" href="tools/qr-code/"><span class="icon dark">▦</span><div><h3>二维码</h3><p>生成二维码，也可识别图片</p></div><b>→</b></a>
         <a class="tool-card" data-category="text" data-search="文本 对比 Diff 差异" href="tools/text-diff/"><span class="icon rose">≠</span><div><h3>文本对比</h3><p>按行查看新增与删除</p></div><b>→</b></a>
         <a class="tool-card" data-category="developer" data-search="Hash MD5 SHA 摘要 哈希 加密" href="tools/hash-generator/"><span class="icon green">#</span><div><h3>Hash 生成器</h3><p>生成 MD5 与 SHA 摘要</p></div><b>→</b></a>
         <a class="tool-card" data-category="developer" data-search="URL URI 百分号 编码 解码" href="tools/url-codec/"><span class="icon blue">%</span><div><h3>URL 编解码</h3><p>网址与参数安全转换</p></div><b>→</b></a>
