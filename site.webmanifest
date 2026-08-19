@@ -1,0 +1,19 @@
+{
+  "name": "Utilora 在线实用工具箱",
+  "short_name": "Utilora",
+  "description": "无需安装、无需登录。常用文本与开发工具，尽可能只在你的浏览器中处理。",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#111827",
+  "lang": "zh-CN",
+  "icons": [
+    {
+      "src": "./favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any"
+    }
+  ]
+}
