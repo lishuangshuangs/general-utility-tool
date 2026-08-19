@@ -6,6 +6,7 @@ const maxWidth = document.getElementById("maxWidth");
 const format = document.getElementById("format");
 const message = document.getElementById("message");
 const compare = document.getElementById("compare");
+const batch = document.getElementById("batch");
 const beforeImg = document.getElementById("beforeImg");
 const afterImg = document.getElementById("afterImg");
 const beforeMeta = document.getElementById("beforeMeta");
@@ -13,10 +14,7 @@ const afterMeta = document.getElementById("afterMeta");
 const downloadBtn = document.getElementById("download");
 const copyBtn = document.getElementById("copyBase64");
 
-let sourceFile = null;
-let sourceUrl = "";
-let outputBlob = null;
-let outputUrl = "";
+let items = [];
 
 function show(ok, text) {
   message.className = ok ? "message" : "message error";
@@ -29,8 +27,8 @@ function formatSize(n) {
   return `${(n / (1024 * 1024)).toFixed(2)} MB`;
 }
 
-function revoke(url) {
-  if (url) URL.revokeObjectURL(url);
+function extOf(type) {
+  return type.split("/")[1].replace("jpeg", "jpg");
 }
 
 function loadImage(file) {
@@ -47,75 +45,110 @@ function loadImage(file) {
 }
 
 function canvasToBlob(canvas, type, q) {
-  return new Promise((resolve) => {
-    canvas.toBlob((blob) => resolve(blob), type, q);
-  });
+  return new Promise((resolve) => canvas.toBlob((blob) => resolve(blob), type, q));
 }
 
-async function compress() {
-  if (!sourceFile) return;
+async function compressFile(file) {
   const q = Number(quality.value);
   const limit = Number(maxWidth.value);
   const type = format.value;
-  qualityText.textContent = q.toFixed(2);
+  const { image, url } = await loadImage(file);
+  let width = image.naturalWidth;
+  let height = image.naturalHeight;
+  if (limit && Math.max(width, height) > limit) {
+    const scale = limit / Math.max(width, height);
+    width = Math.max(1, Math.round(width * scale));
+    height = Math.max(1, Math.round(height * scale));
+  }
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+  if (type === "image/jpeg") {
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(0, 0, width, height);
+  }
+  ctx.drawImage(image, 0, 0, width, height);
+  const blob = await canvasToBlob(canvas, type, q);
+  if (!blob) throw new Error("当前浏览器不支持这种输出格式");
+  const ratio = file.size ? Math.round((1 - blob.size / file.size) * 100) : 0;
+  return {
+    beforeUrl: url,
+    beforeMeta: `${image.naturalWidth}×${image.naturalHeight} · ${formatSize(file.size)}`,
+    afterUrl: URL.createObjectURL(blob),
+    afterMeta: `${width}×${height} · ${formatSize(blob.size)} · ${ratio > 0 ? `小 ${ratio}%` : ratio < 0 ? `大 ${-ratio}%` : "体积接近"}`,
+    blob,
+  };
+}
 
-  try {
-    const { image, url } = await loadImage(sourceFile);
-    revoke(sourceUrl);
-    sourceUrl = url;
-    beforeImg.src = url;
-
-    let width = image.naturalWidth;
-    let height = image.naturalHeight;
-    if (limit && Math.max(width, height) > limit) {
-      const scale = limit / Math.max(width, height);
-      width = Math.max(1, Math.round(width * scale));
-      height = Math.max(1, Math.round(height * scale));
-    }
-
-    const canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
-    const ctx = canvas.getContext("2d");
-    if (type === "image/jpeg") {
-      ctx.fillStyle = "#fff";
-      ctx.fillRect(0, 0, width, height);
-    }
-    ctx.drawImage(image, 0, 0, width, height);
-
-    const blob = await canvasToBlob(canvas, type, q);
-    if (!blob) {
-      show(false, "当前浏览器不支持这种输出格式");
-      return;
-    }
-
-    revoke(outputUrl);
-    outputBlob = blob;
-    outputUrl = URL.createObjectURL(blob);
-    afterImg.src = outputUrl;
-    beforeMeta.textContent = `${image.naturalWidth}×${image.naturalHeight} · ${formatSize(sourceFile.size)}`;
-    const ratio = sourceFile.size ? Math.round((1 - blob.size / sourceFile.size) * 100) : 0;
-    afterMeta.textContent = `${width}×${height} · ${formatSize(blob.size)} · ${ratio > 0 ? `小 ${ratio}%` : ratio < 0 ? `大 ${-ratio}%` : "体积接近"}`;
+function paint() {
+  const ready = items.filter((item) => item.blob);
+  downloadBtn.disabled = !ready.length;
+  copyBtn.disabled = ready.length !== 1;
+  downloadBtn.textContent = ready.length > 1 ? "打包下载" : "下载";
+  if (items.length === 1 && items[0].afterUrl) {
     compare.hidden = false;
-    downloadBtn.disabled = false;
-    copyBtn.disabled = false;
-    show(true, "已压缩。重绘后 EXIF 定位信息会一并去掉。");
-  } catch (error) {
-    show(false, error.message || "压缩失败");
+    batch.hidden = true;
+    beforeImg.src = items[0].beforeUrl;
+    afterImg.src = items[0].afterUrl;
+    beforeMeta.textContent = items[0].beforeMeta;
+    afterMeta.textContent = items[0].afterMeta;
+  } else if (items.length > 1) {
+    compare.hidden = true;
+    batch.hidden = false;
+    batch.innerHTML = items
+      .map(
+        (item) =>
+          `<li><img src="${item.afterUrl || item.beforeUrl}" alt=""><span>${item.name}</span><span>${item.error || item.afterMeta || "处理中"}</span></li>`,
+      )
+      .join("");
+  } else {
+    compare.hidden = true;
+    batch.hidden = true;
+    batch.innerHTML = "";
   }
 }
 
-function acceptFile(file) {
-  if (!file || !file.type.startsWith("image/")) {
+async function rebuild() {
+  qualityText.textContent = Number(quality.value).toFixed(2);
+  if (!items.length) return;
+  const next = [];
+  for (const item of items) {
+    try {
+      const result = await compressFile(item.file);
+      next.push({ ...item, ...result, error: undefined });
+    } catch (error) {
+      next.push({ ...item, error: error.message || "压缩失败" });
+    }
+  }
+  items = next;
+  const failed = items.filter((item) => item.error).length;
+  const saved = items.reduce((sum, item) => sum + (item.blob ? item.file.size - item.blob.size : 0), 0);
+  show(
+    !failed,
+    failed
+      ? `${items.length - failed} 张完成，${failed} 张失败`
+      : `已压缩 ${items.length} 张。合计${saved > 0 ? `小 ${formatSize(saved)}` : "体积接近"}。EXIF 已去掉。`,
+  );
+  paint();
+}
+
+function accept(list) {
+  const files = [...(list || [])].filter((file) => file.type.startsWith("image/"));
+  if (!files.length) {
     show(false, "请选择图片文件");
     return;
   }
-  if (file.size > 20 * 1024 * 1024) {
-    show(false, "图片请小于 20 MB");
+  if (files.some((file) => file.size > 20 * 1024 * 1024)) {
+    show(false, "单张图片请小于 20 MB");
     return;
   }
-  sourceFile = file;
-  compress();
+  items = files.slice(0, 20).map((file) => ({
+    name: file.name,
+    file,
+    beforeUrl: URL.createObjectURL(file),
+  }));
+  rebuild();
 }
 
 dropzone.addEventListener("dragover", (event) => {
@@ -126,50 +159,60 @@ dropzone.addEventListener("dragleave", () => dropzone.classList.remove("drag"));
 dropzone.addEventListener("drop", (event) => {
   event.preventDefault();
   dropzone.classList.remove("drag");
-  acceptFile(event.dataTransfer.files[0]);
+  accept(event.dataTransfer.files);
 });
-fileInput.addEventListener("change", () => acceptFile(fileInput.files[0]));
-quality.addEventListener("input", compress);
-maxWidth.addEventListener("change", compress);
-format.addEventListener("change", compress);
-
+fileInput.addEventListener("change", () => accept(fileInput.files));
+quality.addEventListener("input", rebuild);
+maxWidth.addEventListener("change", rebuild);
+format.addEventListener("change", rebuild);
 document.addEventListener("paste", (event) => {
-  const item = [...(event.clipboardData?.items || [])].find((entry) => entry.type.startsWith("image/"));
-  if (item) acceptFile(item.getAsFile());
+  const files = [...(event.clipboardData?.items || [])]
+    .map((item) => item.getAsFile())
+    .filter((file) => file?.type.startsWith("image/"));
+  if (files.length) {
+    event.preventDefault();
+    accept(files);
+  }
 });
 
-downloadBtn.onclick = () => {
-  if (!outputBlob) return;
-  const ext = format.value.split("/")[1].replace("jpeg", "jpg");
+downloadBtn.onclick = async () => {
+  const ready = items.filter((item) => item.blob);
+  if (!ready.length) return;
+  const ext = extOf(format.value);
+  if (ready.length === 1) {
+    const link = document.createElement("a");
+    link.href = ready[0].afterUrl;
+    link.download = `compressed.${ext}`;
+    link.click();
+    return;
+  }
+  const zip = await UtiloraZip.zipBlobs(
+    ready.map((item, index) => ({
+      name: `${item.name.replace(/\.[^.]+$/, "") || `image-${index + 1}`}.${ext}`,
+      blob: item.blob,
+    })),
+  );
   const link = document.createElement("a");
-  link.href = outputUrl;
-  link.download = `compressed.${ext}`;
+  link.href = URL.createObjectURL(zip);
+  link.download = "utilora-images.zip";
   link.click();
 };
 
 copyBtn.onclick = async () => {
-  if (!outputBlob) return;
-  const buffer = await outputBlob.arrayBuffer();
-  const bytes = new Uint8Array(buffer);
+  const item = items.find((entry) => entry.blob);
+  if (!item) return;
+  const bytes = new Uint8Array(await item.blob.arrayBuffer());
   let binary = "";
   bytes.forEach((b) => {
     binary += String.fromCharCode(b);
   });
-  const dataUrl = `data:${outputBlob.type};base64,${btoa(binary)}`;
-  await navigator.clipboard.writeText(dataUrl);
+  await navigator.clipboard.writeText(`data:${item.blob.type};base64,${btoa(binary)}`);
   show(true, "已复制 Data URL");
 };
 
 document.getElementById("clear").onclick = () => {
-  sourceFile = null;
-  outputBlob = null;
-  revoke(sourceUrl);
-  revoke(outputUrl);
-  sourceUrl = "";
-  outputUrl = "";
+  items = [];
   fileInput.value = "";
-  compare.hidden = true;
-  downloadBtn.disabled = true;
-  copyBtn.disabled = true;
+  paint();
   show(true, "");
 };
