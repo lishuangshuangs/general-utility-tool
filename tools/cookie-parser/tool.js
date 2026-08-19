@@ -2,77 +2,92 @@
   const input = document.getElementById("input");
   const tbody = document.getElementById("tbody");
   const resultWrap = document.getElementById("result-wrap");
+  const emptyState = document.getElementById("empty-state");
   const message = document.getElementById("message");
+  let lastPairs = [];
 
-  function parseCookieLine(line) {
-    const parts = line.split(";").map((p) => p.trim()).filter(Boolean);
-    if (!parts.length) return null;
-    const first = parts[0];
-    const eq = first.indexOf("=");
-    const name = eq === -1 ? first : first.slice(0, eq).trim();
-    const value = eq === -1 ? "" : first.slice(eq + 1).trim();
-    const attrs = parts.slice(1).map((p) => {
-      const i = p.indexOf("=");
-      if (i === -1) return { key: p, val: true };
-      return { key: p.slice(0, i).trim(), val: p.slice(i + 1).trim() };
+  function parseCookie(str) {
+    const pairs = [];
+    if (!str || !str.trim()) return pairs;
+    str.split(";").forEach((part) => {
+      const trimmed = part.trim();
+      if (!trimmed) return;
+      const eq = trimmed.indexOf("=");
+      if (eq === -1) {
+        pairs.push({ name: trimmed, value: "" });
+      } else {
+        pairs.push({
+          name: trimmed.slice(0, eq).trim(),
+          value: trimmed.slice(eq + 1).trim(),
+        });
+      }
     });
-    return { name, value, attrs };
+    return pairs;
   }
 
-  function parse() {
-    const raw = input.value.trim();
-    if (!raw) {
-      message.textContent = "请输入 Cookie 字符串";
-      message.className = "message error";
-      resultWrap.hidden = true;
-      return;
-    }
-    let lines = raw.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
-    if (lines.length === 1 && lines[0].includes(";") && !lines[0].toLowerCase().includes("path=") && !lines[0].toLowerCase().includes("httponly")) {
-      const pairs = lines[0].split(";").map((p) => p.trim()).filter(Boolean);
-      lines = pairs;
-    }
-    const rows = [];
-    lines.forEach((line) => {
-      const parsed = parseCookieLine(line);
-      if (parsed && parsed.name) rows.push(parsed);
-    });
+  function render() {
+    const pairs = parseCookie(input.value);
+    lastPairs = pairs;
     tbody.replaceChildren();
-    if (!rows.length) {
-      message.textContent = "未能解析出有效 Cookie";
-      message.className = "message error";
+    if (pairs.length === 0) {
       resultWrap.hidden = true;
+      emptyState.hidden = false;
+      emptyState.textContent = input.value.trim()
+        ? "未解析出有效 Cookie 键值对。"
+        : "输入 Cookie 后点击解析，结果将显示在下方。";
+      message.textContent = "";
       return;
     }
-    rows.forEach((r) => {
+    emptyState.hidden = true;
+    resultWrap.hidden = false;
+    pairs.forEach(({ name, value }) => {
       const tr = document.createElement("tr");
-      const attrStr = r.attrs
-        .map((a) => (a.val === true ? a.key : `${a.key}=${a.val}`))
-        .join("; ") || "—";
-      tr.innerHTML = `<td><code>${escapeHtml(r.name)}</code></td><td><code>${escapeHtml(r.value)}</code></td><td>${escapeHtml(attrStr)}</td>`;
+      const tdName = document.createElement("td");
+      const tdValue = document.createElement("td");
+      tdName.textContent = name;
+      tdValue.textContent = value;
+      tr.append(tdName, tdValue);
       tbody.append(tr);
     });
-    resultWrap.hidden = false;
-    message.textContent = `共解析 ${rows.length} 条`;
+    message.textContent = `共解析 ${pairs.length} 项`;
     message.className = "message";
   }
 
-  function escapeHtml(s) {
-    return String(s)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;");
-  }
+  document.getElementById("parse").addEventListener("click", render);
+  input.addEventListener("input", () => {
+    if (input.value.trim()) render();
+  });
 
-  document.getElementById("parse").addEventListener("click", parse);
+  document.getElementById("sample").addEventListener("click", () => {
+    input.value =
+      "session_id=a1b2c3d4e5f6; theme=dark; lang=zh-CN; _ga=GA1.2.123456789.1620000000; remember_me=true";
+    render();
+  });
+
   document.getElementById("clear").addEventListener("click", () => {
     input.value = "";
+    lastPairs = [];
     tbody.replaceChildren();
     resultWrap.hidden = true;
+    emptyState.hidden = false;
+    emptyState.textContent = "输入 Cookie 后点击解析，结果将显示在下方。";
     message.textContent = "";
   });
-  input.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) parse();
+
+  document.getElementById("copy-json").addEventListener("click", async () => {
+    if (lastPairs.length === 0) {
+      message.textContent = "暂无数据可复制";
+      message.className = "message error";
+      return;
+    }
+    const obj = Object.fromEntries(lastPairs.map((p) => [p.name, p.value]));
+    try {
+      await navigator.clipboard.writeText(JSON.stringify(obj, null, 2));
+      message.textContent = "已复制为 JSON";
+      message.className = "message";
+    } catch {
+      message.textContent = "复制失败，请手动选择";
+      message.className = "message error";
+    }
   });
 })();
