@@ -1,6 +1,86 @@
-const countEl=document.getElementById('count'),styleEl=document.getElementById('style'),swatches=document.getElementById('swatches'),message=document.getElementById('message');
-function hslToHex(h,s,l){s/=100;l/=100;const a=s*Math.min(l,1-l);const f=n=>{const k=(n+h/30)%12;const color=l-a*Math.max(Math.min(k-3,9-k,1),-1);return Math.round(255*color).toString(16).padStart(2,'0')};return`#${f(0)}${f(8)}${f(4)}`}
-function random(min,max){return Math.random()*(max-min)+min}
-function generatePalette(n,style){const colors=[];const baseH=random(0,360);for(let i=0;i<n;i++){let h,s,l;if(style==='vibrant'){h=(baseH+i*(360/n)+random(-15,15))%360;s=random(65,90);l=random(40,60)}else if(style==='pastel'){h=(baseH+i*(360/n)+random(-20,20))%360;s=random(30,55);l=random(70,88)}else if(style==='earth'){h=(baseH+i*25+random(-10,10))%360;if(h>80&&h<160)h=random(20,50);s=random(25,55);l=random(35,65)}else if(style==='mono'){h=baseH+random(-8,8);s=random(10,40);l=20+(i/(n-1||1))*60+random(-5,5)}else{h=random(0,360);s=random(40,85);l=random(35,75)}colors.push(hslToHex(h,s,Math.min(95,Math.max(8,l))))}return colors}
-function render(){const n=Math.min(12,Math.max(3,parseInt(countEl.value,10)||5));const colors=generatePalette(n,styleEl.value);swatches.innerHTML='';colors.forEach(hex=>{const el=document.createElement('div');el.className='swatch';el.innerHTML=`<div class="color" style="background:${hex}"></div><div class="meta">${hex}<span>点击复制</span></div>`;el.onclick=async()=>{await navigator.clipboard.writeText(hex);message.className='message';message.textContent=`已复制 ${hex}`};swatches.append(el)});message.className='message';message.textContent=`已生成 ${n} 色色板`;window._lastPalette=colors}
-document.getElementById('generate').onclick=render;document.getElementById('copy').onclick=async()=>{if(!window._lastPalette)return;await navigator.clipboard.writeText(window._lastPalette.join('\n'));message.textContent='已复制全部 HEX'};countEl.addEventListener('change',render);styleEl.addEventListener('change',render);render();
+(() => {
+  const palette = document.getElementById("palette");
+  const countEl = document.getElementById("count");
+  const modeEl = document.getElementById("mode");
+  const message = document.getElementById("message");
+  let colors = [];
+
+  function rand(min, max) {
+    return min + Math.random() * (max - min);
+  }
+
+  function hslToHex(h, s, l) {
+    s /= 100;
+    l /= 100;
+    const a = s * Math.min(l, 1 - l);
+    const f = (n) => {
+      const k = (n + h / 30) % 12;
+      const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+      return Math.round(255 * color).toString(16).padStart(2, "0");
+    };
+    return "#" + f(0) + f(8) + f(4);
+  }
+
+  function genOne(mode) {
+    const h = rand(0, 360);
+    let s, l;
+    if (mode === "vibrant") {
+      s = rand(65, 95);
+      l = rand(40, 60);
+    } else if (mode === "pastel") {
+      s = rand(30, 55);
+      l = rand(72, 88);
+    } else if (mode === "dark") {
+      s = rand(40, 80);
+      l = rand(18, 38);
+    } else {
+      s = rand(25, 90);
+      l = rand(25, 80);
+    }
+    return hslToHex(h, s, l);
+  }
+
+  function render() {
+    const n = Math.min(12, Math.max(3, Number(countEl.value) || 5));
+    countEl.value = n;
+    const mode = modeEl.value;
+    colors = Array.from({ length: n }, () => genOne(mode));
+    palette.replaceChildren(
+      ...colors.map((hex) => {
+        const card = document.createElement("div");
+        card.className = "swatch-card";
+        card.title = "点击复制 " + hex;
+        card.innerHTML = `<div class="chip" style="background:${hex}"></div><div class="meta">${hex}</div>`;
+        card.addEventListener("click", async () => {
+          try {
+            await navigator.clipboard.writeText(hex);
+            message.className = "message";
+            message.textContent = "已复制 " + hex;
+          } catch {
+            message.className = "message error";
+            message.textContent = "复制失败";
+          }
+        });
+        return card;
+      })
+    );
+    message.className = "message";
+    message.textContent = "已生成 " + n + " 个颜色";
+  }
+
+  document.getElementById("gen").addEventListener("click", render);
+  document.getElementById("copyAll").addEventListener("click", async () => {
+    if (!colors.length) return;
+    try {
+      await navigator.clipboard.writeText(colors.join("\n"));
+      message.className = "message";
+      message.textContent = "已复制全部 HEX";
+    } catch {
+      message.className = "message error";
+      message.textContent = "复制失败";
+    }
+  });
+  countEl.addEventListener("change", render);
+  modeEl.addEventListener("change", render);
+  render();
+})();
