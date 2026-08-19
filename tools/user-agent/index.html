@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>User-Agent 解析 - Utilora</title>
+  <meta name="description" content="在浏览器中解析 User-Agent 字符串，识别浏览器、系统与设备信息，本地处理不上传。">
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="stylesheet" href="../../assets/css/site.css">
+  <style>
+    .ua-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}
+    .ua-grid .stat{text-align:left}
+    .ua-grid .stat strong{font-size:15px;word-break:break-all}
+    @media(max-width:650px){.ua-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header class="tool-head">
+    <nav>
+      <a class="brand" href="../../">Utilora</a>
+      <a href="../../feedback/">功能建议</a>
+    </nav>
+  </header>
+  <main class="tool-main">
+    <div class="panel">
+      <h1>User-Agent 解析</h1>
+      <p class="hint">粘贴 User-Agent 字符串，或使用当前浏览器的 UA。本地解析浏览器、操作系统与设备类型。</p>
+      <div class="field">
+        <label for="input">User-Agent</label>
+        <textarea id="input" rows="4" placeholder="Mozilla/5.0 ..."></textarea>
+      </div>
+      <div class="actions">
+        <button id="parse" type="button">解析</button>
+        <button id="use-current" class="secondary" type="button">使用当前浏览器</button>
+        <button id="clear" class="secondary" type="button">清空</button>
+      </div>
+      <div id="result" class="ua-grid" hidden>
+        <div class="stat"><span>浏览器</span><strong id="browser">—</strong></div>
+        <div class="stat"><span>版本</span><strong id="version">—</strong></div>
+        <div class="stat"><span>操作系统</span><strong id="os">—</strong></div>
+        <div class="stat"><span>设备类型</span><strong id="device">—</strong></div>
+        <div class="stat"><span>引擎</span><strong id="engine">—</strong></div>
+        <div class="stat"><span>移动端</span><strong id="mobile">—</strong></div>
+      </div>
+      <div id="message" class="message"></div>
+    </div>
+    <div class="related">
+      <span>相关工具</span>
+      <a href="../url-parser/">URL 解析器</a>
+      <a href="../cookie-parser/">Cookie 解析</a>
+      <a href="../jwt-decoder/">JWT 解码</a>
+    </div>
+  </main>
+  <script src="../../assets/js/app.js"></script>
+  <script src="tool.js"></script>
+  <script src="../../assets/js/analytics.js" data-tool="user-agent"></script>
+</body>
+</html>

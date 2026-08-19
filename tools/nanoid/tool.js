@@ -1,46 +1,61 @@
-const sizeEl = document.getElementById("size");
-const countEl = document.getElementById("count");
-const alphabetEl = document.getElementById("alphabet");
-const output = document.getElementById("output");
-const message = document.getElementById("message");
+(() => {
+  const sizeEl = document.getElementById("size");
+  const countEl = document.getElementById("count");
+  const alphabetEl = document.getElementById("alphabet");
+  const output = document.getElementById("output");
+  const message = document.getElementById("message");
 
-const DEFAULT_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-";
+  const alphabets = {
+    url: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-",
+    alphanum: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
+    numbers: "0123456789",
+    lowercase: "abcdefghijklmnopqrstuvwxyz0123456789",
+  };
 
-function nanoid(size, alphabet) {
-  const chars = alphabet || DEFAULT_ALPHABET;
-  const len = chars.length;
-  if (len < 2) throw new Error("字母表至少 2 个字符");
-  const bytes = crypto.getRandomValues(new Uint8Array(size));
-  let id = "";
-  for (let i = 0; i < size; i++) {
-    id += chars[bytes[i] % len];
+  function nanoid(size, alphabet) {
+    const mask = (2 << (Math.log(alphabet.length - 1) / Math.LN2)) - 1;
+    const step = Math.ceil((1.6 * mask * size) / alphabet.length);
+    let id = "";
+    while (id.length < size) {
+      const bytes = new Uint8Array(step);
+      crypto.getRandomValues(bytes);
+      for (let i = 0; i < step && id.length < size; i++) {
+        const idx = bytes[i] & mask;
+        if (idx < alphabet.length) id += alphabet[idx];
+      }
+    }
+    return id;
   }
-  return id;
-}
 
-function generate() {
-  const size = Math.max(8, Math.min(64, +sizeEl.value || 21));
-  const count = Math.max(1, Math.min(50, +countEl.value || 1));
-  sizeEl.value = size;
-  countEl.value = count;
-  let alphabet = alphabetEl.value.trim();
-  if (!alphabet) alphabet = DEFAULT_ALPHABET;
-  try {
-    const ids = Array.from({ length: count }, () => nanoid(size, alphabet));
+  function generate() {
+    const size = Math.min(64, Math.max(4, Number(sizeEl.value) || 21));
+    const count = Math.min(50, Math.max(1, Number(countEl.value) || 5));
+    const alphabet = alphabets[alphabetEl.value] || alphabets.url;
+    const ids = [];
+    for (let i = 0; i < count; i++) {
+      ids.push(nanoid(size, alphabet));
+    }
     output.value = ids.join("\n");
-    message.textContent = `已生成 ${count} 个，长度 ${size}`;
-  } catch (e) {
-    message.textContent = e.message || "生成失败";
-    message.classList.add("error");
+    message.textContent = `已生成 ${count} 个`;
+    message.className = "message";
   }
-}
 
-document.getElementById("generate").onclick = generate;
-document.getElementById("copy").onclick = async () => {
-  if (!output.value) return;
-  await navigator.clipboard.writeText(output.value);
-  message.textContent = "已复制";
-  message.classList.remove("error");
-};
+  document.getElementById("generate").addEventListener("click", generate);
+  document.getElementById("copy").addEventListener("click", async () => {
+    if (!output.value) {
+      message.textContent = "请先生成";
+      message.className = "message error";
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(output.value);
+      message.textContent = "已复制到剪贴板";
+      message.className = "message";
+    } catch {
+      message.textContent = "复制失败，请手动选择";
+      message.className = "message error";
+    }
+  });
 
-generate();
+  generate();
+})();

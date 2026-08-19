@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>文本去重 - Utilora</title>
+  <meta name="description" content="在浏览器中对文本按行去重，支持保留顺序或排序，本地处理不上传。">
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="stylesheet" href="../../assets/css/site.css">
+</head>
+<body>
+  <header class="tool-head">
+    <nav>
+      <a class="brand" href="../../">Utilora</a>
+      <a href="../../feedback/">功能建议</a>
+    </nav>
+  </header>
+  <main class="tool-main">
+    <div class="panel">
+      <h1>文本去重</h1>
+      <p class="hint">按行去除重复内容，可选择保留首次出现顺序或排序输出。所有处理在浏览器内完成。</p>
+      <div class="field">
+        <label for="input">输入文本（每行一条）</label>
+        <textarea id="input" rows="10" placeholder="一行一条&#10;重复行会被移除"></textarea>
+      </div>
+      <div class="grid">
+        <div class="field">
+          <label for="mode">处理方式</label>
+          <select id="mode">
+            <option value="keep">保留首次出现顺序</option>
+            <option value="sort">去重后排序</option>
+            <option value="reverse">去重后倒序</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="trim">空白处理</label>
+          <select id="trim">
+            <option value="trim">去除首尾空格</option>
+            <option value="keep">保留原样</option>
+            <option value="empty">同时忽略空行</option>
+          </select>
+        </div>
+      </div>
+      <div class="actions">
+        <button id="run" type="button">去重</button>
+        <button id="copy" class="secondary" type="button">复制结果</button>
+        <button id="swap" class="secondary" type="button">结果写回输入</button>
+      </div>
+      <div class="stats" style="margin-top:14px">
+        <div class="stat"><span>原行数</span><strong id="before">0</strong></div>
+        <div class="stat"><span>去重后</span><strong id="after">0</strong></div>
+        <div class="stat"><span>移除</span><strong id="removed">0</strong></div>
+      </div>
+      <div class="field" style="margin-top:16px">
+        <label for="output">结果</label>
+        <textarea id="output" readonly rows="10" placeholder="点击去重…"></textarea>
+      </div>
+      <div id="message" class="message"></div>
+    </div>
+    <div class="related">
+      <span>相关工具</span>
+      <a href="../text-counter/">文本统计</a>
+      <a href="../text-diff/">文本对比</a>
+      <a href="../case-converter/">大小写转换</a>
+    </div>
+  </main>
+  <script src="../../assets/js/app.js"></script>
+  <script src="tool.js"></script>
+  <script src="../../assets/js/analytics.js" data-tool="text-dedup"></script>
+</body>
+</html>

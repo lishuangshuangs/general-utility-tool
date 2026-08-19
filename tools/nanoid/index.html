@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>NanoID 生成 - Utilora</title>
-  <meta name="description" content="在浏览器中生成安全的 NanoID 短唯一标识，本地处理不上传。">
+  <meta name="description" content="在浏览器中生成安全的 NanoID，可自定义长度与字符集，本地处理不上传。">
   <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
   <link rel="stylesheet" href="../../assets/css/site.css">
 </head>
@@ -18,25 +18,33 @@
   <main class="tool-main">
     <div class="panel">
       <h1>NanoID 生成</h1>
-      <p class="hint">使用加密安全随机数生成短小、URL 友好的唯一 ID。默认字母表与官方 NanoID 一致。</p>
+      <p class="hint">生成体积小、URL 安全的唯一 ID。使用浏览器加密随机源，内容仅在本地生成。</p>
       <div class="grid">
         <div class="field">
-          <label for="size">长度（8–64）</label>
-          <input id="size" type="number" min="8" max="64" value="21">
+          <label for="size">长度</label>
+          <input id="size" type="number" min="4" max="64" value="21">
         </div>
         <div class="field">
-          <label for="count">数量（1–50）</label>
+          <label for="count">生成数量</label>
           <input id="count" type="number" min="1" max="50" value="5">
         </div>
       </div>
       <div class="field">
-        <label for="alphabet">字母表（可选，留空使用默认）</label>
-        <input id="alphabet" type="text" placeholder="A-Za-z0-9_-（默认）" spellcheck="false">
+        <label for="alphabet">字符集</label>
+        <select id="alphabet">
+          <option value="url">URL 安全 (A-Za-z0-9_-)</option>
+          <option value="alphanum">字母数字 (A-Za-z0-9)</option>
+          <option value="numbers">纯数字 (0-9)</option>
+          <option value="lowercase">小写字母数字</option>
+        </select>
       </div>
-      <textarea id="output" readonly spellcheck="false"></textarea>
       <div class="actions">
         <button id="generate" type="button">生成</button>
         <button id="copy" class="secondary" type="button">复制全部</button>
+      </div>
+      <div class="field" style="margin-top:16px">
+        <label for="output">结果</label>
+        <textarea id="output" readonly rows="8" placeholder="点击生成…"></textarea>
       </div>
       <div id="message" class="message"></div>
     </div>
