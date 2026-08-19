@@ -19,7 +19,7 @@
 <body>
   <header class="site-header"><nav class="nav"><a class="brand" href="./"><span class="brand-mark">U</span><span>Utilora</span></a><div class="nav-links"><a href="#tools">全部工具</a><a href="feedback/">功能建议</a></div></nav></header>
   <main>
-    <section class="hero"><div class="hero-inner"><div class="eyebrow">LOCAL-FIRST · PRIVACY-FRIENDLY</div><h1>顺手的工具，<br><span>不该复杂。</span></h1><p>无需安装、无需登录。常用文本与开发工具，尽可能只在你的浏览器中处理。</p><div class="search-wrap"><span>⌕</span><input id="tool-search" type="search" placeholder="搜索工具，例如 JSON、时间戳、Base64…" autocomplete="off"><kbd>/</kbd></div><div class="hero-meta"><span><b id="tool-count">21</b> 个工具</span><span>✓ 免费使用</span><span>✓ 本地处理</span><span>✓ 可离线安装</span></div></div><div class="hero-art" aria-hidden="true"><div class="orb orb-one"></div><div class="orb orb-two"></div><div class="code-card"><i></i><i></i><i></i><pre>{
+    <section class="hero"><div class="hero-inner"><div class="eyebrow">LOCAL-FIRST · PRIVACY-FRIENDLY</div><h1>顺手的工具，<br><span>不该复杂。</span></h1><p>无需安装、无需登录。常用文本与开发工具，尽可能只在你的浏览器中处理。</p><div class="search-wrap"><span>⌕</span><input id="tool-search" type="search" placeholder="搜索工具，例如 JSON、图片压缩、大写金额…" autocomplete="off"><kbd>/</kbd></div><div class="hero-meta"><span><b id="tool-count">24</b> 个工具</span><span>✓ 免费使用</span><span>✓ 本地处理</span><span>✓ 可离线安装</span></div></div><div class="hero-art" aria-hidden="true"><div class="orb orb-one"></div><div class="orb orb-two"></div><div class="code-card"><i></i><i></i><i></i><pre>{
   "simple": true,
   "private": true
 }</pre></div></div></section>
@@ -33,8 +33,11 @@
         <div id="recent-row" class="shelf-row"></div>
       </div>
     </section>
-    <section id="tools" class="tools-section"><div class="section-head"><div><span class="section-kicker">TOOLBOX</span><h2>选择一个工具开始</h2></div><div id="categories" class="categories"><button class="active" data-category="all">全部</button><button data-category="text">文本</button><button data-category="developer">开发</button><button data-category="generator">生成</button></div></div>
+    <section id="tools" class="tools-section"><div class="section-head"><div><span class="section-kicker">TOOLBOX</span><h2>选择一个工具开始</h2></div><div id="categories" class="categories"><button class="active" data-category="all">全部</button><button data-category="text">文本</button><button data-category="developer">开发</button><button data-category="generator">生成</button><button data-category="image">图像</button></div></div>
       <div id="tool-grid" class="tool-grid">
+        <a class="tool-card new" data-category="image" data-search="图片 压缩 体积 WebP Base64 EXIF 照片" href="tools/image-compress/"><span class="icon amber">图</span><div><h3>图片压缩</h3><p>压缩、转 WebP 并去掉 EXIF</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="text" data-search="数字 中文 大写 人民币 金额 发票 合同" href="tools/number-chinese/"><span class="icon rose">万</span><div><h3>数字转中文大写</h3><p>金额转人民币大写与读法</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="text" data-search="简体 繁体 拼音 slug 中文 转换 台湾 香港" href="tools/zh-convert/"><span class="icon violet">汉</span><div><h3>简繁拼音</h3><p>简繁互转、拼音与 URL slug</p></div><b>→</b></a>
         <a class="tool-card" data-category="text" data-search="文本统计 字数 字符 行数 中文 阅读" href="tools/text-counter/"><span class="icon indigo">字</span><div><h3>文本统计</h3><p>统计字符、中文与阅读时间</p></div><b>→</b></a>
         <a class="tool-card" data-category="developer" data-search="JSON 格式化 压缩 校验 排序" href="tools/json-formatter/"><span class="icon amber">{ }</span><div><h3>JSON 格式化</h3><p>格式化、压缩、排序与下载</p></div><b>→</b></a>
         <a class="tool-card" data-category="developer" data-search="时间戳 Unix 日期 转换" href="tools/timestamp/"><span class="icon cyan">时</span><div><h3>时间戳转换</h3><p>Unix 时间戳与日期互转</p></div><b>→</b></a>
@@ -55,7 +58,7 @@
         <a class="tool-card" data-category="generator" data-search="单位 换算 长度 重量 温度" href="tools/unit-converter/"><span class="icon cyan">↔</span><div><h3>单位换算</h3><p>长度、重量与温度转换</p></div><b>→</b></a>
         <a class="tool-card" data-category="text" data-search="HTML 实体 编码 解码 转义" href="tools/html-entities/"><span class="icon violet">&amp;</span><div><h3>HTML 实体编解码</h3><p>转换 HTML 特殊字符</p></div><b>→</b></a>
         <a class="tool-card" data-category="generator" data-search="随机数 生成 安全 批量" href="tools/random-number/"><span class="icon rose">#?</span><div><h3>随机数生成器</h3><p>安全批量生成随机整数</p></div><b>→</b></a>
-        <a class="tool-card new" data-category="developer" data-search="抖音 视频 下载 无水印 分享链接" href="tools/douyin-downloader/"><span class="icon rose">▶</span><div><h3>抖音视频下载</h3><p>解析已授权的公开分享视频</p></div><b>→</b></a>
+        <a class="tool-card" data-category="developer" data-search="抖音 视频 下载 无水印 分享链接" href="tools/douyin-downloader/"><span class="icon rose">▶</span><div><h3>抖音视频下载</h3><p>解析已授权的公开分享视频</p></div><b>→</b></a>
       </div><div id="no-results" class="no-results" hidden>没有找到匹配的工具，<a href="feedback/">告诉我们你想要什么</a>。</div>
     </section>
     <section class="privacy"><div><span>隐私优先</span><h2>你的内容，留在你的浏览器里。</h2><p>除留言功能外，工具处理过程不会主动把输入内容发送到 Utilora 服务器。收藏和最近使用只保存在你的设备上。</p></div><div class="privacy-badge">◉<small>LOCAL<br>PROCESSING</small></div></section>
