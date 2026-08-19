@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>数字转中文大写 - Utilora</title>
+  <meta name="description" content="把数字转成人民币大写和中文数字，适合合同、发票和文书，本地处理。">
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="stylesheet" href="../../assets/css/site.css">
+</head>
+<body>
+  <header class="tool-head">
+    <nav>
+      <a class="brand" href="../../">Utilora</a>
+      <a href="../../feedback/">功能建议</a>
+    </nav>
+  </header>
+  <main class="tool-main">
+    <div class="panel">
+      <h1>数字转中文大写</h1>
+      <p class="hint">把金额转成合同常用的人民币大写，同时给出日常中文读法。输入只在浏览器里转换。</p>
+      <div class="field">
+        <label for="amount">数字或金额</label>
+        <input id="amount" inputmode="decimal" placeholder="例如 12345.67" autocomplete="off">
+      </div>
+      <div class="actions">
+        <button id="sample" class="secondary" type="button">示例</button>
+        <button id="copyMoney" class="secondary" type="button">复制大写</button>
+        <button id="copySpoken" class="secondary" type="button">复制读法</button>
+        <button id="clear" class="secondary" type="button">清空</button>
+      </div>
+      <div class="stats stats-wide" style="grid-template-columns:1fr">
+        <div class="stat" style="text-align:left">
+          <strong id="moneyOut" style="font-size:22px">—</strong>人民币大写
+        </div>
+        <div class="stat" style="text-align:left">
+          <strong id="spokenOut" style="font-size:22px">—</strong>中文读法
+        </div>
+      </div>
+      <div id="message" class="message"></div>
+    </div>
+    <div class="related">
+      <span>相关工具</span>
+      <a href="../number-base/">进制转换</a>
+      <a href="../random-number/">随机数生成</a>
+      <a href="../zh-convert/">简繁拼音</a>
+    </div>
+  </main>
+  <script src="tool.js"></script>
+  <script src="../../assets/js/analytics.js" data-tool="number-chinese"></script>
+</body>
+</html>
