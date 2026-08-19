@@ -11,6 +11,9 @@ const recentShelf = document.getElementById("recent-shelf");
 const installBtn = document.getElementById("install-app");
 
 const toolPriority = [
+  "image-compress",
+  "number-chinese",
+  "zh-convert",
   "json-formatter",
   "unit-converter",
   "timestamp",
