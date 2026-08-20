@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>登录 - Utilora</title>
-  <meta name="description" content="用邮箱登录 Utilora，收藏记在这台设备上。">
+  <meta name="description" content="使用邮箱登录 Utilora。注册后需验证邮箱，收藏可跟随账号。">
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <link rel="stylesheet" href="../assets/css/site.css">
 </head>
@@ -12,26 +12,38 @@
   <main class="login-page">
     <div class="login-card">
       <a class="brand" href="../"><span class="brand-mark">U</span><span>返回工具箱</span></a>
-      <h1>登录</h1>
-      <p class="hint">工具本身不用登录。邮箱登录后，这台设备上的收藏会记在你的账号里。</p>
-      <form id="login-form">
-        <div class="field">
+      <h1 id="title">登录</h1>
+      <p class="hint" id="lead">工具不用登录也能用。注册会发送验证邮件，点开链接后才能登录。</p>
+      <p id="banner" class="message" role="status"></p>
+      <form id="auth-form">
+        <div class="field" id="name-field" hidden>
           <label for="name">称呼</label>
-          <input id="name" autocomplete="nickname" placeholder="注册时填写，登录可留空">
+          <input id="name" autocomplete="nickname" placeholder="例如：林深">
         </div>
         <div class="field">
           <label for="email">邮箱</label>
           <input id="email" type="email" required autocomplete="username" inputmode="email">
         </div>
-        <div class="field">
+        <div class="field" id="password-field">
           <label for="password">密码</label>
           <input id="password" type="password" required minlength="8" autocomplete="current-password">
+          <p id="strength" class="hint tight" hidden></p>
         </div>
-        <button id="submit" type="submit">登录 / 注册</button>
+        <div class="field" id="confirm-field" hidden>
+          <label for="confirm">确认密码</label>
+          <input id="confirm" type="password" minlength="8" autocomplete="new-password">
+        </div>
+        <button id="submit" type="submit">登录</button>
       </form>
       <p id="form-msg" class="message" role="status"></p>
+      <div class="login-links">
+        <button id="toggle-mode" class="text-link" type="button">没有账号？注册</button>
+        <button id="toggle-recover" class="text-link" type="button">忘记密码</button>
+        <button id="resend" class="text-link" type="button" hidden>重新发送验证邮件</button>
+      </div>
     </div>
   </main>
+  <script src="../assets/js/auth.js"></script>
   <script src="login.js"></script>
 </body>
 </html>

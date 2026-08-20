@@ -28,20 +28,29 @@
     return match ? match[1] : null;
   };
 
+  const syncCloud = () => {
+    const auth = window.UtiloraAuth;
+    if (!auth) return;
+    const session = auth.readSession();
+    if (!session) return;
+    const name = session.user?.user_metadata?.name || auth.displayName(session.user);
+    auth.updateUser({ data: { name, favorites: read(FAV_KEY), recents: read(RECENT_KEY) } }).catch(() => {});
+  };
+
   const addRecent = (slug) => {
     if (!slug) return read(RECENT_KEY);
     const next = [slug, ...read(RECENT_KEY).filter((item) => item !== slug)].slice(0, MAX_RECENT);
     write(RECENT_KEY, next);
+    syncCloud();
     return next;
   };
 
   const toggleFav = (slug) => {
     if (!slug) return read(FAV_KEY);
     const current = read(FAV_KEY);
-    const next = current.includes(slug)
-      ? current.filter((item) => item !== slug)
-      : [slug, ...current];
+    const next = current.includes(slug) ? current.filter((item) => item !== slug) : [slug, ...current];
     write(FAV_KEY, next);
+    syncCloud();
     return next;
   };
 
@@ -98,26 +107,11 @@
     if (nav && !nav.querySelector(".star-btn")) nav.append(starButton(slug, "tool-star"));
   };
 
-  window.Utilora = {
-    recent: () => read(RECENT_KEY),
-    favorites: () => read(FAV_KEY),
-    addRecent,
-    toggleFav,
-    isFav,
-    starButton,
-  };
-
-
-  const SESSION_KEY = "utilora_session";
-  const readSession = () => {
-    try { return JSON.parse(localStorage.getItem(SESSION_KEY) || "null"); }
-    catch { return null; }
-  };
-
-  const mountLogin = () => {
-    if (/\/(admin|login)(\/|$)/.test(location.pathname)) return;
-    const session = readSession();
-    const label = session && (session.name || session.email) ? "账号" : "登录";
+  const mountLogin = async () => {
+    if (/\/(admin)(\/|$)/.test(location.pathname)) return;
+    const auth = window.UtiloraAuth;
+    if (auth) await auth.captureRedirect();
+    const session = auth ? await auth.refreshIfNeeded() : null;
     const parent = document.querySelector(".nav-links") || document.querySelector(".tool-head nav");
     if (!parent) return;
     let link = parent.querySelector("[data-login]");
@@ -127,13 +121,40 @@
       link.className = "login-link";
       parent.append(link);
     }
-    link.href = "/login/";
-    link.textContent = label;
+    if (session?.user) {
+      link.href = "/account/";
+      link.textContent = auth.displayName(session.user);
+    } else {
+      link.href = "/login/";
+      link.textContent = "登录";
+    }
   };
 
-  ensureHeadLinks();
-  registerWorker();
-  mountLogin();
-  const slug = slugFromPath();
-  if (slug) initToolChrome(slug);
+  window.Utilora = {
+    recent: () => read(RECENT_KEY),
+    favorites: () => read(FAV_KEY),
+    addRecent,
+    toggleFav,
+    isFav,
+    starButton,
+  };
+
+  const boot = () => {
+    ensureHeadLinks();
+    registerWorker();
+    mountLogin();
+    const slug = slugFromPath();
+    if (slug) initToolChrome(slug);
+  };
+
+  if (window.UtiloraAuth) {
+    boot();
+  } else {
+    const script = document.createElement("script");
+    const base = document.currentScript && document.currentScript.src ? document.currentScript.src : "/assets/js/app.js";
+    script.src = new URL("auth.js", base).href;
+    script.onload = boot;
+    script.onerror = boot;
+    document.head.append(script);
+  }
 })();

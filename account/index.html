@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>账号 - Utilora</title>
+  <meta name="description" content="管理 Utilora 账号、收藏与最近使用的工具。">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+  <header class="tool-head">
+    <nav>
+      <a class="brand" href="../">Utilora</a>
+      <a class="login-link" data-login="1" href="../account/">账号</a>
+    </nav>
+  </header>
+  <main class="tool-main account-main">
+    <section class="panel">
+      <div class="account-hero">
+        <span class="account-avatar" id="avatar">U</span>
+        <div>
+          <h1 id="hello">账号</h1>
+          <p class="hint" id="email-line"></p>
+          <p id="verify-badge"></p>
+        </div>
+      </div>
+      <form id="profile-form">
+        <div class="field">
+          <label for="name">称呼</label>
+          <input id="name" autocomplete="nickname">
+        </div>
+        <div class="field">
+          <label for="email">邮箱</label>
+          <input id="email" type="email" readonly>
+        </div>
+        <button type="submit">保存资料</button>
+      </form>
+      <p id="profile-msg" class="message" role="status"></p>
+    </section>
+    <section class="panel">
+      <h2>我的收藏</h2>
+      <div id="favs" class="account-chips"></div>
+      <p id="fav-empty" class="hint">还没有收藏。打开工具后点星标即可。</p>
+    </section>
+    <section class="panel">
+      <h2>最近使用</h2>
+      <div id="recents" class="account-chips"></div>
+      <p id="recent-empty" class="hint">还没有使用记录。</p>
+    </section>
+    <div class="actions">
+      <a class="download-button" href="../">返回工具箱</a>
+      <button id="logout" class="secondary" type="button">退出登录</button>
+    </div>
+  </main>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/app.js"></script>
+  <script src="account.js"></script>
+</body>
+</html>
