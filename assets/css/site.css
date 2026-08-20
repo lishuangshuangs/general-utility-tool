@@ -108,3 +108,15 @@ a.plan-pill{margin:0}
 .install-card ol{margin:0 0 16px;padding-left:18px;color:#475569;line-height:1.7}
 @media print{.promo-bar{display:none!important}}
 @media(max-width:650px){.hero-inner{padding-top:150px}.promo-bar{font-size:12px}}
+
+.quote-card{position:relative;overflow:hidden}
+.quote-mark{position:absolute;right:8%;top:22%;z-index:1;padding:6px 18px;border:5px solid currentColor;color:#b91c1c33;font-size:64px;font-weight:900;letter-spacing:.12em;transform:rotate(-18deg);pointer-events:none}
+.quote-extras{display:flex;align-items:flex-end;justify-content:flex-end;gap:18px;min-height:72px;margin-top:8px}
+.quote-qr{display:grid;justify-items:center;gap:4px;color:var(--muted);font-size:12px}
+.quote-qr img{width:88px;height:88px;object-fit:cover;border:1px solid var(--line)}
+.quote-seal{width:118px;height:118px;object-fit:contain;opacity:.92}
+.quote-signs{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:28px;color:#334155}
+.quote-card.theme-stamp{border-color:#9f1239}
+.quote-card.theme-stamp .quote-head{margin:-28px -32px 16px;padding:24px 32px 18px;color:#fff;background:#9f1239}
+.quote-card.theme-stamp .quote-head .muted,.quote-card.theme-stamp .quote-meta{color:#fecdd3}
+@media print{.quote-mark{color:#b91c1c22}}

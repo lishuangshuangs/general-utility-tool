@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>报价单 - Utilora</title>
-  <meta name="description" content="本地生成报价单、对账单和形式发票，可加 logo、换模板。目前免费使用。">
+  <meta name="description" content="专业报价单：公章、收款码、定金尾款、客户档案和历史单据。目前免费使用。">
   <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
   <link rel="stylesheet" href="../../assets/css/site.css">
 </head>
@@ -20,7 +20,7 @@
       <div class="quote-title-row">
         <div>
           <h1>报价单</h1>
-          <p class="hint">给客户出报价、对账或形式发票。可加 logo、换版式、填收款和有效期。目前免费使用。不是增值税发票。</p>
+          <p class="hint">做成能给客户签字的单据：公章、收款码、定金尾款、客户档案。目前免费使用。不是增值税发票。</p>
         </div>
         <a id="plan-pill" class="plan-pill on" href="../../pro/">目前免费使用</a>
       </div>
@@ -29,9 +29,21 @@
         <button type="button" data-kind="对账单">对账单</button>
         <button type="button" data-kind="形式发票">形式发票</button>
       </div>
-      <div class="grid">
+      <div class="grid three">
         <div class="field"><label for="number">单号</label><input id="number"></div>
         <div class="field"><label for="date">日期</label><input id="date" type="date"></div>
+        <div class="field">
+          <label for="status">单据状态</label>
+          <select id="status">
+            <option value="">无水印</option>
+            <option value="草稿">草稿</option>
+            <option value="已报价" selected>已报价</option>
+            <option value="已成交">已成交</option>
+            <option value="作废">作废</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid">
         <div class="field">
           <label for="taxIncluded">单价口径</label>
           <select id="taxIncluded">
@@ -39,9 +51,12 @@
             <option value="in">含税单价</option>
           </select>
         </div>
+        <div class="field"><label for="validUntil">报价有效期</label><input id="validUntil" type="date"></div>
       </div>
       <div class="actions" style="margin-top:0">
         <button id="nextNumber" class="secondary" type="button">下一单号</button>
+        <button id="saveDoc" class="secondary" type="button">存入历史</button>
+        <button id="newDoc" class="secondary" type="button">新建空白单</button>
       </div>
       <div class="grid">
         <div>
@@ -52,12 +67,17 @@
         </div>
         <div>
           <p class="group-title">买方</p>
+          <div class="field">
+            <label for="buyerPick">客户档案</label>
+            <select id="buyerPick"><option value="">选择已存客户</option></select>
+          </div>
           <div class="field"><label for="buyerName">名称</label><input id="buyerName" value="示例客户"></div>
           <div class="field"><label for="buyerTax">税号</label><input id="buyerTax"></div>
           <div class="field"><label for="buyerContact">地址 / 电话</label><input id="buyerContact"></div>
+          <button id="saveBuyer" class="secondary" type="button">存为客户</button>
         </div>
       </div>
-      <p class="group-title">版式 <span class="pro-tag">目前免费</span></p>
+      <p class="group-title">版式与签章 <span class="pro-tag">目前免费</span></p>
       <div class="grid">
         <div class="field">
           <label for="logo">公司 logo</label>
@@ -69,12 +89,24 @@
             <button type="button" class="active" data-theme="classic">经典</button>
             <button type="button" data-theme="navy">商务</button>
             <button type="button" data-theme="plain">极简</button>
+            <button type="button" data-theme="stamp">合同红</button>
           </div>
         </div>
       </div>
       <div class="grid">
-        <div class="field"><label for="validUntil">报价有效期</label><input id="validUntil" type="date"></div>
-        <div class="field"><label for="payInfo">收款账户</label><input id="payInfo" placeholder="开户行 + 账号，选填"></div>
+        <div class="field">
+          <label for="seal">公章图片</label>
+          <input id="seal" type="file" accept="image/*">
+          <button id="makeSeal" class="secondary" type="button" style="margin-top:8px">按卖方名称生成公章</button>
+        </div>
+        <div class="field">
+          <label for="qr">收款码</label>
+          <input id="qr" type="file" accept="image/*">
+        </div>
+      </div>
+      <div class="grid">
+        <div class="field"><label for="payInfo">收款账户</label><input id="payInfo" placeholder="开户行 + 账号"></div>
+        <div class="field"><label for="depositPct">预付款 %</label><input id="depositPct" inputmode="decimal" placeholder="如 30"></div>
       </div>
       <label class="check-line"><input id="unbrand" type="checkbox"> 打印时不显示 Utilora 标识</label>
       <div class="table-wrap">
@@ -87,10 +119,27 @@
       </div>
       <div class="actions">
         <button id="addLine" class="secondary" type="button">加一行</button>
+        <button id="saveItem" class="secondary" type="button">把当前第一行存进项目库</button>
+        <select id="itemPick" style="width:auto;min-width:180px"><option value="">从项目库插入</option></select>
       </div>
-      <div class="grid">
+      <div class="grid three">
+        <div class="field"><label for="discountPct">优惠 %</label><input id="discountPct" inputmode="decimal" value="0"></div>
         <div class="field"><label for="discount">优惠金额</label><input id="discount" inputmode="decimal" value="0"></div>
-        <div class="field"><label for="note">备注</label><textarea id="note" style="min-height:90px">本文件仅作报价/对账，不是税务机关监制的增值税发票。</textarea></div>
+        <div class="field">
+          <label for="terms">付款条款</label>
+          <select id="terms">
+            <option value="">不印条款</option>
+            <option value="款到发货，发票随货发出。">款到发货</option>
+            <option value="预付 30%，验收合格后 7 日内付清。">预付 30%</option>
+            <option value="月结 30 天，对账后付款。">月结 30 天</option>
+            <option value="含税含运，安装调试另计。">含税含运</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label for="note">备注</label><textarea id="note" style="min-height:80px">本文件仅作报价/对账，不是税务机关监制的增值税发票。</textarea></div>
+      <div class="field">
+        <label for="historyPick">本机历史单据</label>
+        <select id="historyPick"><option value="">打开已存单据</option></select>
       </div>
       <div class="actions">
         <button id="print" type="button">打印 / 存 PDF</button>
