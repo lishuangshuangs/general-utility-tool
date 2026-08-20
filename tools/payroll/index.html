@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>到手工资 - Utilora</title>
+  <meta name="description" content="按城市测算五险一金、个税、实发工资与企业成本，本地计算。">
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="stylesheet" href="../../assets/css/site.css">
+</head>
+<body>
+  <header class="tool-head">
+    <nav>
+      <a class="brand" href="../../">Utilora</a>
+      <a href="../../feedback/">功能建议</a>
+    </nav>
+  </header>
+  <main class="tool-main">
+    <div class="panel">
+      <h1>到手工资</h1>
+      <p class="hint">城市基数按近年常见上下限预填，各地每年调整；工伤费率随行业浮动。测算不能替代工资表或个税 App。</p>
+      <div class="grid">
+        <div class="field">
+          <label for="city">城市</label>
+          <select id="city"></select>
+        </div>
+        <div class="field"><label for="gross">税前应发</label><input id="gross" inputmode="decimal" value="20000"></div>
+        <div class="field"><label for="housingPct">公积金比例 %</label><input id="housingPct" inputmode="decimal" value="7"><p class="hint tight">常见 5%–12%</p></div>
+        <div class="field">
+          <label for="month">算到几月</label>
+          <select id="month"></select>
+        </div>
+      </div>
+      <div class="grid three">
+        <div class="field"><label for="customSocial">社保缴费基数</label><input id="customSocial" inputmode="decimal" placeholder="留空按工资夹紧"><p class="hint tight" id="socialHint"></p></div>
+        <div class="field"><label for="customFund">公积金基数</label><input id="customFund" inputmode="decimal"><p class="hint tight" id="fundHint"></p></div>
+        <div class="field"><label for="extra">专项附加扣除 / 月</label><input id="extra" inputmode="decimal" value="0"><p class="hint tight">有子女、房租等再填，详见个税工具</p></div>
+      </div>
+      <p class="hint tight" id="cityNote"></p>
+      <div class="stats stats-wide" id="stats"></div>
+      <div class="table-wrap">
+        <table class="sheet-table">
+          <thead><tr><th>项目</th><th>个人</th><th>单位</th><th>个人比例</th><th>单位比例</th></tr></thead>
+          <tbody id="siTable"></tbody>
+        </table>
+      </div>
+      <div class="quote-sum" id="formula"></div>
+      <div class="actions">
+        <button id="sample" class="secondary" type="button">示例</button>
+        <button id="copy" class="secondary" type="button">复制结果</button>
+      </div>
+      <div id="message" class="message"></div>
+    </div>
+    <div class="related">
+      <span>相关工具</span>
+      <a href="../income-tax/">个人所得税</a>
+      <a href="../vat-split/">增值税价税分离</a>
+      <a href="../number-chinese/">数字转中文大写</a>
+    </div>
+  </main>
+  <script src="../../assets/js/app.js"></script>
+  <script src="../../assets/js/finance.js"></script>
+  <script src="tool.js"></script>
+  <script src="../../assets/js/analytics.js" data-tool="payroll"></script>
+</body>
+</html>

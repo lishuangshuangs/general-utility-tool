@@ -19,10 +19,10 @@
 <body>
   <header class="site-header"><nav class="nav"><a class="brand" href="./"><span class="brand-mark">U</span><span>Utilora</span></a><div class="nav-links"><a href="#tools">全部工具</a><a href="feedback/">功能建议</a><a class="login-link" data-login="1" href="login/">登录</a></div></nav></header>
   <main>
-    <section class="hero"><div class="hero-inner"><div class="eyebrow">LOCAL-FIRST · PRIVACY-FRIENDLY</div><h1>顺手的工具，<br><span>不该复杂。</span></h1><p>常用工具留在浏览器里。注册需验证邮箱；登录后收藏可跟随账号。</p><div class="search-wrap"><span>⌕</span><input id="tool-search" type="search" placeholder="搜索工具，例如 JSON、图片压缩、大写金额…" autocomplete="off"><kbd>/</kbd></div><div class="hero-meta"><span><b id="tool-count">47</b> 个工具</span><span>✓ 免费使用</span><span>✓ 本地处理</span><span>✓ 可离线安装</span></div></div><div class="hero-art" aria-hidden="true"><div class="orb orb-one"></div><div class="orb orb-two"></div><div class="code-card"><i></i><i></i><i></i><pre>{
-  "simple": true,
-  "private": true
-}</pre></div></div></section>
+    <section class="hero"><div class="hero-inner"><div class="eyebrow">LOCAL-FIRST · PRIVACY-FRIENDLY</div><h1>顺手的工具，<br><span>不该复杂。</span></h1><p>常用工具留在浏览器里。新加了增值税价税分离、报价单、个税和到手工资。</p><div class="search-wrap"><span>⌕</span><input id="tool-search" type="search" placeholder="搜索工具，例如 增值税、个税、JSON…" autocomplete="off"><kbd>/</kbd></div><div class="hero-meta"><span><b id="tool-count">51</b> 个工具</span><span>✓ 免费使用</span><span>✓ 本地处理</span><span>✓ 可离线安装</span></div></div><div class="hero-art" aria-hidden="true"><div class="orb orb-one"></div><div class="orb orb-two"></div><div class="code-card"><i></i><i></i><i></i><pre>财务
+  增值税价税分离
+  报价单 / 个税
+  到手工资</pre></div></div></section>
     <section id="library" class="library" hidden>
       <div id="fav-shelf" class="shelf" hidden>
         <h3>我的收藏</h3>
@@ -33,8 +33,12 @@
         <div id="recent-row" class="shelf-row"></div>
       </div>
     </section>
-    <section id="tools" class="tools-section"><div class="section-head"><div><span class="section-kicker">TOOLBOX</span><h2>选择一个工具开始</h2></div><div id="categories" class="categories"><button class="active" data-category="all">全部</button><button data-category="text">文本</button><button data-category="developer">开发</button><button data-category="generator">生成</button><button data-category="image">图像</button></div></div>
+    <section id="tools" class="tools-section"><div class="section-head"><div><span class="section-kicker">TOOLBOX</span><h2>选择一个工具开始</h2></div><div id="categories" class="categories"><button class="active" data-category="all">全部</button><button data-category="finance">财务</button><button data-category="text">文本</button><button data-category="developer">开发</button><button data-category="generator">生成</button><button data-category="image">图像</button></div></div>
       <div id="tool-grid" class="tool-grid">
+        <a class="tool-card new" data-category="finance" data-search="增值税 价税分离 含税 不含税 税额 1% 3% 6% 9% 13% 小规模 一般纳税人 zengzhishui" href="tools/vat-split/"><span class="icon amber">税</span><div><h3>增值税价税分离</h3><p>含税拆分、加税与批量明细</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="finance" data-search="报价单 对账单 形式发票 账单 明细 PDF 打印 增值税 baojiadan" href="tools/quote/"><span class="icon rose">报</span><div><h3>报价单</h3><p>本地生成报价、对账和形式发票</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="finance" data-search="个税 个人所得税 累计预扣 汇算清缴 专项附加扣除 税率 工资 geshui" href="tools/income-tax/"><span class="icon indigo">个</span><div><h3>个人所得税</h3><p>累计预扣与年度汇算，含专项附加</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="finance" data-search="到手工资 五险一金 社保 公积金 实发 个税 缴费基数 北京 上海 gongzi" href="tools/payroll/"><span class="icon green">发</span><div><h3>到手工资</h3><p>五险一金、个税与企业成本</p></div><b>→</b></a>
         <a class="tool-card new" data-category="developer" data-search="罗马 数字 转换 roman numeral" href="tools/roman-numeral/"><span class="icon amber">RM</span><div><h3>罗马数字转换</h3><p>阿拉伯数字与罗马数字互转</p></div><b>→</b></a>
         <a class="tool-card new" data-category="generator" data-search="百分比 计算 占比 增减 percentage" href="tools/percentage/"><span class="icon rose">%</span><div><h3>百分比计算器</h3><p>占比、增减幅度与百分数运算</p></div><b>→</b></a>
         <a class="tool-card new" data-category="text" data-search="列表 转换 逗号 换行 JSON 去重 list" href="tools/list-converter/"><span class="icon green">列</span><div><h3>列表格式转换</h3><p>换行、逗号、JSON 等列表互转</p></div><b>→</b></a>

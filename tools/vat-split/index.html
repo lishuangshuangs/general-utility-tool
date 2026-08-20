@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>增值税价税分离 - Utilora</title>
+  <meta name="description" content="含税拆分、不含税加税与批量价税明细，本地计算不上传。">
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="stylesheet" href="../../assets/css/site.css">
+</head>
+<body>
+  <header class="tool-head">
+    <nav>
+      <a class="brand" href="../../">Utilora</a>
+      <a href="../../feedback/">功能建议</a>
+    </nav>
+  </header>
+  <main class="tool-main">
+    <div class="panel">
+      <h1>增值税价税分离</h1>
+      <p class="hint">含税拆不含税、税额，或反向加税。一般纳税人常用 13% / 9% / 6%，小规模常用 3% / 1%。按价税分离公式测算，开票请以税控系统为准。</p>
+      <div class="tabs" id="modes">
+        <button type="button" class="active" data-mode="inclusive">含税拆分</button>
+        <button type="button" data-mode="exclusive">不含税加税</button>
+        <button type="button" data-mode="batch">批量明细</button>
+      </div>
+      <div class="field">
+        <label>税率</label>
+        <div class="chips" id="rates"></div>
+        <input id="customRate" inputmode="decimal" placeholder="自定义 %" style="max-width:160px;margin-top:10px">
+      </div>
+      <div id="singlePane">
+        <div class="field">
+          <label id="amountLabel">含税金额</label>
+          <input id="amount" inputmode="decimal" value="11300" autocomplete="off">
+        </div>
+        <div class="stats stats-wide">
+          <div class="stat"><strong id="exOut">—</strong>不含税</div>
+          <div class="stat"><strong id="taxOut">—</strong>税额</div>
+          <div class="stat"><strong id="inOut">—</strong>价税合计</div>
+          <div class="stat"><strong id="rateOut">—</strong>税率</div>
+        </div>
+        <p id="moneyOut" class="money-line">—</p>
+        <div class="actions">
+          <button id="sample" class="secondary" type="button">示例</button>
+          <button id="copy" class="secondary" type="button">复制结果</button>
+          <button id="copyMoney" class="secondary" type="button">复制大写</button>
+        </div>
+      </div>
+      <div id="batchPane" hidden>
+        <div class="field">
+          <label for="batch">每行一笔</label>
+          <textarea id="batch">11300
+3090,3%
+10600,6%</textarea>
+          <p class="hint tight">支持 11300 或 10600,6%。未写税率时用上方税率。</p>
+        </div>
+        <div class="table-wrap">
+          <table class="sheet-table" id="batchTable"></table>
+        </div>
+        <p id="batchMoney" class="money-line">—</p>
+        <div class="actions">
+          <button id="downloadCsv" class="secondary" type="button">下载 CSV</button>
+          <button id="copySum" class="secondary" type="button">复制合计</button>
+        </div>
+      </div>
+      <div id="message" class="message"></div>
+    </div>
+    <div class="related">
+      <span>相关工具</span>
+      <a href="../quote/">报价单</a>
+      <a href="../number-chinese/">数字转中文大写</a>
+      <a href="../payroll/">到手工资</a>
+    </div>
+  </main>
+  <script src="../../assets/js/app.js"></script>
+  <script src="../../assets/js/finance.js"></script>
+  <script src="tool.js"></script>
+  <script src="../../assets/js/analytics.js" data-tool="vat-split"></script>
+</body>
+</html>

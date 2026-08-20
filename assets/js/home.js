@@ -11,6 +11,10 @@ const recentShelf = document.getElementById("recent-shelf");
 const installBtn = document.getElementById("install-app");
 
 const toolPriority = [
+  "vat-split",
+  "quote",
+  "income-tax",
+  "payroll",
   "roman-numeral",
   "percentage",
   "list-converter",

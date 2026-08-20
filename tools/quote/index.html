@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>报价单 - Utilora</title>
+  <meta name="description" content="本地生成报价单、对账单和形式发票，可打印存 PDF。不是增值税发票。">
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="stylesheet" href="../../assets/css/site.css">
+</head>
+<body>
+  <header class="tool-head no-print">
+    <nav>
+      <a class="brand" href="../../">Utilora</a>
+      <a href="../../feedback/">功能建议</a>
+    </nav>
+  </header>
+  <main class="tool-main">
+    <div class="panel no-print">
+      <h1>报价单</h1>
+      <p class="hint">本地生成报价、对账和形式发票。本文件不是税务机关监制的增值税发票。</p>
+      <div class="tabs" id="kinds">
+        <button type="button" class="active" data-kind="报价单">报价单</button>
+        <button type="button" data-kind="对账单">对账单</button>
+        <button type="button" data-kind="形式发票">形式发票</button>
+      </div>
+      <div class="grid">
+        <div class="field"><label for="number">单号</label><input id="number"></div>
+        <div class="field"><label for="date">日期</label><input id="date" type="date"></div>
+        <div class="field">
+          <label for="taxIncluded">单价口径</label>
+          <select id="taxIncluded">
+            <option value="ex">不含税单价</option>
+            <option value="in">含税单价</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid">
+        <div>
+          <p class="group-title">卖方</p>
+          <div class="field"><label for="sellerName">名称</label><input id="sellerName" value="示例商行"></div>
+          <div class="field"><label for="sellerTax">税号</label><input id="sellerTax" value="91310000MA0000000X"></div>
+          <div class="field"><label for="sellerContact">地址 / 电话</label><input id="sellerContact" value="上海市 · 021-00000000"></div>
+        </div>
+        <div>
+          <p class="group-title">买方</p>
+          <div class="field"><label for="buyerName">名称</label><input id="buyerName" value="示例客户"></div>
+          <div class="field"><label for="buyerTax">税号</label><input id="buyerTax"></div>
+          <div class="field"><label for="buyerContact">地址 / 电话</label><input id="buyerContact"></div>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="sheet-table edit-table">
+          <thead>
+            <tr><th>项目</th><th>规格</th><th>数量</th><th>单位</th><th>单价</th><th>税率%</th><th></th></tr>
+          </thead>
+          <tbody id="lines"></tbody>
+        </table>
+      </div>
+      <div class="actions">
+        <button id="addLine" class="secondary" type="button">加一行</button>
+      </div>
+      <div class="grid">
+        <div class="field"><label for="discount">优惠金额</label><input id="discount" inputmode="decimal" value="0"></div>
+        <div class="field"><label for="note">备注</label><textarea id="note" style="min-height:90px">本文件仅作报价/对账，不是税务机关监制的增值税发票。</textarea></div>
+      </div>
+      <div class="actions">
+        <button id="print" type="button">打印 / 存 PDF</button>
+        <button id="copy" class="secondary" type="button">复制摘要</button>
+        <button id="csv" class="secondary" type="button">下载明细</button>
+      </div>
+      <div id="message" class="message"></div>
+    </div>
+    <section class="print-sheet" id="sheet"></section>
+    <div class="related no-print">
+      <span>相关工具</span>
+      <a href="../vat-split/">增值税价税分离</a>
+      <a href="../number-chinese/">数字转中文大写</a>
+      <a href="../income-tax/">个人所得税</a>
+    </div>
+  </main>
+  <script src="../../assets/js/app.js"></script>
+  <script src="../../assets/js/finance.js"></script>
+  <script src="tool.js"></script>
+  <script src="../../assets/js/analytics.js" data-tool="quote"></script>
+</body>
+</html>

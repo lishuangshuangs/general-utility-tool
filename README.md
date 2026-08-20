@@ -8,6 +8,7 @@ https://utilora.github.io/
 
 ## 这次更新
 
+- 增值税价税分离、报价单、个人所得税、到手工资
 - JSON / YAML / CSV 互转
 - 图片批量压缩并打包下载
 - 二维码识别
