@@ -17,8 +17,13 @@
   </header>
   <main class="tool-main">
     <div class="panel no-print">
-      <h1>报价单</h1>
-      <p class="hint">本地生成报价、对账和形式发票。本文件不是税务机关监制的增值税发票。</p>
+      <div class="quote-title-row">
+        <div>
+          <h1>报价单</h1>
+          <p class="hint">本地生成报价、对账和形式发票。本文件不是税务机关监制的增值税发票。</p>
+        </div>
+        <a id="plan-pill" class="plan-pill" href="../../pro/">免费版</a>
+      </div>
       <div class="tabs" id="kinds">
         <button type="button" class="active" data-kind="报价单">报价单</button>
         <button type="button" data-kind="对账单">对账单</button>
@@ -49,6 +54,22 @@
           <div class="field"><label for="buyerContact">地址 / 电话</label><input id="buyerContact"></div>
         </div>
       </div>
+      <p class="group-title">版式 <span class="pro-tag">专业版</span></p>
+      <div class="grid">
+        <div class="field">
+          <label for="logo">公司 logo</label>
+          <input id="logo" type="file" accept="image/*">
+        </div>
+        <div class="field">
+          <label>模板</label>
+          <div class="tabs" id="themes">
+            <button type="button" class="active" data-theme="classic">经典</button>
+            <button type="button" data-theme="navy">商务</button>
+            <button type="button" data-theme="plain">极简</button>
+          </div>
+        </div>
+      </div>
+      <label class="check-line"><input id="unbrand" type="checkbox"> 打印时不显示 Utilora 标识</label>
       <div class="table-wrap">
         <table class="sheet-table edit-table">
           <thead>
@@ -69,6 +90,14 @@
         <button id="copy" class="secondary" type="button">复制摘要</button>
         <button id="csv" class="secondary" type="button">下载明细</button>
       </div>
+      <div id="pro-gate" class="pro-gate" hidden>
+        <p><b>这是专业版功能</b></p>
+        <p>加 logo、商务/极简模板、去掉标识，以及超过 8 行明细，需要专业版。支付即将接入，先登录即可，开通后自动解锁。</p>
+        <div class="actions">
+          <a class="download-button" href="../../pro/">查看专业版</a>
+          <button id="gate-close" class="secondary" type="button">先用免费版</button>
+        </div>
+      </div>
       <div id="message" class="message"></div>
     </div>
     <section class="print-sheet" id="sheet"></section>
@@ -76,10 +105,11 @@
       <span>相关工具</span>
       <a href="../vat-split/">增值税价税分离</a>
       <a href="../number-chinese/">数字转中文大写</a>
-      <a href="../income-tax/">个人所得税</a>
+      <a href="../../pro/">专业版说明</a>
     </div>
   </main>
   <script src="../../assets/js/app.js"></script>
+  <script src="../../assets/js/pro.js"></script>
   <script src="../../assets/js/finance.js"></script>
   <script src="tool.js"></script>
   <script src="../../assets/js/analytics.js" data-tool="quote"></script>
