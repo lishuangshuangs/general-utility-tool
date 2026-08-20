@@ -1,11 +1,10 @@
 (() => {
   const F = window.UtiloraFinance;
-  const FREE_LINES = 8;
+  const SELLER_KEY = "utilora_quote_seller";
   const kinds = document.getElementById("kinds");
   const linesEl = document.getElementById("lines");
   const sheet = document.getElementById("sheet");
   const message = document.getElementById("message");
-  const gate = document.getElementById("pro-gate");
   let kind = "报价单";
   let theme = "classic";
   let logoData = "";
@@ -13,21 +12,6 @@
     { name: "咨询服务", spec: "按项目", qty: "1", unit: "项", price: "8000", rate: "6" },
     { name: "配件", spec: "A-12", qty: "10", unit: "个", price: "113", rate: "13" },
   ];
-
-  const isPro = () => Boolean(window.UtiloraPro && UtiloraPro.isPro());
-
-  function showGate() {
-    gate.hidden = false;
-    gate.scrollIntoView({ behavior: "smooth", block: "nearest" });
-  }
-
-  function paintPlan() {
-    const pill = document.getElementById("plan-pill");
-    if (!pill) return;
-    const pro = isPro();
-    pill.textContent = pro ? "专业版" : "免费版";
-    pill.className = "plan-pill" + (pro ? " on" : "");
-  }
 
   function today() {
     const d = new Date();
@@ -38,9 +22,17 @@
   const date = document.getElementById("date");
   number.value = `Q${today().replace(/-/g, "")}-001`;
   date.value = today();
+  const plus7 = new Date();
+  plus7.setDate(plus7.getDate() + 7);
+  document.getElementById("validUntil").value = `${plus7.getFullYear()}-${String(plus7.getMonth() + 1).padStart(2, "0")}-${String(plus7.getDate()).padStart(2, "0")}`;
 
   function val(id) {
     return document.getElementById(id).value.trim();
+  }
+
+  function setVal(id, value) {
+    const node = document.getElementById(id);
+    if (node && value != null) node.value = value;
   }
 
   function esc(value) {
@@ -50,6 +42,25 @@
       ">": "\u0026gt;",
       '"': "\u0026quot;",
     }[ch]));
+  }
+
+  function loadSeller() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(SELLER_KEY) || "null");
+      if (!saved) return;
+      setVal("sellerName", saved.sellerName);
+      setVal("sellerTax", saved.sellerTax);
+      setVal("sellerContact", saved.sellerContact);
+      setVal("payInfo", saved.payInfo);
+      if (saved.theme) theme = saved.theme;
+      if (saved.logoData) logoData = saved.logoData;
+      if (saved.unbrand) document.getElementById("unbrand").checked = true;
+      [...document.getElementById("themes").children].forEach((item) => {
+        item.classList.toggle("active", item.dataset.theme === theme);
+      });
+    } catch {
+      /* ignore */
+    }
   }
 
   function computed() {
@@ -101,14 +112,12 @@
     const c = computed();
     const sellerName = val("sellerName");
     const buyerName = val("buyerName");
-    const showLogo = isPro() && logoData;
-    const hideBrand = isPro() && document.getElementById("unbrand").checked;
-    const themeClass = isPro() ? theme : "classic";
+    const hideBrand = document.getElementById("unbrand").checked;
     sheet.innerHTML = `
-      <div class="quote-card theme-${esc(themeClass)}">
+      <div class="quote-card theme-${esc(theme)}">
         <div class="quote-head">
           <div class="quote-brand">
-            ${showLogo ? `<img class="quote-logo" alt="" src="${logoData}">` : ""}
+            ${logoData ? `<img class="quote-logo" alt="" src="${logoData}">` : ""}
             <div>
               <p class="muted">${esc(sellerName || "UTILORA")}</p>
               <h2>${esc(kind)}</h2>
@@ -117,6 +126,7 @@
           <div class="quote-meta">
             <p>单号 ${esc(val("number") || "—")}</p>
             <p>日期 ${esc(val("date") || "—")}</p>
+            ${val("validUntil") ? `<p>有效期至 ${esc(val("validUntil"))}</p>` : ""}
           </div>
         </div>
         <div class="quote-parties">
@@ -153,6 +163,7 @@
           ${c.off > 0 ? `<p>优惠　−${F.formatRmb(c.off)}</p>` : ""}
           <p class="money-line">应付 ${F.formatRmb(c.payable)}</p>
           <p class="money-line">${esc(F.toMoney(c.payable))}</p>
+          ${val("payInfo") ? `<p class="muted">收款 ${esc(val("payInfo"))}</p>` : ""}
         </div>
         ${val("note") ? `<p class="quote-note">${esc(val("note"))}</p>` : ""}
         ${hideBrand ? "" : `<p class="quote-foot">由 Utilora 本地生成 · 非正式发票</p>`}
@@ -161,7 +172,11 @@
   }
 
   function render() {
-    paintPlan();
+    const pill = document.getElementById("plan-pill");
+    if (pill && window.UtiloraPro) {
+      pill.textContent = UtiloraPro.label();
+      pill.className = "plan-pill on";
+    }
     renderLines();
     renderSheet();
   }
@@ -177,12 +192,7 @@
   document.getElementById("themes").addEventListener("click", (event) => {
     const button = event.target.closest("button");
     if (!button) return;
-    const next = button.dataset.theme;
-    if (next !== "classic" && !isPro()) {
-      showGate();
-      return;
-    }
-    theme = next;
+    theme = button.dataset.theme;
     [...document.getElementById("themes").children].forEach((item) => item.classList.toggle("active", item === button));
     renderSheet();
   });
@@ -191,10 +201,6 @@
     const file = event.target.files && event.target.files[0];
     event.target.value = "";
     if (!file) return;
-    if (!isPro()) {
-      showGate();
-      return;
-    }
     const img = new Image();
     const url = URL.createObjectURL(file);
     img.onload = () => {
@@ -211,28 +217,36 @@
     img.src = url;
   });
 
-  document.getElementById("unbrand").addEventListener("change", (event) => {
-    if (event.target.checked && !isPro()) {
-      event.target.checked = false;
-      showGate();
-      return;
-    }
-    renderSheet();
-  });
-
-  ["number", "date", "taxIncluded", "sellerName", "sellerTax", "sellerContact", "buyerName", "buyerTax", "buyerContact", "discount", "note"].forEach((id) => {
+  ["number", "date", "taxIncluded", "sellerName", "sellerTax", "sellerContact", "buyerName", "buyerTax", "buyerContact", "discount", "note", "validUntil", "payInfo", "unbrand"].forEach((id) => {
     document.getElementById(id).addEventListener("input", renderSheet);
     document.getElementById(id).addEventListener("change", renderSheet);
   });
   document.getElementById("addLine").onclick = () => {
-    if (rows.length >= FREE_LINES && !isPro()) {
-      showGate();
-      message.textContent = `免费版最多 ${FREE_LINES} 行明细`;
-      message.className = "message error";
-      return;
-    }
     rows.push({ name: "", spec: "", qty: "1", unit: "项", price: "", rate: "13" });
     render();
+  };
+  document.getElementById("nextNumber").onclick = () => {
+    const current = val("number");
+    const match = current.match(/^(.*?)(\d+)$/);
+    if (match) {
+      number.value = `${match[1]}${String(Number(match[2]) + 1).padStart(match[2].length, "0")}`;
+    } else {
+      number.value = `${current || "Q"}-002`;
+    }
+    renderSheet();
+  };
+  document.getElementById("saveSeller").onclick = () => {
+    localStorage.setItem(SELLER_KEY, JSON.stringify({
+      sellerName: val("sellerName"),
+      sellerTax: val("sellerTax"),
+      sellerContact: val("sellerContact"),
+      payInfo: val("payInfo"),
+      theme,
+      logoData,
+      unbrand: document.getElementById("unbrand").checked,
+    }));
+    message.className = "message";
+    message.textContent = "卖方资料已保存在这台设备";
   };
   document.getElementById("print").onclick = () => window.print();
   document.getElementById("copy").onclick = async () => {
@@ -250,9 +264,6 @@
     a.click();
     URL.revokeObjectURL(a.href);
   };
-  document.getElementById("gate-close").onclick = () => {
-    gate.hidden = true;
-  };
+  loadSeller();
   render();
-  setTimeout(paintPlan, 400);
 })();

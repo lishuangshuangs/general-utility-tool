@@ -90,3 +90,21 @@ a.plan-pill{margin:0}
 .pro-cta{margin:0 0 16px;padding:12px 14px;background:#eef2ff;border:1px solid #c7d2fe;border-radius:12px;color:#312e81;line-height:1.6;font-size:14px}
 .pro-cta a{color:var(--primary);font-weight:750}
 @media print{.pro-cta{display:none!important}}
+
+.promo-bar{position:relative;z-index:8;padding:10px 16px;background:#4f46e5;color:#eef2ff;text-align:center;font-size:13px;font-weight:650}
+.promo-bar a{color:#fff}
+.site-header{top:42px}
+.hero-inner{padding-top:175px}
+.pro-nav{display:inline-flex;align-items:center;padding:6px 12px;border-radius:999px;background:#fff;color:#4f46e5;font-weight:800}
+.nav-links .pro-nav{color:#4f46e5}
+.hero-meta .install-btn{background:#fff;color:#111827}
+.featured-section{padding-top:48px;padding-bottom:0}
+.featured-section + .tools-section{padding-top:40px}
+.install-guide{position:fixed;inset:0;z-index:60;display:grid;place-items:center;background:#0f172a99}
+.install-guide[hidden]{display:none!important}
+.install-card{width:min(440px,calc(100% - 32px));padding:24px;background:#fff;border-radius:16px;box-shadow:0 20px 60px #0004}
+.install-card h3{margin:0 0 8px}
+.install-card p{margin:0 0 12px;color:var(--muted)}
+.install-card ol{margin:0 0 16px;padding-left:18px;color:#475569;line-height:1.7}
+@media print{.promo-bar{display:none!important}}
+@media(max-width:650px){.hero-inner{padding-top:150px}.promo-bar{font-size:12px}}

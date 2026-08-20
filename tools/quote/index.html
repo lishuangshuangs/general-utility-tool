@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>报价单 - Utilora</title>
-  <meta name="description" content="本地生成报价单、对账单和形式发票，可打印存 PDF。不是增值税发票。">
+  <meta name="description" content="本地生成报价单、对账单和形式发票，可加 logo、换模板。目前免费使用。">
   <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
   <link rel="stylesheet" href="../../assets/css/site.css">
 </head>
@@ -20,9 +20,9 @@
       <div class="quote-title-row">
         <div>
           <h1>报价单</h1>
-          <p class="hint">免费可算、可打印。专业财务可加 logo、换模板、去掉 Utilora 标识。本文件不是增值税发票。</p>
+          <p class="hint">给客户出报价、对账或形式发票。可加 logo、换版式、填收款和有效期。目前免费使用。不是增值税发票。</p>
         </div>
-        <a id="plan-pill" class="plan-pill" href="../../pro/">免费版</a>
+        <a id="plan-pill" class="plan-pill on" href="../../pro/">目前免费使用</a>
       </div>
       <div class="tabs" id="kinds">
         <button type="button" class="active" data-kind="报价单">报价单</button>
@@ -40,6 +40,9 @@
           </select>
         </div>
       </div>
+      <div class="actions" style="margin-top:0">
+        <button id="nextNumber" class="secondary" type="button">下一单号</button>
+      </div>
       <div class="grid">
         <div>
           <p class="group-title">卖方</p>
@@ -54,7 +57,7 @@
           <div class="field"><label for="buyerContact">地址 / 电话</label><input id="buyerContact"></div>
         </div>
       </div>
-      <p class="group-title">版式 <span class="pro-tag">专业版</span></p>
+      <p class="group-title">版式 <span class="pro-tag">目前免费</span></p>
       <div class="grid">
         <div class="field">
           <label for="logo">公司 logo</label>
@@ -68,6 +71,10 @@
             <button type="button" data-theme="plain">极简</button>
           </div>
         </div>
+      </div>
+      <div class="grid">
+        <div class="field"><label for="validUntil">报价有效期</label><input id="validUntil" type="date"></div>
+        <div class="field"><label for="payInfo">收款账户</label><input id="payInfo" placeholder="开户行 + 账号，选填"></div>
       </div>
       <label class="check-line"><input id="unbrand" type="checkbox"> 打印时不显示 Utilora 标识</label>
       <div class="table-wrap">
@@ -89,14 +96,7 @@
         <button id="print" type="button">打印 / 存 PDF</button>
         <button id="copy" class="secondary" type="button">复制摘要</button>
         <button id="csv" class="secondary" type="button">下载明细</button>
-      </div>
-      <div id="pro-gate" class="pro-gate" hidden>
-        <p><b>这是专业版功能</b></p>
-        <p>加 logo、商务/极简模板、去掉标识，以及超过 8 行明细，需要专业版。支付即将接入，先登录即可，开通后自动解锁。</p>
-        <div class="actions">
-          <a class="download-button" href="../../pro/">查看专业版</a>
-          <button id="gate-close" class="secondary" type="button">先用免费版</button>
-        </div>
+        <button id="saveSeller" class="secondary" type="button">保存卖方资料</button>
       </div>
       <div id="message" class="message"></div>
     </div>
@@ -105,7 +105,7 @@
       <span>相关工具</span>
       <a href="../vat-split/">增值税价税分离</a>
       <a href="../number-chinese/">数字转中文大写</a>
-      <a href="../../pro/">专业版说明</a>
+      <a href="../../pro/">专业财务</a>
     </div>
   </main>
   <script src="../../assets/js/app.js"></script>

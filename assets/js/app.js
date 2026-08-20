@@ -105,6 +105,12 @@
     addRecent(slug);
     const nav = document.querySelector(".tool-head nav");
     if (nav && !nav.querySelector(".star-btn")) nav.append(starButton(slug, "tool-star"));
+    if (/\/(pro|admin|login|account)(\/|$)/.test(location.pathname)) return;
+    if (document.querySelector(".promo-bar")) return;
+    const bar = document.createElement("div");
+    bar.className = "promo-bar";
+    bar.innerHTML = '<a href="/pro/"><b>专业财务目前免费使用</b>　报价单可加 logo、换模板 →</a>';
+    document.body.prepend(bar);
   };
 
   const mountLogin = async () => {

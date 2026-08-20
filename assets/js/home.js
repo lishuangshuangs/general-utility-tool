@@ -152,18 +152,31 @@ document.getElementById("year").textContent = new Date().getFullYear();
 
 if (installBtn) {
   let pendingPrompt = null;
+  const guide = document.getElementById("install-guide");
+  const footerBtn = document.getElementById("install-app-footer");
+  const openInstall = async () => {
+    if (pendingPrompt) {
+      pendingPrompt.prompt();
+      await pendingPrompt.userChoice.catch(() => {});
+      pendingPrompt = null;
+      return;
+    }
+    if (guide) guide.hidden = false;
+  };
   window.addEventListener("beforeinstallprompt", (event) => {
     event.preventDefault();
     pendingPrompt = event;
-    installBtn.hidden = false;
   });
-  installBtn.addEventListener("click", async () => {
-    if (!pendingPrompt) return;
-    pendingPrompt.prompt();
-    await pendingPrompt.userChoice.catch(() => {});
-    pendingPrompt = null;
-    installBtn.hidden = true;
+  installBtn.addEventListener("click", openInstall);
+  if (footerBtn) footerBtn.addEventListener("click", openInstall);
+  document.getElementById("install-guide-close")?.addEventListener("click", () => {
+    if (guide) guide.hidden = true;
   });
+  if (guide) {
+    guide.addEventListener("click", (event) => {
+      if (event.target === guide) guide.hidden = true;
+    });
+  }
 }
 
 renderShelves();

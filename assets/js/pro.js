@@ -1,5 +1,9 @@
 (() => {
+  // Flip to false when payment is wired.
+  const OPEN_PREVIEW = true;
+
   const fromUser = (user) => {
+    if (OPEN_PREVIEW) return "pro";
     const meta = (user && user.user_metadata) || {};
     if (meta.plan === "pro" || meta.pro === true) return "pro";
     if (meta.pro_until && Date.parse(meta.pro_until) > Date.now()) return "pro";
@@ -22,11 +26,14 @@
 
   const plan = () => fromUser(currentUser());
   const isPro = () => plan() === "pro";
+  const label = () => (OPEN_PREVIEW ? "目前免费使用" : isPro() ? "专业财务" : "免费版");
 
   window.UtiloraPro = {
+    OPEN_PREVIEW,
     fromUser,
     plan,
     isPro,
+    label,
     href: "/pro/",
   };
 })();

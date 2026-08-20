@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>专业财务 - Utilora</title>
-  <meta name="description" content="Utilora 免费工具引流，专业财务收费：报价单加 logo、换模板、去掉标识。">
+  <meta name="description" content="Utilora 专业财务目前免费使用：报价单加 logo、换模板、收款信息和有效期。">
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <link rel="stylesheet" href="../assets/css/site.css">
 </head>
@@ -18,59 +18,44 @@
   <main class="tool-main">
     <section class="panel">
       <p class="eyebrow" style="color:var(--primary)">专业财务</p>
-      <h1>免费工具用来算，专业版用来交给客户。</h1>
-      <p class="hint">JSON、图片、价税、个税继续免费，用来把人留下来。真正要收费的是能交货的财务文件：带 logo 的报价单、商务模板、去掉 Utilora 字样。</p>
-      <p id="plan-status" class="plan-pill">正在确认账号…</p>
-      <div class="pro-price">
-        <div>
-          <strong>168 元 / 年</strong>
-          <span>或 29 元 / 月</span>
-        </div>
-        <p>支付即将接入。先登录，开通后自动解锁专业财务。</p>
-      </div>
+      <h1>先把能交给客户的文件做出来。</h1>
+      <p class="hint">JSON、图片、算税继续免费。专业财务把报价做成你自己的单据。现在全部功能开放，标成「目前免费使用」，以后再接收费和会员。</p>
+      <p id="plan-status" class="plan-pill on">目前免费使用</p>
       <div class="actions">
-        <a class="download-button" href="../tools/quote/">免费试用报价单</a>
-        <a class="download-button secondary" href="../account/" style="background:#e8eef7;color:#334155">查看账号</a>
+        <a class="download-button" href="../tools/quote/">打开报价单</a>
+        <a class="download-button secondary" href="../" style="background:#e8eef7;color:#334155">返回工具箱</a>
       </div>
     </section>
     <section class="panel" style="margin-top:16px">
-      <h2>怎么分工</h2>
+      <h2>现在就能用</h2>
+      <div class="tool-grid" style="margin-top:14px">
+        <a class="tool-card" href="../tools/quote/"><span class="icon rose">报</span><div><h3>报价单</h3><p>logo、模板、收款、有效期、去标识</p></div><b>→</b></a>
+        <a class="tool-card" href="../tools/vat-split/"><span class="icon amber">税</span><div><h3>增值税价税分离</h3><p>含税拆分、加税、批量明细</p></div><b>→</b></a>
+        <a class="tool-card" href="../tools/income-tax/"><span class="icon indigo">个</span><div><h3>个人所得税</h3><p>累计预扣和年度汇算</p></div><b>→</b></a>
+        <a class="tool-card" href="../tools/payroll/"><span class="icon green">发</span><div><h3>到手工资</h3><p>五险一金与企业成本</p></div><b>→</b></a>
+        <a class="tool-card" href="../tools/number-chinese/"><span class="icon rose">万</span><div><h3>金额大写</h3><p>发票、合同用人民币大写</p></div><b>→</b></a>
+      </div>
+    </section>
+    <section class="panel" style="margin-top:16px">
+      <h2>报价单多了什么</h2>
       <div class="table-wrap">
         <table class="sheet-table">
-          <thead>
-            <tr><th></th><th>免费工具箱</th><th>专业财务</th></tr>
-          </thead>
+          <thead><tr><th>功能</th><th>说明</th></tr></thead>
           <tbody>
-            <tr><td>文本 / 开发 / 图像</td><td>全部免费</td><td>—</td></tr>
-            <tr><td>价税、个税、工资测算</td><td>打开就用</td><td>后续批量与导出</td></tr>
-            <tr><td>报价 / 对账 / 形式发票</td><td>可算、可打、最多 8 行</td><td>不限行数</td></tr>
-            <tr><td>公司 logo、商务/极简模板</td><td>—</td><td>有</td></tr>
-            <tr><td>去掉单据上的 Utilora</td><td>—</td><td>有</td></tr>
-            <tr><td>文件是否上传</td><td>不上传</td><td>不上传</td></tr>
+            <tr><td>公司 logo</td><td>印在单据左上角</td></tr>
+            <tr><td>经典 / 商务 / 极简</td><td>三种版式，打印前可切换</td></tr>
+            <tr><td>去掉 Utilora 标识</td><td>交给客户时更干净</td></tr>
+            <tr><td>收款账户</td><td>印在合计下方</td></tr>
+            <tr><td>报价有效期</td><td>避免过期还被当合同用</td></tr>
+            <tr><td>保存卖方资料</td><td>下次打开自动带出抬头和 logo</td></tr>
+            <tr><td>下一单号</td><td>当天流水 +1</td></tr>
           </tbody>
         </table>
       </div>
-      <p class="hint" style="margin-top:16px">免费页负责搜索和试用，专业财务负责成交。支付接上后，同一套登录账号开通即可。</p>
+      <p class="hint" style="margin-top:16px">以后收费时，这些会留在专业财务里。现在请直接用，看缺什么再提建议。</p>
     </section>
   </main>
   <script src="../assets/js/app.js"></script>
   <script src="../assets/js/pro.js"></script>
-  <script>
-    const pill = document.getElementById("plan-status");
-    const paint = () => {
-      if (window.UtiloraPro && UtiloraPro.isPro()) {
-        pill.className = "plan-pill on";
-        pill.textContent = "当前账号已开通专业财务";
-      } else if (window.UtiloraAuth && UtiloraAuth.readSession()) {
-        pill.className = "plan-pill";
-        pill.textContent = "当前是免费账号";
-      } else {
-        pill.className = "plan-pill";
-        pill.textContent = "未登录 · 免费工具可直接用";
-      }
-    };
-    paint();
-    setTimeout(paint, 400);
-  </script>
 </body>
 </html>
