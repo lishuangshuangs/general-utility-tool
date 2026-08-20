@@ -4,59 +4,50 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>专业财务 - Utilora</title>
-  <meta name="description" content="Utilora 专业财务目前免费使用：报价单加 logo、换模板、收款信息和有效期。">
+  <meta name="description" content="仿 Crater 的专业财务工作台：客户、项目、报价、发票、收款和费用。目前免费使用，数据留在浏览器。">
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <link rel="stylesheet" href="../assets/css/site.css">
+  <link rel="stylesheet" href="pro.css">
 </head>
-<body>
-  <header class="tool-head">
-    <nav>
-      <a class="brand" href="../">Utilora</a>
-      <a class="login-link" data-login="1" href="../login/">登录</a>
-    </nav>
-  </header>
-  <main class="tool-main">
-    <section class="panel">
-      <p class="eyebrow" style="color:var(--primary)">专业财务</p>
-      <h1>先把能交给客户的文件做出来。</h1>
-      <p class="hint">JSON、图片、算税继续免费。专业财务把报价做成你自己的单据。现在全部功能开放，标成「目前免费使用」，以后再接收费和会员。</p>
-      <p id="plan-status" class="plan-pill on">目前免费使用</p>
-      <div class="actions">
-        <a class="download-button" href="../tools/quote/">打开报价单</a>
-        <a class="download-button secondary" href="../" style="background:#e8eef7;color:#334155">返回工具箱</a>
+<body class="pro-body">
+  <div class="admin-shell">
+    <aside class="admin-sidebar" id="sidebar">
+      <a class="side-brand" href="./"><span>财</span>专业财务</a>
+      <nav class="side-nav">
+        <p>概览</p>
+        <button class="side-link" data-route="dashboard" type="button">工作台</button>
+        <p>销售</p>
+        <button class="side-link" data-route="customers" type="button">客户</button>
+        <button class="side-link" data-route="items" type="button">项目</button>
+        <button class="side-link" data-route="estimates" type="button">报价单</button>
+        <button class="side-link" data-route="invoices" type="button">发票</button>
+        <button class="side-link" data-route="payments" type="button">收款</button>
+        <p>支出</p>
+        <button class="side-link" data-route="expenses" type="button">费用</button>
+        <p>设置</p>
+        <button class="side-link" data-route="settings" type="button">公司资料</button>
+      </nav>
+      <div class="side-foot">
+        <strong>目前免费使用</strong>
+        <a href="../">返回工具箱</a>
+        <a href="../tools/quote/">单张报价</a>
       </div>
-    </section>
-    <section class="panel" style="margin-top:16px">
-      <h2>现在就能用</h2>
-      <div class="tool-grid" style="margin-top:14px">
-        <a class="tool-card" href="../tools/quote/"><span class="icon rose">报</span><div><h3>报价单</h3><p>公章、收款码、定金、客户档案</p></div><b>→</b></a>
-        <a class="tool-card" href="../tools/vat-split/"><span class="icon amber">税</span><div><h3>增值税价税分离</h3><p>含税拆分、加税、批量明细</p></div><b>→</b></a>
-        <a class="tool-card" href="../tools/income-tax/"><span class="icon indigo">个</span><div><h3>个人所得税</h3><p>累计预扣和年度汇算</p></div><b>→</b></a>
-        <a class="tool-card" href="../tools/payroll/"><span class="icon green">发</span><div><h3>到手工资</h3><p>五险一金与企业成本</p></div><b>→</b></a>
-        <a class="tool-card" href="../tools/number-chinese/"><span class="icon rose">万</span><div><h3>金额大写</h3><p>发票、合同用人民币大写</p></div><b>→</b></a>
-      </div>
-    </section>
-    <section class="panel" style="margin-top:16px">
-      <h2>报价单多了什么</h2>
-      <div class="table-wrap">
-        <table class="sheet-table">
-          <thead><tr><th>功能</th><th>说明</th></tr></thead>
-          <tbody>
-            <tr><td>公司 logo</td><td>印在单据左上角</td></tr>
-            <tr><td>经典 / 商务 / 极简 / 合同红</td><td>四种版式</td></tr>
-            <tr><td>公章</td><td>按公司名生成，或上传真实印章</td></tr>
-            <tr><td>收款码</td><td>微信 / 支付宝收款码印在单上</td></tr>
-            <tr><td>草稿 / 已报价 / 已成交水印</td><td>避免把草稿当合同</td></tr>
-            <tr><td>预付款与尾款</td><td>按比例拆定金</td></tr>
-            <tr><td>客户档案、项目库、历史单据</td><td>留在这台电脑，下次直接调</td></tr>
-            <tr><td>付款条款、买卖双方签章栏</td><td>打印就能让客户签字</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="hint" style="margin-top:16px">以后收费时，这些会留在专业财务里。现在请直接用，看缺什么再提建议。</p>
-    </section>
-  </main>
-  <script src="../assets/js/app.js"></script>
-  <script src="../assets/js/pro.js"></script>
+    </aside>
+    <div class="admin-content">
+      <header class="admin-topbar">
+        <button id="sidebar-toggle" class="ghost" type="button">☰</button>
+        <div>
+          <h1 id="page-title">工作台</h1>
+          <p class="hint" id="page-hint">客户、报价、发票和收款都在本机，不上传。</p>
+        </div>
+        <span class="plan-pill on">目前免费使用</span>
+        <button id="primary-action" type="button">新建</button>
+      </header>
+      <div id="view" class="admin-pages"></div>
+      <section class="print-sheet" id="sheet"></section>
+    </div>
+  </div>
+  <script src="../assets/js/finance.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
