@@ -8,9 +8,6 @@
 .login-card{width:min(420px,100%);padding:28px 22px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 12px 35px #0f172a0b}
 .login-card h1{margin:12px 0 8px;font-size:28px}
 .login-card .hint{margin-bottom:16px}
-.provider-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:48px;margin:0 0 10px}
-.provider-wechat{background:#07c160}
-.provider-qq{background:#12b7f5}
 .login-or{display:flex;align-items:center;gap:10px;margin:16px 0;color:#94a3b8;font-size:12px}
 .login-or:before,.login-or:after{content:"";flex:1;height:1px;background:var(--line)}
 .login-card form button{width:100%;min-height:48px}

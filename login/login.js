@@ -44,15 +44,6 @@
     return;
   }
 
-  document.getElementById("wechat").addEventListener("click", () => {
-    setMsg("social-msg", "微信登录需要开放平台网站应用。请先用邮箱登录。");
-    document.getElementById("email").focus();
-  });
-  document.getElementById("qq").addEventListener("click", () => {
-    setMsg("social-msg", "QQ 登录需要 QQ 互联应用。请先用邮箱登录。");
-    document.getElementById("email").focus();
-  });
-
   document.getElementById("login-form").addEventListener("submit", async (event) => {
     event.preventDefault();
     const email = document.getElementById("email").value.trim().toLowerCase();
