@@ -4,49 +4,41 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>专业财务 - Utilora</title>
-  <meta name="description" content="仿 Crater 的专业财务工作台：客户、项目、报价、发票、收款和费用。目前免费使用，数据留在浏览器。">
+  <meta name="description" content="仿 Crater 的专业财务：工作台、报价、发票、收款和费用。目前免费使用。">
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <link rel="stylesheet" href="../assets/css/site.css">
   <link rel="stylesheet" href="pro.css">
 </head>
-<body class="pro-body">
-  <div class="admin-shell">
-    <aside class="admin-sidebar" id="sidebar">
-      <a class="side-brand" href="./"><span>财</span>专业财务</a>
-      <nav class="side-nav">
-        <p>概览</p>
-        <button class="side-link" data-route="dashboard" type="button">工作台</button>
-        <p>销售</p>
-        <button class="side-link" data-route="customers" type="button">客户</button>
-        <button class="side-link" data-route="items" type="button">项目</button>
-        <button class="side-link" data-route="estimates" type="button">报价单</button>
-        <button class="side-link" data-route="invoices" type="button">发票</button>
-        <button class="side-link" data-route="payments" type="button">收款</button>
-        <p>支出</p>
-        <button class="side-link" data-route="expenses" type="button">费用</button>
-        <p>设置</p>
-        <button class="side-link" data-route="settings" type="button">公司资料</button>
+<body class="crater-body">
+  <header class="crater-top">
+    <a class="crater-logo" href="./">专业财务</a>
+    <span class="crater-free">目前免费使用</span>
+    <a href="../">工具箱</a>
+  </header>
+  <div class="crater-shell">
+    <aside class="crater-side" id="sidebar">
+      <nav>
+        <button data-route="dashboard" type="button">工作台</button>
+        <button data-route="customers" type="button">客户</button>
+        <button data-route="items" type="button">项目</button>
+        <button data-route="estimates" type="button">报价</button>
+        <button data-route="invoices" type="button">发票</button>
+        <button data-route="payments" type="button">收款</button>
+        <button data-route="expenses" type="button">费用</button>
+        <button data-route="reports" type="button">报表</button>
+        <button data-route="settings" type="button">设置</button>
       </nav>
-      <div class="side-foot">
-        <strong>目前免费使用</strong>
-        <a href="../">返回工具箱</a>
-        <a href="../tools/quote/">单张报价</a>
-      </div>
     </aside>
-    <div class="admin-content">
-      <header class="admin-topbar">
+    <main class="crater-main">
+      <div class="crater-head">
         <button id="sidebar-toggle" class="ghost" type="button">☰</button>
-        <div>
-          <h1 id="page-title">工作台</h1>
-          <p class="hint" id="page-hint">客户、报价、发票和收款都在本机，不上传。</p>
-        </div>
-        <span class="plan-pill on">目前免费使用</span>
-        <button id="primary-action" type="button">新建</button>
-      </header>
-      <div id="view" class="admin-pages"></div>
-      <section class="print-sheet" id="sheet"></section>
-    </div>
+        <h1 id="page-title">工作台</h1>
+        <button id="primary-action" type="button">新建报价</button>
+      </div>
+      <div id="view"></div>
+    </main>
   </div>
+  <section class="print-sheet" id="sheet"></section>
   <script src="../assets/js/finance.js"></script>
   <script src="app.js"></script>
 </body>
