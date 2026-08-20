@@ -17,7 +17,11 @@ a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit}
 .crater-head #primary-action{margin-left:auto;padding:10px 16px;color:#fff;background:var(--c-purple);border:0;border-radius:10px;font-weight:750;cursor:pointer}
 .ghost{display:none;padding:8px 10px;border:0;border-radius:8px;background:#e5e7eb}
 .stat-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-.stat-card{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;background:#fff;border-radius:16px;box-shadow:0 8px 24px #5851d80c}
+.stat-card{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;background:#fff;border-radius:16px;box-shadow:0 8px 24px #5851d80c;cursor:pointer}
+.stat-card:hover,.chart-card:hover,.sum-card p:hover,.list-card h2:hover,.mini-row:hover{box-shadow:0 10px 28px #5851d818;transform:translateY(-1px)}
+.chart-card{cursor:pointer}
+.sum-card p{cursor:pointer}
+.list-card h2{cursor:pointer}
 .stat-card b{display:block;font-size:26px;letter-spacing:-.03em}
 .stat-card span{color:var(--c-muted);font-size:13px;font-weight:650}
 .stat-ico{display:grid;width:42px;height:42px;place-items:center;border-radius:50%;font-weight:800;color:#fff}

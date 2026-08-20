@@ -156,28 +156,28 @@
     const dues = db.invoices.filter((i) => ["overdue", "sent", "partial"].includes(invoiceStatus(i)));
     view.innerHTML = `
       <div class="stat-row">
-        <div class="stat-card"><div><b>${money(due)}</b><span>应收未收</span></div><div class="stat-ico pink">¥</div></div>
-        <div class="stat-card"><div><b>${db.customers.length}</b><span>客户</span></div><div class="stat-ico blue">客</div></div>
-        <div class="stat-card"><div><b>${db.invoices.length}</b><span>发票</span></div><div class="stat-ico violet">票</div></div>
-        <div class="stat-card"><div><b>${db.estimates.length}</b><span>报价</span></div><div class="stat-ico blue">报</div></div>
+        <div class="stat-card" data-go="invoices"><div><b>${money(due)}</b><span>应收未收</span></div><div class="stat-ico pink">¥</div></div>
+        <div class="stat-card" data-go="customers"><div><b>${db.customers.length}</b><span>客户</span></div><div class="stat-ico blue">客</div></div>
+        <div class="stat-card" data-go="invoices"><div><b>${db.invoices.length}</b><span>发票</span></div><div class="stat-ico violet">票</div></div>
+        <div class="stat-card" data-go="estimates"><div><b>${db.estimates.length}</b><span>报价</span></div><div class="stat-ico blue">报</div></div>
       </div>
       <div class="chart-wrap">
-        <div class="chart-card"><h2>销售收入与费用</h2>${svgChart(series)}</div>
+        <div class="chart-card" data-go="reports"><h2>销售收入与费用</h2>${svgChart(series)}</div>
         <div class="sum-card">
-          <p><span>销售合计</span><b class="purple">${money(sales)}</b></p>
-          <p><span>已收</span><b class="green">${money(receipts)}</b></p>
-          <p><span>费用</span><b class="red">${money(expenses)}</b></p>
-          <p><span>净额</span><b>${money(sales - expenses)}</b></p>
+          <p data-go="reports"><span>销售合计</span><b class="purple">${money(sales)}</b></p>
+          <p data-go="payments"><span>已收</span><b class="green">${money(receipts)}</b></p>
+          <p data-go="expenses"><span>费用</span><b class="red">${money(expenses)}</b></p>
+          <p data-go="reports"><span>净额</span><b>${money(sales - expenses)}</b></p>
         </div>
       </div>
       <div class="split-lists">
         <div class="list-card">
-          <h2>到期发票</h2>
-          ${dues.length ? dues.map((inv) => `<div class="mini-row" data-go="invoice/${inv.id}"><div><b>${esc(customer(inv.customerId).name)}</b><small>${esc(inv.dueDate)} · ${esc(inv.number)}</small></div><b>${money(compute(inv).inclusive - paidOf(inv.id))}</b></div>`).join("") : `<p class="empty">没有到期发票</p>`}
+          <h2 data-go="invoices">到期发票</h2>
+          ${dues.length ? dues.map((inv) => `<div class="mini-row" data-go="invoices/${inv.id}"><div><b>${esc(customer(inv.customerId).name)}</b><small>${esc(inv.dueDate)} · ${esc(inv.number)}</small></div><b>${money(compute(inv).inclusive - paidOf(inv.id))}</b></div>`).join("") : `<p class="empty">没有到期发票</p>`}
         </div>
         <div class="list-card">
-          <h2>最近报价</h2>
-          ${db.estimates.map((est) => `<div class="mini-row" data-go="estimate/${est.id}"><div><b>${esc(customer(est.customerId).name)}</b><small>${esc(est.date)} · ${esc(est.number)}</small></div><b>${money(compute(est).inclusive)}</b></div>`).join("") || `<p class="empty">还没有报价</p>`}
+          <h2 data-go="estimates">最近报价</h2>
+          ${db.estimates.map((est) => `<div class="mini-row" data-go="estimates/${est.id}"><div><b>${esc(customer(est.customerId).name)}</b><small>${esc(est.date)} · ${esc(est.number)}</small></div><b>${money(compute(est).inclusive)}</b></div>`).join("") || `<p class="empty">还没有报价</p>`}
         </div>
       </div>`;
     view.querySelectorAll("[data-go]").forEach((el) => el.onclick = () => { location.hash = `#/${el.dataset.go}`; });
