@@ -253,6 +253,21 @@
   const displayName = (user) => (user && user.user_metadata && user.user_metadata.name) || (user && user.email && user.email.split("@")[0]) || "账号";
   const isVerified = (user) => Boolean(user && (user.email_confirmed_at || user.confirmed_at || (user.user_metadata && user.user_metadata.email_verified)));
 
+  const isDisabled = async () => {
+    const session = await refreshIfNeeded();
+    if (!session) return false;
+    try {
+      const data = await request("/rest/v1/rpc/account_is_disabled", {
+        method: "POST",
+        headers: headers(session.access_token),
+        body: "{}",
+      }, 1);
+      return data === true;
+    } catch {
+      return false;
+    }
+  };
+
   window.UtiloraAuth = {
     readSession,
     refreshIfNeeded,
@@ -266,6 +281,7 @@
     resend,
     updateUser,
     logout,
+    isDisabled,
     ping,
     displayName,
     isVerified,

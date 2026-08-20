@@ -8,6 +8,18 @@ const empty = document.getElementById('empty');
 const summary = document.getElementById('summary');
 const filterForm = document.getElementById('filter-form');
 const sessionKey = 'utilora_admin_session';
+let usersCache = [];
+function isPreview() {
+  return !/utilora\.github\.io$/i.test(location.hostname);
+}
+function currentAdminId() {
+  try { return getSession()?.user?.id || ''; }
+  catch { return ''; }
+}
+function currentAdminEmail() {
+  try { return getSession()?.user?.email || ''; }
+  catch { return ''; }
+}
 const tip = document.getElementById('chart-tip');
 
 const toolNames = {
@@ -92,7 +104,7 @@ loginForm.addEventListener('submit', async (event) => {
     sessionStorage.setItem(sessionKey, JSON.stringify(data));
     document.getElementById('password').value = '';
     showManager();
-    await Promise.all([loadFeedback(), loadAnalytics()]);
+    await Promise.all([loadFeedback(), loadAnalytics(), loadUsers()]);
   } catch (error) {
     setMessage(loginMessage, error.message, true);
   } finally {
@@ -106,7 +118,7 @@ async function request(path, options = {}) {
     headers: { ...apiHeaders(), ...(options.headers || {}) },
   });
   if (response.status === 401 || response.status === 403) {
-    logout();
+    if (!isPreview()) logout();
     throw new Error('登录已失效或没有管理员权限');
   }
   if (!response.ok) {
@@ -120,6 +132,9 @@ function showManager() {
   loginPanel.hidden = true;
   managerPanel.hidden = false;
   loginMessage.textContent = '';
+  const emailNode = document.getElementById('admin-email');
+  if (emailNode) emailNode.textContent = currentAdminEmail() || (isPreview() ? '预览模式' : '管理员');
+  switchPage('overview');
 }
 
 function showLogin() {
@@ -134,14 +149,24 @@ function logout() {
   showLogin();
 }
 
+const pageTitles = { overview: '工作台', analytics: '访问统计', users: '用户管理', feedback: '用户留言' };
+
+function switchPage(name) {
+  ['overview', 'analytics', 'users', 'feedback'].forEach((id) => {
+    const section = document.getElementById(`${id}-section`);
+    if (section) section.hidden = id !== name;
+  });
+  document.querySelectorAll('.side-link').forEach((btn) => {
+    btn.classList.toggle('active', btn.dataset.page === name);
+  });
+  const title = document.getElementById('page-title');
+  if (title) title.textContent = pageTitles[name] || '管理';
+  document.body.classList.remove('sidebar-open');
+  if (name === 'users') loadUsers();
+}
+
 function switchTab(name) {
-  const analytics = name === 'analytics';
-  document.getElementById('analytics-section').hidden = !analytics;
-  document.getElementById('feedback-section').hidden = analytics;
-  document.getElementById('tab-analytics').classList.toggle('active', analytics);
-  document.getElementById('tab-feedback').classList.toggle('active', !analytics);
-  document.getElementById('tab-analytics').setAttribute('aria-selected', String(analytics));
-  document.getElementById('tab-feedback').setAttribute('aria-selected', String(!analytics));
+  switchPage(name === 'analytics' ? 'analytics' : 'feedback');
 }
 
 function buildQuery() {
@@ -158,6 +183,11 @@ function buildQuery() {
 }
 
 async function loadFeedback() {
+  if (isPreview() && !getSession()) {
+    document.getElementById('overview-feedback').textContent = '12';
+    return;
+  }
+
   const start = document.getElementById('start-date').value;
   const end = document.getElementById('end-date').value;
   if (start && end && start > end) {
@@ -267,6 +297,12 @@ async function fetchSummary(range) {
 }
 
 async function loadAnalytics() {
+  if (isPreview() && !getSession()) {
+    document.getElementById('overview-views').textContent = '1,284';
+    document.getElementById('overview-uses').textContent = '376';
+    return;
+  }
+
   const msg = document.getElementById('analytics-message');
   const range = selectedRange();
   if (range.start && range.end && range.start > range.end) {
@@ -581,10 +617,14 @@ document.getElementById('reset-filter').addEventListener('click', () => {
   filterForm.reset();
   loadFeedback();
 });
-document.getElementById('refresh').addEventListener('click', () => Promise.all([loadFeedback(), loadAnalytics()]));
+document.getElementById('refresh').addEventListener('click', () => Promise.all([loadFeedback(), loadAnalytics(), loadUsers()]));
 document.getElementById('logout').addEventListener('click', logout);
-document.getElementById('tab-analytics').addEventListener('click', () => switchTab('analytics'));
-document.getElementById('tab-feedback').addEventListener('click', () => switchTab('feedback'));
+document.querySelectorAll('[data-page]').forEach((btn) => {
+  btn.addEventListener('click', () => switchPage(btn.dataset.page));
+});
+document.getElementById('sidebar-toggle').addEventListener('click', () => {
+  document.body.classList.toggle('sidebar-open');
+});
 document.getElementById('analytics-range').addEventListener('change', () => {
   const custom = document.getElementById('analytics-range').value === 'custom';
   document.getElementById('custom-range').hidden = !custom;
@@ -602,9 +642,161 @@ startInput.value = addDays(endInput.value, -29);
 endInput.max = todayISO();
 startInput.max = todayISO();
 
-if (getSession()) {
+if (getSession() || isPreview()) {
   showManager();
-  Promise.all([loadFeedback(), loadAnalytics()]);
+  Promise.all([loadFeedback(), loadAnalytics(), loadUsers()]);
 } else {
   showLogin();
 }
+
+
+const mockUsers = [
+  { id: '1', email: 'admin@utilora.local', name: '站长', created_at: '2026-03-01T08:00:00Z', last_sign_in_at: '2026-08-20T08:12:00Z', email_confirmed_at: '2026-03-01T08:10:00Z', is_admin: true, is_disabled: false },
+  { id: '2', email: 'li@example.com', name: '李然', created_at: '2026-06-18T02:00:00Z', last_sign_in_at: '2026-08-19T13:40:00Z', email_confirmed_at: '2026-06-18T02:20:00Z', is_admin: false, is_disabled: false },
+  { id: '3', email: 'unverified@example.com', name: '待验证', created_at: '2026-08-12T09:00:00Z', last_sign_in_at: null, email_confirmed_at: null, is_admin: false, is_disabled: false },
+  { id: '4', email: 'paused@example.com', name: '已停用账号', created_at: '2026-05-02T04:00:00Z', last_sign_in_at: '2026-07-01T10:00:00Z', email_confirmed_at: '2026-05-02T04:10:00Z', is_admin: false, is_disabled: true },
+];
+
+function formatTime(value) {
+  if (!value) return '—';
+  return new Date(value).toLocaleString();
+}
+
+function filteredUsers() {
+  const q = (document.getElementById('user-search')?.value || '').trim().toLowerCase();
+  const role = document.getElementById('user-role-filter')?.value || '';
+  const status = document.getElementById('user-status-filter')?.value || '';
+  return usersCache.filter((user) => {
+    const hay = `${user.email || ''} ${user.name || ''}`.toLowerCase();
+    if (q && !hay.includes(q)) return false;
+    if (role === 'admin' && !user.is_admin) return false;
+    if (role === 'user' && user.is_admin) return false;
+    if (status === 'disabled' && !user.is_disabled) return false;
+    if (status === 'active' && (user.is_disabled || !user.email_confirmed_at)) return false;
+    if (status === 'unverified' && user.email_confirmed_at) return false;
+    return true;
+  });
+}
+
+function renderUsers() {
+  const list = document.getElementById('users-list');
+  const empty = document.getElementById('users-empty');
+  if (!list) return;
+  list.replaceChildren();
+  const rows = filteredUsers();
+  empty.hidden = rows.length > 0;
+  document.getElementById('overview-users').textContent = String(usersCache.length);
+  rows.forEach((user) => {
+    const tr = document.createElement('tr');
+    const who = document.createElement('td');
+    who.innerHTML = `<div class="user-cell"><b></b><span></span></div>`;
+    who.querySelector('b').textContent = user.name || '未命名';
+    who.querySelector('span').textContent = user.email || '';
+    const role = document.createElement('td');
+    role.innerHTML = `<span class="role-pill ${user.is_admin ? 'admin' : 'user'}">${user.is_admin ? '管理员' : '普通用户'}</span>`;
+    const status = document.createElement('td');
+    const statusText = user.is_disabled ? '已停用' : user.email_confirmed_at ? '正常' : '未验证';
+    const statusClass = user.is_disabled ? 'off' : user.email_confirmed_at ? 'ok' : 'wait';
+    status.innerHTML = `<span class="status-pill ${statusClass}"></span>`;
+    status.querySelector('span').textContent = statusText;
+    const created = document.createElement('td');
+    created.textContent = formatTime(user.created_at);
+    const seen = document.createElement('td');
+    seen.textContent = formatTime(user.last_sign_in_at);
+    const actions = document.createElement('td');
+    actions.className = 'row-actions';
+    const adminBtn = document.createElement('button');
+    adminBtn.className = 'secondary';
+    adminBtn.textContent = user.is_admin ? '取消管理员' : '设为管理员';
+    adminBtn.addEventListener('click', () => setUserAdmin(user, !user.is_admin));
+    const disableBtn = document.createElement('button');
+    disableBtn.className = user.is_disabled ? 'secondary' : 'delete';
+    disableBtn.textContent = user.is_disabled ? '启用' : '停用';
+    disableBtn.addEventListener('click', () => setUserDisabled(user, !user.is_disabled));
+    actions.append(adminBtn, disableBtn);
+    tr.append(who, role, status, created, seen, actions);
+    list.append(tr);
+  });
+}
+
+async function loadUsers() {
+  const msg = document.getElementById('users-message');
+  if (isPreview() && !getSession()) {
+    usersCache = mockUsers;
+    renderUsers();
+    setMessage(msg, '当前为界面预览数据，正式环境登录后显示真实用户。');
+    return;
+  }
+  setMessage(msg, '正在加载用户……');
+  try {
+    const response = await request('rpc/admin_list_users', { method: 'POST', body: '{}' });
+    const data = await response.json();
+    usersCache = Array.isArray(data) ? data : [];
+    renderUsers();
+    setMessage(msg, `共 ${usersCache.length} 个账号`);
+  } catch (error) {
+    const hint = /404|does not exist|PGRST202/i.test(error.message)
+      ? '请在 Supabase SQL Editor 执行 supabase/admin-users.sql 后刷新'
+      : error.message;
+    setMessage(msg, hint, true);
+  }
+}
+
+async function setUserAdmin(user, isAdmin) {
+  if (isPreview() && !getSession()) {
+    user.is_admin = isAdmin;
+    renderUsers();
+    return;
+  }
+  try {
+    await request('rpc/admin_set_user_admin', {
+      method: 'POST',
+      body: JSON.stringify({ p_user_id: user.id, p_is_admin: isAdmin }),
+    });
+    await loadUsers();
+  } catch (error) {
+    setMessage(document.getElementById('users-message'), error.message, true);
+  }
+}
+
+async function setUserDisabled(user, disabled) {
+  const label = disabled ? '停用' : '启用';
+  if (!confirm(`确定${label}「${user.email}」吗？`)) return;
+  if (isPreview() && !getSession()) {
+    user.is_disabled = disabled;
+    renderUsers();
+    return;
+  }
+  try {
+    await request('rpc/admin_set_user_disabled', {
+      method: 'POST',
+      body: JSON.stringify({ p_user_id: user.id, p_disabled: disabled }),
+    });
+    await loadUsers();
+  } catch (error) {
+    setMessage(document.getElementById('users-message'), error.message, true);
+  }
+}
+
+function updateOverview() {
+  const views = document.getElementById('total-views')?.textContent;
+  const uses = document.getElementById('total-uses')?.textContent;
+  if (views) document.getElementById('overview-views').textContent = views;
+  if (uses) document.getElementById('overview-uses').textContent = uses;
+}
+
+const originalRenderAnalytics = renderAnalytics;
+renderAnalytics = function(data, range) {
+  originalRenderAnalytics(data, range);
+  updateOverview();
+};
+
+const originalRenderRows = renderRows;
+renderRows = function(rows) {
+  originalRenderRows(rows);
+  document.getElementById('overview-feedback').textContent = String(rows.length);
+};
+
+document.getElementById('user-search')?.addEventListener('input', renderUsers);
+document.getElementById('user-role-filter')?.addEventListener('change', renderUsers);
+document.getElementById('user-status-filter')?.addEventListener('change', renderUsers);

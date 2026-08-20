@@ -168,6 +168,10 @@
       }
       try {
         await auth.login(email, password);
+        if (await auth.isDisabled()) {
+          await auth.logout();
+          throw new Error("账号已被停用，请联系管理员");
+        }
         goAccount();
       } catch (error) {
         if (/尚未验证|not_confirmed|confirm/i.test((error.code || "") + error.message)) {
