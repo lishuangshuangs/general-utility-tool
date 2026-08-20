@@ -121,27 +121,29 @@
     try {
       if (mode === "recover") {
         await auth.recover(email);
-        setMsg(formMsg, "如果该邮箱已注册，重置邮件已发出。");
+        setMsg(formMsg, "如果该邮箱已注册，重置邮件已发出。请同时检查垃圾箱。");
         return;
       }
       if (mode === "up") {
         const issue = passwordIssue(password, confirm);
         if (issue) throw new Error(issue);
+        const reachable = await auth.ping();
+        if (!reachable) throw new Error("连不上登录服务。请关闭广告拦截后重试；若在大陆网络，可能需要畅通的国际网络。");
         const data = await auth.signup(email, password, name);
         if (data.access_token) {
           await auth.login(email, password).catch(() => {});
           goAccount();
           return;
         }
-        setMsg(formMsg, "验证邮件已发送到 " + email + "。请打开邮件中的链接后再登录。");
+        setMsg(formMsg, "验证邮件已发送到 " + email + "。请打开邮件中的链接后再登录。QQ / 网易邮箱请同时检查垃圾箱。");
         resend.hidden = false;
         return;
       }
       await auth.login(email, password);
       goAccount();
     } catch (error) {
-      const unconfirmed = /confirm|not.*verified|email_not_confirmed/i.test(error.code + " " + error.message);
-      setMsg(formMsg, unconfirmed ? "邮箱尚未验证。请先打开验证邮件中的链接。" : error.message || "登录失败", true);
+      const unconfirmed = /尚未验证|confirm|not.*verified|email_not_confirmed/i.test((error.code || "") + " " + (error.message || ""));
+      setMsg(formMsg, error.message || "登录失败", true);
       resend.hidden = !unconfirmed;
     } finally {
       submit.disabled = false;

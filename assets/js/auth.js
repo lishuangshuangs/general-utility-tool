@@ -4,10 +4,26 @@
   const SESSION_KEY = "utilora_sb_session";
   const REDIRECT = "https://utilora.github.io/account/";
 
-  const headers = (token) => {
-    const value = { apikey: KEY, "Content-Type": "application/json" };
-    if (token) value.Authorization = "Bearer " + token;
-    return value;
+  const headers = (token) => ({
+    apikey: KEY,
+    Authorization: "Bearer " + (token || KEY),
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  });
+
+  const friendlyError = (error, fallback) => {
+    const raw = String(error && (error.message || error.msg || error) || "");
+    const code = String(error && (error.code || error.error_code) || "");
+    if (/rate_limit|too many|429/i.test(code + raw)) return "验证邮件发送太频繁，请 10 分钟后再试。";
+    if (/redirect_to|not allowed|whitelist/i.test(raw)) return "回调地址未配置，请稍后再试。";
+    if (/invalid.*email|email_address_invalid/i.test(code + raw)) return "这个邮箱地址不被接受，请换一个常用邮箱。";
+    if (/already.?registered|user_already_exists|already been registered/i.test(code + raw)) return "这个邮箱已经注册。请直接登录，或点「忘记密码」。";
+    if (/confirm|not.*verified|email_not_confirmed/i.test(code + raw)) return "邮箱尚未验证。请先打开验证邮件里的链接。";
+    if (/invalid login|invalid_credentials|invalid.*password/i.test(code + raw)) return "邮箱或密码不对。";
+    if (/Failed to fetch|NetworkError|Load failed|network/i.test(raw) || error && error.name === "TypeError") {
+      return "连不上登录服务。请关闭广告拦截后重试；若在公司网或大陆网络，可能需要畅通的国际网络。";
+    }
+    return fallback || raw || "请求失败";
   };
 
   const readSession = () => {
@@ -18,27 +34,45 @@
     }
   };
 
-  const writeSession = (session) => {
-    localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-  };
-
+  const writeSession = (session) => localStorage.setItem(SESSION_KEY, JSON.stringify(session));
   const clearSession = () => localStorage.removeItem(SESSION_KEY);
 
   const parseJson = async (response) => {
     const data = await response.json().catch(() => ({}));
     if (!response.ok) {
-      const message = data.msg || data.error_description || data.error || data.message || "请求失败";
-      const error = new Error(message);
+      const error = new Error(data.msg || data.error_description || data.error || data.message || "请求失败");
       error.code = data.error_code || data.code;
+      error.status = response.status;
       throw error;
     }
     return data;
   };
 
-  const fetchUser = async (token) => {
-    const response = await fetch(API + "/auth/v1/user", { headers: headers(token) });
-    return parseJson(response);
+  const request = async (path, options = {}, tries = 2) => {
+    let lastError;
+    for (let i = 0; i < tries; i += 1) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 18000);
+      try {
+        const response = await fetch(API + path, {
+          credentials: "omit",
+          cache: "no-store",
+          signal: controller.signal,
+          ...options,
+        });
+        clearTimeout(timer);
+        return parseJson(response);
+      } catch (error) {
+        clearTimeout(timer);
+        lastError = error;
+        if (error && error.status) throw error;
+        if (i + 1 < tries) await new Promise((resolve) => setTimeout(resolve, 700 * (i + 1)));
+      }
+    }
+    throw lastError;
   };
+
+  const fetchUser = (token) => request("/auth/v1/user", { headers: headers(token) });
 
   const saveTokens = async (payload) => {
     const access = payload.access_token;
@@ -64,12 +98,11 @@
       return null;
     }
     try {
-      const response = await fetch(API + "/auth/v1/token?grant_type=refresh_token", {
+      const data = await request("/auth/v1/token?grant_type=refresh_token", {
         method: "POST",
         headers: headers(),
         body: JSON.stringify({ refresh_token: session.refresh_token }),
       });
-      const data = await parseJson(response);
       return saveTokens(data);
     } catch {
       clearSession();
@@ -99,67 +132,98 @@
   };
 
   const signup = async (email, password, name) => {
-    const response = await fetch(API + "/auth/v1/signup?redirect_to=" + encodeURIComponent(REDIRECT), {
-      method: "POST",
-      headers: headers(),
-      body: JSON.stringify({ email, password, data: { name } }),
-    });
-    return parseJson(response);
+    try {
+      return await request(
+        "/auth/v1/signup?redirect_to=" + encodeURIComponent(REDIRECT),
+        {
+          method: "POST",
+          headers: headers(),
+          body: JSON.stringify({ email, password, data: { name } }),
+        },
+        2,
+      );
+    } catch (error) {
+      error.message = friendlyError(error, "注册失败");
+      throw error;
+    }
   };
 
   const login = async (email, password) => {
-    const response = await fetch(API + "/auth/v1/token?grant_type=password", {
-      method: "POST",
-      headers: headers(),
-      body: JSON.stringify({ email, password }),
-    });
-    const data = await parseJson(response);
-    return saveTokens(data);
+    try {
+      const data = await request("/auth/v1/token?grant_type=password", {
+        method: "POST",
+        headers: headers(),
+        body: JSON.stringify({ email, password }),
+      });
+      return saveTokens(data);
+    } catch (error) {
+      error.message = friendlyError(error, "登录失败");
+      throw error;
+    }
   };
 
   const recover = async (email) => {
-    const response = await fetch(API + "/auth/v1/recover?redirect_to=" + encodeURIComponent(REDIRECT), {
-      method: "POST",
-      headers: headers(),
-      body: JSON.stringify({ email }),
-    });
-    if (response.status === 429) throw new Error("发送太频繁，请稍后再试");
-    return parseJson(response);
+    try {
+      return await request("/auth/v1/recover?redirect_to=" + encodeURIComponent(REDIRECT), {
+        method: "POST",
+        headers: headers(),
+        body: JSON.stringify({ email }),
+      });
+    } catch (error) {
+      error.message = friendlyError(error, "发送失败");
+      throw error;
+    }
   };
 
   const resend = async (email) => {
-    const response = await fetch(API + "/auth/v1/resend", {
-      method: "POST",
-      headers: headers(),
-      body: JSON.stringify({ type: "signup", email }),
-    });
-    if (response.status === 429) throw new Error("发送太频繁，请稍后再试");
-    return parseJson(response);
+    try {
+      return await request("/auth/v1/resend", {
+        method: "POST",
+        headers: headers(),
+        body: JSON.stringify({ type: "signup", email, options: { emailRedirectTo: REDIRECT } }),
+      });
+    } catch (error) {
+      error.message = friendlyError(error, "发送失败");
+      throw error;
+    }
   };
 
   const updateUser = async (body) => {
     const session = await refreshIfNeeded();
     if (!session) throw new Error("请先登录");
-    const response = await fetch(API + "/auth/v1/user", {
-      method: "PUT",
-      headers: headers(session.access_token),
-      body: JSON.stringify(body),
-    });
-    const user = await parseJson(response);
-    writeSession({ ...session, user });
-    return user;
+    try {
+      const user = await request("/auth/v1/user", {
+        method: "PUT",
+        headers: headers(session.access_token),
+        body: JSON.stringify(body),
+      });
+      writeSession({ ...session, user });
+      return user;
+    } catch (error) {
+      error.message = friendlyError(error, "保存失败");
+      throw error;
+    }
   };
 
   const logout = async () => {
     const session = readSession();
-    if (session?.access_token) {
-      await fetch(API + "/auth/v1/logout", { method: "POST", headers: headers(session.access_token) }).catch(() => {});
+    if (session && session.access_token) {
+      await request("/auth/v1/logout", { method: "POST", headers: headers(session.access_token) }).catch(() => {});
     }
     clearSession();
   };
 
-  const displayName = (user) => user?.user_metadata?.name || user?.email?.split("@")[0] || "账号";
-  const isVerified = (user) => Boolean(user?.email_confirmed_at || user?.confirmed_at || user?.user_metadata?.email_verified);
+  const ping = async () => {
+    try {
+      await request("/auth/v1/settings", { headers: headers() }, 1);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const displayName = (user) => (user && user.user_metadata && user.user_metadata.name) || (user && user.email && user.email.split("@")[0]) || "账号";
+  const isVerified = (user) => Boolean(user && (user.email_confirmed_at || user.confirmed_at || (user.user_metadata && user.user_metadata.email_verified)));
 
   window.UtiloraAuth = {
     readSession,
@@ -171,7 +235,9 @@
     resend,
     updateUser,
     logout,
+    ping,
     displayName,
     isVerified,
+    friendlyError,
   };
 })();
