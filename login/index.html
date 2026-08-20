@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>登录 - Utilora</title>
+  <meta name="description" content="登录 Utilora，同步收藏。支持微信、QQ 与邮箱。">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+  <main class="login-page">
+    <div class="login-card">
+      <a class="brand" href="../"><span class="brand-mark">U</span><span>返回工具箱</span></a>
+      <h1>登录</h1>
+      <p class="hint">工具本身不用登录。登录后，这台设备上的收藏会记在你的账号里。</p>
+      <button id="wechat" class="provider-btn provider-wechat" type="button">微信登录</button>
+      <button id="qq" class="provider-btn provider-qq" type="button">QQ 登录</button>
+      <p id="social-msg" class="message" role="status"></p>
+      <div class="login-or">邮箱</div>
+      <form id="login-form">
+        <div class="field">
+          <label for="name">称呼</label>
+          <input id="name" autocomplete="nickname" placeholder="注册时填写，登录可留空">
+        </div>
+        <div class="field">
+          <label for="email">邮箱</label>
+          <input id="email" type="email" required autocomplete="username" inputmode="email">
+        </div>
+        <div class="field">
+          <label for="password">密码</label>
+          <input id="password" type="password" required minlength="8" autocomplete="current-password">
+        </div>
+        <button id="submit" type="submit">登录 / 注册</button>
+      </form>
+      <p id="form-msg" class="message" role="status"></p>
+    </div>
+  </main>
+  <script src="login.js"></script>
+</body>
+</html>

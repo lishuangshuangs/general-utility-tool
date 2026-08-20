@@ -107,8 +107,33 @@
     starButton,
   };
 
+
+  const SESSION_KEY = "utilora_session";
+  const readSession = () => {
+    try { return JSON.parse(localStorage.getItem(SESSION_KEY) || "null"); }
+    catch { return null; }
+  };
+
+  const mountLogin = () => {
+    if (/\/(admin|login)(\/|$)/.test(location.pathname)) return;
+    const session = readSession();
+    const label = session && (session.name || session.email) ? "账号" : "登录";
+    const parent = document.querySelector(".nav-links") || document.querySelector(".tool-head nav");
+    if (!parent) return;
+    let link = parent.querySelector("[data-login]");
+    if (!link) {
+      link = document.createElement("a");
+      link.dataset.login = "1";
+      link.className = "login-link";
+      parent.append(link);
+    }
+    link.href = "/login/";
+    link.textContent = label;
+  };
+
   ensureHeadLinks();
   registerWorker();
+  mountLogin();
   const slug = slugFromPath();
   if (slug) initToolChrome(slug);
 })();
