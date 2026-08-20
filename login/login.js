@@ -26,7 +26,13 @@
   };
 
   const escapeHtml = (value) =>
-    String(value).replace(/[&<>"']/g, (ch) => ({ "&": "&", "<": "<", ">": ">", '"': """, "'": "&#39;" }[ch]));
+    String(value).replace(/[&<>"']/g, (ch) => {
+      if (ch === "&") return "&#38;";
+      if (ch === "<") return "&#60;";
+      if (ch === ">") return "&#62;";
+      if (ch === '"') return "&#34;";
+      return "&#39;";
+    });
 
   const session = read(SESSION, null);
   if (session) {
@@ -54,7 +60,7 @@
     setMsg("form-msg", "请稍候…");
     try {
       if (password.length < 8) throw new Error("密码至少 8 位");
-      const pass = await digest(`${email}:${password}`);
+      const pass = await digest(email + ":" + password);
       const accounts = read(ACCOUNTS, []);
       const existing = accounts.find((item) => item.email === email);
       if (existing) {
