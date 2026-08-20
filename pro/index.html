@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>专业财务 - Utilora</title>
+  <meta name="description" content="Utilora 免费工具引流，专业财务收费：报价单加 logo、换模板、去掉标识。">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+  <header class="tool-head">
+    <nav>
+      <a class="brand" href="../">Utilora</a>
+      <a class="login-link" data-login="1" href="../login/">登录</a>
+    </nav>
+  </header>
+  <main class="tool-main">
+    <section class="panel">
+      <p class="eyebrow" style="color:var(--primary)">专业财务</p>
+      <h1>免费工具用来算，专业版用来交给客户。</h1>
+      <p class="hint">JSON、图片、价税、个税继续免费，用来把人留下来。真正要收费的是能交货的财务文件：带 logo 的报价单、商务模板、去掉 Utilora 字样。</p>
+      <p id="plan-status" class="plan-pill">正在确认账号…</p>
+      <div class="pro-price">
+        <div>
+          <strong>168 元 / 年</strong>
+          <span>或 29 元 / 月</span>
+        </div>
+        <p>支付即将接入。先登录，开通后自动解锁专业财务。</p>
+      </div>
+      <div class="actions">
+        <a class="download-button" href="../tools/quote/">免费试用报价单</a>
+        <a class="download-button secondary" href="../account/" style="background:#e8eef7;color:#334155">查看账号</a>
+      </div>
+    </section>
+    <section class="panel" style="margin-top:16px">
+      <h2>怎么分工</h2>
+      <div class="table-wrap">
+        <table class="sheet-table">
+          <thead>
+            <tr><th></th><th>免费工具箱</th><th>专业财务</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>文本 / 开发 / 图像</td><td>全部免费</td><td>—</td></tr>
+            <tr><td>价税、个税、工资测算</td><td>打开就用</td><td>后续批量与导出</td></tr>
+            <tr><td>报价 / 对账 / 形式发票</td><td>可算、可打、最多 8 行</td><td>不限行数</td></tr>
+            <tr><td>公司 logo、商务/极简模板</td><td>—</td><td>有</td></tr>
+            <tr><td>去掉单据上的 Utilora</td><td>—</td><td>有</td></tr>
+            <tr><td>文件是否上传</td><td>不上传</td><td>不上传</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="hint" style="margin-top:16px">免费页负责搜索和试用，专业财务负责成交。支付接上后，同一套登录账号开通即可。</p>
+    </section>
+  </main>
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/pro.js"></script>
+  <script>
+    const pill = document.getElementById("plan-status");
+    const paint = () => {
+      if (window.UtiloraPro && UtiloraPro.isPro()) {
+        pill.className = "plan-pill on";
+        pill.textContent = "当前账号已开通专业财务";
+      } else if (window.UtiloraAuth && UtiloraAuth.readSession()) {
+        pill.className = "plan-pill";
+        pill.textContent = "当前是免费账号";
+      } else {
+        pill.className = "plan-pill";
+        pill.textContent = "未登录 · 免费工具可直接用";
+      }
+    };
+    paint();
+    setTimeout(paint, 400);
+  </script>
+</body>
+</html>

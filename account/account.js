@@ -64,6 +64,18 @@
       badge.className = "verify-off";
       badge.textContent = "邮箱待验证";
     }
+    const planBadge = document.getElementById("plan-badge");
+    const planCopy = document.getElementById("plan-copy");
+    const pro = window.UtiloraPro && UtiloraPro.fromUser(user) === "pro";
+    if (planBadge) {
+      planBadge.className = "plan-pill" + (pro ? " on" : "");
+      planBadge.textContent = pro ? "专业财务" : "免费版";
+    }
+    if (planCopy) {
+      planCopy.textContent = pro
+        ? "专业财务已开通。报价单可加 logo、换模板、去掉标识，明细不限行数。"
+        : "文本、开发、图像和算税继续免费。专业财务给报价单加 logo、换模板、去掉标识。支付即将接入。";
+    }
     const meta = user.user_metadata || {};
     const localFav = window.Utilora ? Utilora.favorites() : [];
     const localRecent = window.Utilora ? Utilora.recent() : [];
