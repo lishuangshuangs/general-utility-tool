@@ -46,7 +46,7 @@
       ? "使用真实邮箱。我们会发送验证邮件，点开确认链接后才能登录。"
       : isRecover
         ? "输入注册邮箱，我们会发送重置邮件。"
-        : "报价、算税不用登录。登录后可同步收藏。";
+        : "使用已验证的邮箱登录。工具本身仍可免登录使用。";
     nameField.hidden = !isUp;
     confirmField.hidden = !isUp;
     passwordField.hidden = isRecover;

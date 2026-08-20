@@ -18,7 +18,7 @@
   <main class="tool-main">
     <div class="panel no-print">
       <h1>报价单</h1>
-      <p class="hint">给客户出报价、对账单或形式发票。可加 logo、换版式，打印存 PDF。不是税务机关监制的增值税发票。</p>
+      <p class="hint">本地生成报价、对账和形式发票。本文件不是税务机关监制的增值税发票。</p>
       <div class="tabs" id="kinds">
         <button type="button" class="active" data-kind="报价单">报价单</button>
         <button type="button" data-kind="对账单">对账单</button>
@@ -49,22 +49,6 @@
           <div class="field"><label for="buyerContact">地址 / 电话</label><input id="buyerContact"></div>
         </div>
       </div>
-      <p class="group-title">版式</p>
-      <div class="grid">
-        <div class="field">
-          <label for="logo">公司 logo</label>
-          <input id="logo" type="file" accept="image/*">
-        </div>
-        <div class="field">
-          <label>模板</label>
-          <div class="tabs" id="themes">
-            <button type="button" class="active" data-theme="classic">经典</button>
-            <button type="button" data-theme="navy">商务</button>
-            <button type="button" data-theme="plain">极简</button>
-          </div>
-        </div>
-      </div>
-      <label class="check-line"><input id="unbrand" type="checkbox"> 打印时不显示 Utilora 标识</label>
       <div class="table-wrap">
         <table class="sheet-table edit-table">
           <thead>
@@ -92,7 +76,7 @@
       <span>相关工具</span>
       <a href="../vat-split/">增值税价税分离</a>
       <a href="../number-chinese/">数字转中文大写</a>
-      <a href="../payroll/">到手工资</a>
+      <a href="../income-tax/">个人所得税</a>
     </div>
   </main>
   <script src="../../assets/js/app.js"></script>

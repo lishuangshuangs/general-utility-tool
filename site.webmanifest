@@ -1,7 +1,7 @@
 {
-  "name": "Utilora 报价与算税",
+  "name": "Utilora 在线实用工具箱",
   "short_name": "Utilora",
-  "description": "本地报价单、价税分离、个税和工资测算。内容留在浏览器里。",
+  "description": "无需安装、无需登录。常用文本与开发工具，尽可能只在你的浏览器中处理。",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

@@ -1,12 +1,10 @@
-# Utilora 报价与算税
+# Utilora 在线实用工具箱
 
-Utilora 以财务工具为主：报价单、增值税价税分离、个人所得税、到手工资和金额大写。处理在浏览器里完成，用 GitHub Pages 发布。
+Utilora 是一个基于 HTML、CSS 和 JavaScript 的免费在线工具集合，使用 GitHub Pages 自动发布。处理尽量只在浏览器中完成。
 
 ## 在线访问
 
 https://utilora.github.io/
-
-首页默认展示财务工具；文本、开发、图像仍可在「全部」里使用。
 
 ## 这次更新
 
