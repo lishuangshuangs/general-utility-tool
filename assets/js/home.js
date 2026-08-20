@@ -15,6 +15,7 @@ const toolPriority = [
   "quote",
   "income-tax",
   "payroll",
+  "number-chinese",
   "roman-numeral",
   "percentage",
   "list-converter",
@@ -28,7 +29,6 @@ const toolPriority = [
   "image-resize",
   "image-watermark",
   "image-palette",
-  "number-chinese",
   "id-card",
   "zh-convert",
   "markdown-preview",
@@ -91,7 +91,7 @@ cards.forEach((card) => {
   card.addEventListener("click", () => Utilora.addRecent(slug));
 });
 
-let category = "all";
+let category = "finance";
 
 function chipFromCard(card) {
   const chip = document.createElement("a");

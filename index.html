@@ -3,26 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Utilora 免费、轻量、保护隐私的在线实用工具箱">
+  <meta name="description" content="Utilora 本地报价、价税分离、个税与工资测算">
   <meta name="theme-color" content="#111827">
-  <meta property="og:title" content="Utilora｜在线实用工具箱">
-  <meta property="og:description" content="无需安装、无需登录。常用文本与开发工具，尽可能只在你的浏览器中处理。">
+  <meta property="og:title" content="Utilora｜报价、价税与个税">
+  <meta property="og:description" content="本地生成报价单，计算增值税、个税和到手工资。内容留在浏览器里。">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://utilora.github.io/">
   <meta name="twitter:card" content="summary">
-  <title>Utilora｜在线实用工具箱</title>
+  <title>Utilora｜报价、价税与个税</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="apple-touch-icon" href="favicon.svg">
   <link rel="manifest" href="site.webmanifest">
   <link rel="stylesheet" href="assets/css/site.css">
 </head>
 <body>
-  <header class="site-header"><nav class="nav"><a class="brand" href="./"><span class="brand-mark">U</span><span>Utilora</span></a><div class="nav-links"><a href="#tools">全部工具</a><a href="feedback/">功能建议</a><a class="login-link" data-login="1" href="login/">登录</a></div></nav></header>
+  <header class="site-header"><nav class="nav"><a class="brand" href="./"><span class="brand-mark">U</span><span>Utilora</span></a><div class="nav-links"><a href="#tools">财务工具</a><a href="feedback/">功能建议</a><a class="login-link" data-login="1" href="login/">登录</a></div></nav></header>
   <main>
-    <section class="hero"><div class="hero-inner"><div class="eyebrow">本地处理 · 保护隐私</div><h1>顺手的工具，<br><span>不该复杂。</span></h1><p>常用工具打开就能用。处理过程留在你的浏览器里。</p><div class="search-wrap"><span>⌕</span><input id="tool-search" type="search" placeholder="搜索工具，例如 图片、水印、JSON…" autocomplete="off"><kbd>/</kbd></div><div class="hero-meta"><span><b id="tool-count">55</b> 个工具</span><span>✓ 免费使用</span><span>✓ 本地处理</span><span>✓ 可离线安装</span></div></div><div class="hero-art" aria-hidden="true"><div class="orb orb-one"></div><div class="orb orb-two"></div><div class="code-card"><i></i><i></i><i></i><pre>图像
-  压缩 / 格式转换
-  裁剪 / 水印
-  主色提取</pre></div></div></section>
+    <section class="hero"><div class="hero-inner"><div class="eyebrow">本地报价 · 算税开单</div><h1>顺手的工具，<br><span>不该复杂。</span></h1><p>价税分离、报价单、个税和工资，打开就能算。内容留在你的浏览器里。</p><div class="search-wrap"><span>⌕</span><input id="tool-search" type="search" placeholder="搜索 报价、增值税、个税、工资…" autocomplete="off"><kbd>/</kbd></div><div class="hero-meta"><span><b id="tool-count">55</b> 个工具</span><span>✓ 免费使用</span><span>✓ 本地算税</span><span>✓ 可离线安装</span></div></div><div class="hero-art" aria-hidden="true"><div class="orb orb-one"></div><div class="orb orb-two"></div><div class="code-card"><i></i><i></i><i></i><pre>财务
+  报价 / 价税分离
+  个税 / 到手工资
+  金额大写</pre></div></div></section>
     <section id="library" class="library" hidden>
       <div id="fav-shelf" class="shelf" hidden>
         <h3>我的收藏</h3>
@@ -33,10 +33,10 @@
         <div id="recent-row" class="shelf-row"></div>
       </div>
     </section>
-    <section id="tools" class="tools-section"><div class="section-head"><div><span class="section-kicker">TOOLBOX</span><h2>选择一个工具开始</h2></div><div id="categories" class="categories"><button class="active" data-category="all">全部</button><button data-category="finance">财务</button><button data-category="text">文本</button><button data-category="developer">开发</button><button data-category="generator">生成</button><button data-category="image">图像</button></div></div>
+    <section id="tools" class="tools-section"><div class="section-head"><div><span class="section-kicker">FINANCE</span><h2>从常用财务工具开始</h2></div><div id="categories" class="categories"><button data-category="all">全部</button><button class="active" data-category="finance">财务</button><button data-category="text">文本</button><button data-category="developer">开发</button><button data-category="generator">生成</button><button data-category="image">图像</button></div></div>
       <div id="tool-grid" class="tool-grid">
         <a class="tool-card new" data-category="finance" data-search="增值税 价税分离 含税 不含税 税额 1% 3% 6% 9% 13% 小规模 一般纳税人 zengzhishui" href="tools/vat-split/"><span class="icon amber">税</span><div><h3>增值税价税分离</h3><p>含税拆分、加税与批量明细</p></div><b>→</b></a>
-        <a class="tool-card new" data-category="finance" data-search="报价单 对账单 形式发票 账单 明细 PDF 打印 增值税 baojiadan" href="tools/quote/"><span class="icon rose">报</span><div><h3>报价单</h3><p>本地生成报价、对账和形式发票，专业版可加 logo</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="finance" data-search="报价单 对账单 形式发票 账单 明细 PDF 打印 增值税 baojiadan" href="tools/quote/"><span class="icon rose">报</span><div><h3>报价单</h3><p>本地生成报价、对账和形式发票，可加 logo</p></div><b>→</b></a>
         <a class="tool-card new" data-category="finance" data-search="个税 个人所得税 累计预扣 汇算清缴 专项附加扣除 税率 工资 geshui" href="tools/income-tax/"><span class="icon indigo">个</span><div><h3>个人所得税</h3><p>累计预扣与年度汇算，含专项附加</p></div><b>→</b></a>
         <a class="tool-card new" data-category="finance" data-search="到手工资 五险一金 社保 公积金 实发 个税 缴费基数 北京 上海 gongzi" href="tools/payroll/"><span class="icon green">发</span><div><h3>到手工资</h3><p>五险一金、个税与企业成本</p></div><b>→</b></a>
         <a class="tool-card new" data-category="developer" data-search="罗马 数字 转换 roman numeral" href="tools/roman-numeral/"><span class="icon amber">RM</span><div><h3>罗马数字转换</h3><p>阿拉伯数字与罗马数字互转</p></div><b>→</b></a>
@@ -50,7 +50,7 @@
         <a class="tool-card new" data-category="image" data-search="图片 尺寸 缩放 裁剪 宽高 crop resize caijian" href="tools/image-resize/"><span class="icon cyan">裁</span><div><h3>尺寸与裁剪</h3><p>调整宽高，拖选区域后导出</p></div><b>→</b></a>
         <a class="tool-card new" data-category="image" data-search="图片 水印 文字 平铺 watermark shuiyin" href="tools/image-watermark/"><span class="icon rose">印</span><div><h3>图片水印</h3><p>添加文字水印，可调位置与透明度</p></div><b>→</b></a>
         <a class="tool-card new" data-category="image" data-search="图片 主色 提取 色板 HEX 配色 palette zhuse" href="tools/image-palette/"><span class="icon violet">取</span><div><h3>主色提取</h3><p>从图片取出主色并复制 HEX</p></div><b>→</b></a>
-        <a class="tool-card new" data-category="text" data-search="数字 中文 大写 人民币 金额 发票 合同 批量 shuzi zhongwen daxie" href="tools/number-chinese/"><span class="icon rose">万</span><div><h3>数字转中文大写</h3><p>金额转人民币大写，支持批量发票</p></div><b>→</b></a>
+        <a class="tool-card new" data-category="finance" data-search="数字 中文 大写 人民币 金额 发票 合同 批量 shuzi zhongwen daxie" href="tools/number-chinese/"><span class="icon rose">万</span><div><h3>数字转中文大写</h3><p>金额转人民币大写，支持批量发票</p></div><b>→</b></a>
         <a class="tool-card new" data-category="text" data-search="身份证 校验 号码 生日 性别 户籍 18位 15位 shenfenzheng jiaoyan sfz" href="tools/id-card/"><span class="icon indigo">证</span><div><h3>身份证校验</h3><p>校验号码，读出生日、性别与省份</p></div><b>→</b></a>
         <a class="tool-card new" data-category="text" data-search="简体 繁体 拼音 slug 中文 转换 台湾 香港 头发 词级 jianfan pinyin" href="tools/zh-convert/"><span class="icon violet">汉</span><div><h3>简繁拼音</h3><p>词级简繁互转、拼音与 slug</p></div><b>→</b></a>
         <a class="tool-card new" data-category="text" data-search="Markdown 预览 HTML 公众号 笔记 md 渲染 微信 markdown yulan gongzhonghao" href="tools/markdown-preview/"><span class="icon green">MD</span><div><h3>Markdown 预览</h3><p>本地预览，并复制公众号 HTML</p></div><b>→</b></a>
@@ -92,11 +92,11 @@
         <a class="tool-card new" data-category="developer" data-search="Cron 下次 运行 时间 定时 计算 next" href="tools/cron-next/"><span class="icon amber">⌚</span><div><h3>Cron 下次运行</h3><p>计算表达式接下来若干次触发时间</p></div><b>→</b></a>
       </div><div id="no-results" class="no-results" hidden>没有找到匹配的工具，<a href="feedback/">告诉我们你想要什么</a>。</div>
     </section>
-    <section class="privacy"><div><span>隐私优先</span><h2>你的内容，留在你的浏览器里。</h2><p>除留言功能外，工具处理过程不会主动把输入内容发送到 Utilora 服务器。收藏和最近使用只保存在你的设备上。</p></div><div class="privacy-badge">◉<small>LOCAL<br>PROCESSING</small></div></section>
+    <section class="privacy"><div><span>本地算税</span><h2>报价和税额，不必上传。</h2><p>价税分离、报价单、个税和工资都在你的浏览器里算。除留言外，不会主动把明细发到服务器。</p></div><div class="privacy-badge">◉<small>LOCAL<br>PROCESSING</small></div></section>
   </main>
   <footer>
     <a class="brand" href="./"><span class="brand-mark">U</span><span>Utilora</span></a>
-    <p>把复杂留给工具，把时间还给你。</p>
+    <p>报价、算税、开单，文件不出浏览器。</p>
     <button id="install-app" class="install-btn" type="button" hidden>安装到桌面</button>
     <span>© <span id="year"></span></span>
   </footer>
