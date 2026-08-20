@@ -1,5 +1,7 @@
 (() => {
   const auth = window.UtiloraAuth;
+  const NAMES = ["林深", "江晚", "青石", "远山", "清风", "南星", "北岸", "暮雪", "顾言", "沈衡", "苏晚", "白舟", "陆深", "叶宁", "陈予"];
+
   const title = document.getElementById("title");
   const lead = document.getElementById("lead");
   const form = document.getElementById("auth-form");
@@ -17,8 +19,12 @@
   const passwordInput = document.getElementById("password");
   const confirmInput = document.getElementById("confirm");
   const nameInput = document.getElementById("name");
+  const randomName = document.getElementById("random-name");
 
   let mode = "in";
+  let pendingEmail = "";
+  let cooldown = 0;
+  let cooldownTimer = 0;
 
   const setMsg = (el, text, error = false) => {
     el.className = error ? "message error" : "message";
@@ -37,9 +43,9 @@
     const isRecover = mode === "recover";
     title.textContent = isUp ? "创建账号" : isRecover ? "重置密码" : "登录";
     lead.textContent = isUp
-      ? "使用真实邮箱注册。我们会发送验证邮件，点击链接后才能登录。"
+      ? "使用真实邮箱。我们会发送验证邮件，点开确认链接后才能登录。"
       : isRecover
-        ? "输入注册邮箱，我们会发送重置链接。请到邮箱收件箱或垃圾箱查收。"
+        ? "输入注册邮箱，我们会发送重置邮件。"
         : "使用已验证的邮箱登录。工具本身仍可免登录使用。";
     nameField.hidden = !isUp;
     confirmField.hidden = !isUp;
@@ -49,22 +55,44 @@
     submit.textContent = isUp ? "发送验证邮件" : isRecover ? "发送重置邮件" : "登录";
     toggleMode.textContent = isUp || isRecover ? "返回登录" : "没有账号？注册";
     toggleRecover.hidden = isRecover;
-    strength.hidden = !isUp;
+    resend.hidden = !pendingEmail || !isUp;
+    strength.hidden = !(isUp && passwordInput.value);
   };
 
   const goAccount = () => {
     location.href = "../account/";
   };
 
+  const startCooldown = (seconds) => {
+    cooldown = seconds;
+    resend.disabled = true;
+    const tick = () => {
+      if (cooldown <= 0) {
+        resend.disabled = false;
+        resend.textContent = "重新发送验证邮件";
+        return;
+      }
+      resend.textContent = "重新发送（" + cooldown + "s）";
+      cooldown -= 1;
+      cooldownTimer = window.setTimeout(tick, 1000);
+    };
+    window.clearTimeout(cooldownTimer);
+    tick();
+  };
+
   (async () => {
     const captured = await auth.captureRedirect();
-    if (captured?.error) setMsg(banner, captured.error, true);
+    if (captured && captured.error) setMsg(banner, captured.error, true);
     else if (captured) goAccount();
     else {
       const session = await auth.refreshIfNeeded();
       if (session) goAccount();
     }
   })();
+
+  randomName.addEventListener("click", () => {
+    nameInput.value = NAMES[Math.floor(Math.random() * NAMES.length)];
+  });
 
   passwordInput.addEventListener("input", () => {
     if (mode !== "up") return;
@@ -86,26 +114,33 @@
 
   toggleMode.addEventListener("click", () => {
     mode = mode === "in" ? "up" : "in";
+    pendingEmail = "";
     setMsg(formMsg, "");
-    resend.hidden = true;
     paint();
   });
 
   toggleRecover.addEventListener("click", () => {
     mode = "recover";
+    pendingEmail = "";
     setMsg(formMsg, "");
     paint();
   });
 
+  const sendMail = async (email, name) => {
+    await auth.sendOtp(email, name);
+    pendingEmail = email;
+    startCooldown(60);
+    paint();
+    setMsg(formMsg, "验证邮件已发送到 " + email + "。请打开邮件里的确认链接。QQ / 网易请同时检查垃圾箱。");
+  };
+
   resend.addEventListener("click", async () => {
+    if (!pendingEmail || cooldown > 0) return;
     resend.disabled = true;
     try {
-      await auth.resend(emailInput.value.trim().toLowerCase());
-      setMsg(formMsg, "验证邮件已重新发送，请查收。");
+      await sendMail(pendingEmail, nameInput.value.trim());
     } catch (error) {
       setMsg(formMsg, error.message || "发送失败", true);
-    } finally {
-      resend.disabled = false;
     }
   });
 
@@ -117,7 +152,6 @@
     const name = nameInput.value.trim() || email.split("@")[0];
     submit.disabled = true;
     setMsg(formMsg, "请稍候…");
-    resend.hidden = true;
     try {
       if (mode === "recover") {
         await auth.recover(email);
@@ -127,24 +161,21 @@
       if (mode === "up") {
         const issue = passwordIssue(password, confirm);
         if (issue) throw new Error(issue);
-        const reachable = await auth.ping();
-        if (!reachable) throw new Error("连不上登录服务。请关闭广告拦截后重试；若在大陆网络，可能需要畅通的国际网络。");
-        const data = await auth.signup(email, password, name);
-        if (data.access_token) {
-          await auth.login(email, password).catch(() => {});
-          goAccount();
-          return;
-        }
-        setMsg(formMsg, "验证邮件已发送到 " + email + "。请打开邮件中的链接后再登录。QQ / 网易邮箱请同时检查垃圾箱。");
-        resend.hidden = false;
+        await sendMail(email, name);
         return;
       }
-      await auth.login(email, password);
-      goAccount();
+      try {
+        await auth.login(email, password);
+        goAccount();
+      } catch (error) {
+        if (/尚未验证|not_confirmed|confirm/i.test((error.code || "") + error.message)) {
+          await sendMail(email);
+          return;
+        }
+        throw error;
+      }
     } catch (error) {
-      const unconfirmed = /尚未验证|confirm|not.*verified|email_not_confirmed/i.test((error.code || "") + " " + (error.message || ""));
       setMsg(formMsg, error.message || "登录失败", true);
-      resend.hidden = !unconfirmed;
     } finally {
       submit.disabled = false;
     }

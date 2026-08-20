@@ -14,11 +14,13 @@
   const friendlyError = (error, fallback) => {
     const raw = String(error && (error.message || error.msg || error) || "");
     const code = String(error && (error.code || error.error_code) || "");
-    if (/rate_limit|too many|429/i.test(code + raw)) return "验证邮件发送太频繁，请 10 分钟后再试。";
+    if (/rate_limit|too many|429/i.test(code + raw)) return "发信通道这小时次数已用完（不是你点错）。请稍后再发验证码。";
+    if (/otp_expired|expired/i.test(code + raw)) return "验证码已过期，请重新发送。";
+    if (/invalid.*token|otp_disabled|token.*invalid/i.test(code + raw)) return "验证码不对，请核对后重试。";
     if (/redirect_to|not allowed|whitelist/i.test(raw)) return "回调地址未配置，请稍后再试。";
     if (/invalid.*email|email_address_invalid/i.test(code + raw)) return "这个邮箱地址不被接受，请换一个常用邮箱。";
     if (/already.?registered|user_already_exists|already been registered/i.test(code + raw)) return "这个邮箱已经注册。请直接登录，或点「忘记密码」。";
-    if (/confirm|not.*verified|email_not_confirmed/i.test(code + raw)) return "邮箱尚未验证。请先打开验证邮件里的链接。";
+    if (/confirm|not.*verified|email_not_confirmed/i.test(code + raw)) return "邮箱尚未验证。请先填写验证码。";
     if (/invalid login|invalid_credentials|invalid.*password/i.test(code + raw)) return "邮箱或密码不对。";
     if (/Failed to fetch|NetworkError|Load failed|network/i.test(raw) || error && error.name === "TypeError") {
       return "连不上登录服务。请关闭广告拦截后重试；若在公司网或大陆网络，可能需要畅通的国际网络。";
@@ -131,19 +133,55 @@
     return { type };
   };
 
-  const signup = async (email, password, name) => {
+  const sendOtp = async (email, name) => {
+    const body = {
+      email,
+      create_user: true,
+      data: name ? { name } : {},
+    };
     try {
-      return await request(
-        "/auth/v1/signup?redirect_to=" + encodeURIComponent(REDIRECT),
-        {
+      return await request("/auth/v1/otp?redirect_to=" + encodeURIComponent(REDIRECT), {
+        method: "POST",
+        headers: headers(),
+        body: JSON.stringify(body),
+      });
+    } catch (error) {
+      if (/redirect/i.test(String(error.message || ""))) {
+        return await request("/auth/v1/otp", {
           method: "POST",
           headers: headers(),
-          body: JSON.stringify({ email, password, data: { name } }),
-        },
-        2,
-      );
+          body: JSON.stringify(body),
+        });
+      }
+      error.message = friendlyError(error, "验证邮件发送失败");
+      throw error;
+    }
+  };
+
+  const verifyOtp = async (email, token) => {
+    const types = ["email", "signup", "recovery"];
+    let lastError;
+    for (const type of types) {
+      try {
+        const data = await request("/auth/v1/verify", {
+          method: "POST",
+          headers: headers(),
+          body: JSON.stringify({ type, email, token: String(token).trim() }),
+        });
+        return saveTokens(data);
+      } catch (error) {
+        lastError = error;
+      }
+    }
+    lastError.message = friendlyError(lastError, "验证码不对");
+    throw lastError;
+  };
+
+  const setPassword = async (password) => {
+    try {
+      return await updateUser({ password });
     } catch (error) {
-      error.message = friendlyError(error, "注册失败");
+      error.message = friendlyError(error, "密码保存失败");
       throw error;
     }
   };
@@ -229,7 +267,10 @@
     readSession,
     refreshIfNeeded,
     captureRedirect,
-    signup,
+    sendOtp,
+    verifyOtp,
+    setPassword,
+    signup: sendOtp,
     login,
     recover,
     resend,

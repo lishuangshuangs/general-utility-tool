@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>登录 - Utilora</title>
-  <meta name="description" content="使用邮箱登录 Utilora。注册后需验证邮箱，收藏可跟随账号。">
+  <meta name="description" content="使用邮箱登录 Utilora。注册会发送验证邮件，点开确认链接后才能登录。">
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <link rel="stylesheet" href="../assets/css/site.css">
 </head>
@@ -13,12 +13,15 @@
     <div class="login-card">
       <a class="brand" href="../"><span class="brand-mark">U</span><span>返回工具箱</span></a>
       <h1 id="title">登录</h1>
-      <p class="hint" id="lead">工具不用登录也能用。注册会发送验证邮件，点开链接后才能登录。</p>
+      <p class="hint" id="lead">工具不用登录也能用。注册会发送验证邮件，点开确认链接后才能登录。</p>
       <p id="banner" class="message" role="status"></p>
       <form id="auth-form">
         <div class="field" id="name-field" hidden>
           <label for="name">称呼</label>
-          <input id="name" autocomplete="nickname" placeholder="例如：林深">
+          <div class="name-row">
+            <input id="name" autocomplete="nickname" placeholder="例如：林深">
+            <button id="random-name" class="secondary" type="button">随机</button>
+          </div>
         </div>
         <div class="field">
           <label for="email">邮箱</label>

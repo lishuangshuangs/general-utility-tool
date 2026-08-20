@@ -27,3 +27,6 @@
 .verify-on,.verify-off{display:inline-block;margin:8px 0 0;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:750}
 .verify-on{color:#047857;background:#ecfdf5}
 .verify-off{color:#92400e;background:#fffbeb}
+.name-row{display:flex;gap:8px;align-items:center}
+.name-row input{flex:1;margin:0}
+.name-row .secondary{margin:0;padding:12px 14px;white-space:nowrap}
