@@ -127,11 +127,13 @@
   });
 
   const sendMail = async (email, name) => {
-    await auth.sendOtp(email, name);
+    const password = passwordInput.value;
+    if (password) await auth.signup(email, password, name);
+    else await auth.resend(email);
     pendingEmail = email;
     startCooldown(60);
     paint();
-    setMsg(formMsg, "验证邮件已发送到 " + email + "。请打开邮件里的确认链接。QQ / 网易请同时检查垃圾箱。");
+    setMsg(formMsg, "验证邮件已发送到 " + email + "。请打开邮件里的确认链接，确认后会回到本站账号页。QQ / 网易请同时检查垃圾箱。");
   };
 
   resend.addEventListener("click", async () => {

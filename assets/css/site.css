@@ -10,7 +10,7 @@
 .login-card .hint{margin-bottom:16px}
 .login-or{display:flex;align-items:center;gap:10px;margin:16px 0;color:#94a3b8;font-size:12px}
 .login-or:before,.login-or:after{content:"";flex:1;height:1px;background:var(--line)}
-.login-card form button{width:100%;min-height:48px}
+.login-card form>#submit{width:100%;min-height:48px}
 @media(max-width:650px){
   .nav-links a:not(.login-link){display:none}
   .tool-head nav>a:not(.brand):not(.login-link){display:none}
@@ -28,5 +28,5 @@
 .verify-on{color:#047857;background:#ecfdf5}
 .verify-off{color:#92400e;background:#fffbeb}
 .name-row{display:flex;gap:8px;align-items:center}
-.name-row input{flex:1;margin:0}
-.name-row .secondary{margin:0;padding:12px 14px;white-space:nowrap}
+.name-row input{flex:1 1 auto;width:auto;min-width:0;margin:0}
+.name-row button{flex:0 0 auto;width:auto;min-width:auto;min-height:42px;padding:0 12px;white-space:nowrap}
